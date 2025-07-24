@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+@keyframes modal-animation {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-animation-out {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(100vh) scale(0.5);
+  }
+}
+
+.modal-animation-in {
+  animation: modal-animation 0.3s forwards;
+}
+
+.modal-animation-out {
+  animation: modal-animation-out 0.5s forwards;
+}
+
+* {
+  user-select: none;
+}

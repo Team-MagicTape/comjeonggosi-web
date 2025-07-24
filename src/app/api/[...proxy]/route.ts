@@ -21,15 +21,12 @@ export const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head"].includes(method)
-    ? undefined
-    : await req.json();
+  const data = ["get", "head"].includes(method) ? undefined : await req.json();
 
-  const tryRequest = async (token: string) => {
+  const tryRequest = async (cookie?: string) => {
     const headers: Record<string, string> = {
       ...Object.fromEntries(req.headers.entries()),
-      Authorization: `Bearer ${token}`,
-      cookie: "",
+      cookie: cookie || cookieStore.toString(),
       host: "",
     };
 
@@ -53,11 +50,14 @@ export const handler = async (
   }
 
   try {
-    let apiResponse = await tryRequest(accessToken);
+    let apiResponse = await tryRequest();
 
     if (apiResponse.status === 401 || apiResponse.status === 419) {
       if (!refreshToken) {
-        return NextResponse.json({ message: "No refresh token" }, { status: 401 });
+        return NextResponse.json(
+          { message: "No refresh token" },
+          { status: 401 }
+        );
       }
 
       const reissueResponse = await fetch(
@@ -70,7 +70,10 @@ export const handler = async (
       );
 
       if (!reissueResponse.ok) {
-        return NextResponse.json({ message: "Token reissue failed" }, { status: 401 });
+        return NextResponse.json(
+          { message: "Token reissue failed" },
+          { status: 401 }
+        );
       }
 
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
@@ -92,7 +95,9 @@ export const handler = async (
         secure: process.env.NODE_ENV === "production",
       });
 
-      apiResponse = await tryRequest(newAccessToken);
+      apiResponse = await tryRequest(
+        `accessToken=${newAccessToken}; refreshToken=${newRefreshToken};`
+      );
 
       const responseHeaders = new Headers();
       for (const [key, value] of Object.entries(apiResponse.headers)) {
@@ -125,7 +130,10 @@ export const handler = async (
       headers: responseHeaders,
     });
   } catch (e) {
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };
 

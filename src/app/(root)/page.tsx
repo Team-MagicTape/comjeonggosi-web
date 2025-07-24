@@ -1,22 +1,11 @@
-import { fetchUser } from '@/entities/user/api/user'
-import UserAvatar from '@/entities/user/ui/UserAvatar';
-import CustomLink from '@/shared/ui/CustomLink'
-import React from 'react'
+"use client";
 
-const Main = async () => {
-  const user = await fetchUser();
+import { login } from "@/widgets/login-modal/libs/modal-controller";
 
-  if(!user?.username) return (
-    <div className='w-full flex flex-col gap-2'>
-      <CustomLink href='/login' className='text-blue-500'>로그인</CustomLink>
-      <CustomLink href='/signup' className='text-blue-500'>회원가입</CustomLink>
-    </div>
-  )
-
+const Main = () => {
   return (
-    <div>
-      <UserAvatar user={user} size={50} />
-      <p>{user.username}</p>
+    <div className="bg-gray-100">
+      <p onClick={login.open}>오픈!</p>
     </div>
   )
 }

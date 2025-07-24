@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import "./globals.css";
 import ToastContainer from "@/shared/providers/ToastProvider";
 import LoadingProvider from "@/shared/providers/LoadingProvider";
+import LoginModal from "@/widgets/login-modal/ui/LoginModal";
 
 export const metadata: Metadata = {
   title: "cher1sh-next-app",
@@ -27,6 +28,7 @@ const RootLayout = ({
         <ToastContainer />
         <LoadingProvider color="#6969FF" />
         {children}
+        <LoginModal />
       </body>
     </html>
   );

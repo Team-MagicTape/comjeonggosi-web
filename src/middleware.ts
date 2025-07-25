@@ -26,11 +26,10 @@ const middleware = async (req: NextRequest) => {
       }
 
       const refreshResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/reissue`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refreshToken }),
+          headers: { "Content-Type": "application/json", Cookie: req.cookies.toString() },
         }
       );
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import axios from "axios";
+import setCookieParser from 'set-cookie-parser'
 
 export const handler = async (
   req: NextRequest,
@@ -41,6 +42,7 @@ export const handler = async (
       method,
       headers,
       data,
+      withCredentials: true,
       validateStatus: () => true,
     });
   };
@@ -60,76 +62,73 @@ export const handler = async (
         );
       }
 
-      const reissueResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/reissue`,
+      const reissueResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+        {},
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refreshToken }),
+          headers: {
+            Cookie: cookieStore.toString(),
+          },
+          withCredentials: true,
+          validateStatus: () => true,
         }
       );
 
-      if (!reissueResponse.ok) {
+      const setCookies = reissueResponse.headers["set-cookie"];
+      if (
+        !reissueResponse.status.toString().startsWith("2") ||
+        !setCookies ||
+        setCookies.length === 0
+      ) {
         return NextResponse.json(
           { message: "Token reissue failed" },
           { status: 401 }
         );
       }
 
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        await reissueResponse.json();
+      const parsed = setCookieParser.parse(setCookies, { map: true });
 
-      const res = NextResponse.next();
-      res.cookies.set("accessToken", newAccessToken, {
-        httpOnly: true,
-        path: "/",
-        maxAge: 60 * 5,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
-      });
-      res.cookies.set("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "production",
+      const newAccessToken = parsed["accessToken"]?.value;
+      const newRefreshToken = parsed["refreshToken"]?.value;
+
+      const newCookieHeader = `accessToken=${newAccessToken}; refreshToken=${newRefreshToken}`;
+
+      apiResponse = await tryRequest(newCookieHeader);
+
+      const proxyRes = new NextResponse(JSON.stringify(apiResponse.data), {
+        status: apiResponse.status,
       });
 
-      apiResponse = await tryRequest(
-        `accessToken=${newAccessToken}; refreshToken=${newRefreshToken};`
-      );
-
-      const responseHeaders = new Headers();
       for (const [key, value] of Object.entries(apiResponse.headers)) {
         if (Array.isArray(value)) {
-          responseHeaders.set(key, value.join(", "));
+          proxyRes.headers.set(key, value.join(", "));
         } else if (value !== undefined) {
-          responseHeaders.set(key, value.toString());
+          proxyRes.headers.set(key, value.toString());
         }
       }
 
-      responseHeaders.forEach((value, key) => res.headers.set(key, value));
+      for (const cookie of setCookies) {
+        proxyRes.headers.append("Set-Cookie", cookie);
+      }
 
-      return new NextResponse(JSON.stringify(apiResponse.data), {
-        status: apiResponse.status,
-        headers: res.headers,
-      });
+      return proxyRes;
     }
 
-    const responseHeaders = new Headers();
+    const proxyRes = new NextResponse(JSON.stringify(apiResponse.data), {
+      status: apiResponse.status,
+    });
+
     for (const [key, value] of Object.entries(apiResponse.headers)) {
       if (Array.isArray(value)) {
-        responseHeaders.set(key, value.join(", "));
+        proxyRes.headers.set(key, value.join(", "));
       } else if (value !== undefined) {
-        responseHeaders.set(key, value.toString());
+        proxyRes.headers.set(key, value.toString());
       }
     }
 
-    return new NextResponse(JSON.stringify(apiResponse.data), {
-      status: apiResponse.status,
-      headers: responseHeaders,
-    });
+    return proxyRes;
   } catch (e) {
+    console.error("Proxy Error:", e);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }

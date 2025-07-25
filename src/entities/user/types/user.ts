@@ -1,8 +1,11 @@
 export interface User {
-  id: number;
-  username: string;
-  email: string;
-  avatar: string;
-  createdAt: string;
-  updatedAt: string;
+  id: number,
+  provider: string,
+  providerId: string,
+  email: string,
+  nickname: string,
+  profileImageUrl: string,
+  lastLoginAt: string,
+  createdAt: string,
+  updatedAt: string
 }

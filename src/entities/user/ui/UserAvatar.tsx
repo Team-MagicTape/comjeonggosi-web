@@ -9,7 +9,7 @@ interface Props {
 
 const UserAvatar = ({ user, size }: Props) => {
   return (
-    <img src={user.avatar} alt="avatar" style={{ width: size, height: size }} className="rounded-full object-cover" />
+    <img src={user.profileImageUrl} alt="avatar" style={{ width: size, height: size }} className="rounded-full object-cover" />
   )
 }
 

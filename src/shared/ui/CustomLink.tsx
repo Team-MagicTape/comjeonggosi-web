@@ -8,9 +8,10 @@ interface Props {
   href: string; 
   children: React.ReactNode;
   className: string;
+	onClick?: () => void;
 }
 
-const CustomLink = ({ href, children, className }: Props) => {
+const CustomLink = ({ href, children, className, onClick }: Props) => {
   const pathname = usePathname();
 	const searchParams = useSearchParams();
   const { setIsLoading } = useLoadingStore();
@@ -20,6 +21,7 @@ const CustomLink = ({ href, children, className }: Props) => {
 			href={href}
 			onClick={(e) => {
 				if (`${pathname}/?${searchParams.toString()}` !== href) setIsLoading(true); else e.preventDefault();
+				onClick && onClick();
 			}}
 			className={className}
 		>

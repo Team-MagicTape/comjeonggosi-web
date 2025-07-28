@@ -29,3 +29,7 @@
 * {
   user-select: none;
 }
+
+.h-main {
+  height: calc(100dvh - 64px);
+}

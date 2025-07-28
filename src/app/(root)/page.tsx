@@ -4,7 +4,7 @@ import { login } from "@/widgets/login-modal/libs/modal-controller";
 
 const Main = () => {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-main">
       <p onClick={login.open}>오픈!</p>
     </div>
   )

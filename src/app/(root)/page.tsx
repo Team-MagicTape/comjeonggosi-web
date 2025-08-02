@@ -1,18 +1,17 @@
-import { fetchUser } from "@/entities/user/api/user"
-import LoginButton from "@/widgets/login-button/ui/LoginButton";
+import MainArticle from "@/widgets/section/ui/MainArticle";
+import MainMailApply from "@/widgets/section/ui/MainMailApply";
+import MainQuizSearch from "@/widgets/section/ui/MainQuizSearch";
 
-const Main = async () => {
-  const user = await fetchUser();
-
-  if(!user) {
-    return <LoginButton />
-  }
-
+const Main = () => {
   return (
-    <div className="bg-gray-100 h-main">
-      {user.nickname}
+    <div className="flex flex-col xl:flex-row items-start justify-start gap-8">
+      <MainArticle />
+      <div className="w-full xl:w-auto flex-1 flex flex-col gap-8">
+        <MainQuizSearch />
+        <MainMailApply />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;

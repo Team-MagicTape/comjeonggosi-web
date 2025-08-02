@@ -12,7 +12,7 @@ const TabItem = ({ data, onClick, isSelected }: Props) => {
   return (
     <button
       onClick={() => onClick(data)}
-      className={`text-sm font-semibold py-1 px-3 rounded-full cursor-pointer ${
+      className={`text-sm xl:text-base font-semibold py-1 px-3 xl:px-4 rounded-full cursor-pointer ${
         isSelected ? "bg-primary text-white" : "bg-bg text-gray"
       }`}
     >

@@ -1,18 +1,15 @@
-import { fetchUser } from "@/entities/user/api/user"
-import LoginButton from "@/widgets/login-button/ui/LoginButton";
+import MainArticle from "@/widgets/section/ui/MainArticle";
 
-const Main = async () => {
-  const user = await fetchUser();
-
-  if(!user) {
-    return <LoginButton />
-  }
-
+const Main = () => {
   return (
-    <div className="bg-gray-100 h-main">
-      {user.nickname}
-    </div>
-  )
-}
+    <div className="w-full grid grid-cols-12 grid-rows-8 gap-8">
+      <MainArticle />
 
-export default Main
+      <div className="col-[9/13] bg-white border border-border rounded-2xl p-8"></div>
+
+      <div className="col-[9/13] bg-white border border-border rounded-2xl p-8"></div>
+    </div>
+  );
+};
+
+export default Main;

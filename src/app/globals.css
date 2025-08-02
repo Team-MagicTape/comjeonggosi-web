@@ -33,3 +33,16 @@
 .h-main {
   height: calc(100dvh - 64px);
 }
+
+body,html {
+  background-color: #F8F9FA;
+}
+
+@theme {
+  --color-bg: #F8F9FA;
+  --color-primary: #6466F1;
+  --color-gray: #666666;
+  --color-lightgray: #888888;
+  --color-border: #EAECEF;
+  --radius-item: 10px;
+}

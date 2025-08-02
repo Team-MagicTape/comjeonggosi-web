@@ -1,11 +1,16 @@
-"use client";
+import { fetchUser } from "@/entities/user/api/user"
+import LoginButton from "@/widgets/login-button/ui/LoginButton";
 
-import { login } from "@/widgets/login-modal/libs/modal-controller";
+const Main = async () => {
+  const user = await fetchUser();
 
-const Main = () => {
+  if(!user) {
+    return <LoginButton />
+  }
+
   return (
     <div className="bg-gray-100 h-main">
-      <p onClick={login.open}>오픈!</p>
+      {user.nickname}
     </div>
   )
 }

@@ -1,27 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import OAuthButton from "./OAuthButton";
 import { createPortal } from "react-dom";
-import { login, registerLoginModal } from "../libs/modal-controller";
+import { login } from "../libs/modal-controller";
 import { GITHUB_OAUTH_LINK, GOOGLE_OAUTH_LINK, KAKAO_OAUTH_LINK, NAVER_OAUTH_LINK } from "@/shared/constants/oauth";
+import { useLoginModal } from "../model/useLoginModal";
 
 const LoginModal = () => {
-  const [visible, setVisible] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-
-  useEffect(() => {
-    registerLoginModal(
-      () => setVisible(true),
-      () => {
-        setIsClosing(true);
-        setTimeout(() => {
-          setIsClosing(false);
-          setVisible(false);
-        }, 300);
-      }
-    );
-  }, []);
+  const { visible, isClosing } = useLoginModal();
 
   if (!visible && !isClosing) return null;
 

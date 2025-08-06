@@ -17,7 +17,7 @@ const Tabs = ({ tabs, selected, setSelected }: Props) => {
     <div className="flex items-center gap-2 flex-wrap">
       {
         tabs.map((item, idx) => (
-          <TabItem data={item} onClick={handleClick} isSelected={item === selected} key={idx} />
+          <TabItem data={item} onClick={handleClick} isSelected={item.value === selected.value} key={idx} />
         ))
       }
     </div>

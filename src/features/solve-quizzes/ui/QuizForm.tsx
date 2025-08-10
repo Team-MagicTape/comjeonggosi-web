@@ -7,6 +7,9 @@ import OptionButton from "@/entities/quiz/ui/OptionButton";
 import AnswerFeedback from "@/entities/quiz/ui/AnswerFeedback";
 import QuizNavigation from "@/entities/quiz/ui/QuizNavigation";
 import QuizSettings from "./QuizSettings";
+import { getButtonStyle } from "../utils/getButtonStyle";
+import { getOptionCircleStyle } from "../utils/getOptionCircleStyle";
+import { getOptionCircleContent } from "../utils/getOptionCircleContent";
 
 const QuizForm = () => {
   const {
@@ -15,10 +18,6 @@ const QuizForm = () => {
     currentIdx,
     selectedAnswer,
     currentQuiz,
-    getOptionLabel,
-    getButtonStyle,
-    getOptionCircleStyle,
-    getOptionCircleContent,
     showAnswer,
     handleAnswerSelect,
     isCorrect,
@@ -72,7 +71,7 @@ const QuizForm = () => {
                         selectedAnswer === optionIdx,
                         currentQuiz.options[optionIdx] === quiz.answer,
                         showAnswer,
-                        getOptionLabel(optionIdx)
+                        `${optionIdx + 1}`
                       )}
                       showAnswer={showAnswer}
                       handleAnswerSelect={handleAnswerSelect}

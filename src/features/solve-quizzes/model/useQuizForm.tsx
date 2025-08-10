@@ -1,7 +1,6 @@
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { QUIZ_DATA } from "../constants/dummy";
 import { useEffect, useState } from "react";
-import { Quiz } from "@/entities/quiz/types/quiz";
 import { Tab } from "@/widgets/tabs/types/tab";
 
 export const useQuizForm = () => {
@@ -15,8 +14,8 @@ export const useQuizForm = () => {
     autoNext: false,
   });
 
-  const currentQuiz: Quiz = QUIZ_DATA[currentIdx];
-  const isCorrect: boolean = selectedAnswer
+  const currentQuiz = QUIZ_DATA[currentIdx];
+  const isCorrect = selectedAnswer
     ? currentQuiz.options[selectedAnswer] === currentQuiz?.answer
     : false;
 
@@ -84,64 +83,9 @@ export const useQuizForm = () => {
     }));
   };
 
-  const getOptionLabel = (index: number): string => {
-    return `${index + 1}`;
-  };
-
-  const getButtonStyle = (
-    isCurrentQuiz: boolean,
-    isSelected: boolean,
-    isCorrectAnswer: boolean,
-    showAnswer: boolean
-  ): string => {
-    let buttonStyle =
-      "border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100";
-
-    if (isCurrentQuiz && showAnswer) {
-      if (isCorrectAnswer) {
-        buttonStyle = "border-green-500 bg-green-50";
-      } else if (isSelected && !isCorrectAnswer) {
-        buttonStyle = "border-red-500 bg-red-50";
-      } else {
-        buttonStyle = "border-gray-200 bg-gray-100";
-      }
-    } else if (isSelected && isCurrentQuiz) {
-      buttonStyle = "border-blue-500 bg-blue-50 shadow-lg";
-    }
-
-    return buttonStyle;
-  };
-
-  const getOptionCircleStyle = (
-    isCurrentQuiz: boolean,
-    isSelected: boolean,
-    isCorrectAnswer: boolean,
-    showAnswer: boolean
-  ): string => {
-    if (isCurrentQuiz && showAnswer && isCorrectAnswer) {
-      return "bg-green-600 text-white";
-    }
-    if (isCurrentQuiz && showAnswer && isSelected && !isCorrectAnswer) {
-      return "bg-red-600 text-white";
-    }
-    if (isSelected && isCurrentQuiz && !showAnswer) {
-      return "bg-blue-600 text-white";
-    }
-    return "bg-gray-300 text-gray-600";
-  };
-
-  const getOptionCircleContent = (
-    isCurrentQuiz: boolean,
-    isSelected: boolean,
-    isCorrectAnswer: boolean,
-    showAnswer: boolean,
-    optionLabel: string
-  ): string => {
-    if (isCurrentQuiz && showAnswer && isCorrectAnswer) return "✓";
-    if (isCurrentQuiz && showAnswer && isSelected && !isCorrectAnswer)
-      return "✗";
-    return optionLabel;
-  };
+  useEffect(() => {
+    window.history.pushState({}, "", `/quizzes/${currentQuiz.id}`);
+  }, [currentQuiz.id]);
 
   return {
     category,
@@ -149,10 +93,6 @@ export const useQuizForm = () => {
     currentIdx,
     selectedAnswer,
     currentQuiz,
-    getOptionLabel,
-    getButtonStyle,
-    getOptionCircleStyle,
-    getOptionCircleContent,
     showAnswer,
     handleAnswerSelect,
     isCorrect,

@@ -1,5 +1,5 @@
 import { Settings } from "@/features/solve-quizzes/types/settings";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
@@ -7,10 +7,13 @@ import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
 export const useQuizForm = (categories: Category[]) => {
-  const categoryList = categories.map(item => ({ name: item.name, value: `${item.id}` }));
+  const categoryList = categories.map((item) => ({
+    name: item.name,
+    value: `${item.id}`,
+  }));
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [settings, setSettings] = useState<Settings>({
     hide7Days: false,
@@ -22,26 +25,36 @@ export const useQuizForm = (categories: Category[]) => {
 
   const getQuizzes = async () => {
     const quiz = await fetchQuiz(category?.value || "");
-    if(quiz) {
-      setQuizzes(prev => ([...prev, quiz]));
+    if (quiz) {
+      setQuizzes((prev) => [...prev, quiz]);
     }
-  }
+  };
 
   const submit = async (selectedAnswer: string) => {
-    const { isCorrect } = await solveQuizzes(currentQuiz?.id || "0", selectedAnswer);
+    const { isCorrect } = await solveQuizzes(
+      currentQuiz?.id || "0",
+      selectedAnswer
+    );
     return isCorrect;
-  }
-
-  useEffect(() => {
-    getQuizzes();
-  }, [currentIdx]);
+  };
 
   useEffect(() => {
     setQuizzes([]);
     setCurrentIdx(0);
-  }, [category]);
+    getQuizzes();
+  }, [category.value]);
 
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
+
+  const options = useMemo(() => {
+    if(!currentQuiz) return [];
+    const arr = [...currentQuiz.options, currentQuiz.answer];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [currentQuiz]);
 
   useEffect(() => {
     if (showAnswer && settings.autoNext) {
@@ -53,10 +66,10 @@ export const useQuizForm = (categories: Category[]) => {
     }
   }, [showAnswer, settings.autoNext]);
 
-  const handleAnswerSelect = async (answerIndex: number) => {
+  const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
-    setSelectedAnswer(answerIndex);
-    const isCorrect = await submit(currentQuiz.options[answerIndex]);
+    setSelectedAnswer(answer);
+    const isCorrect = await submit(answer);
     setIsCorrect(isCorrect);
     setShowAnswer(true);
   };
@@ -124,6 +137,7 @@ export const useQuizForm = (categories: Category[]) => {
     settings,
     handleSettingChange,
     categoryList,
-    quizzes
+    quizzes,
+    options
   };
 };

@@ -29,9 +29,9 @@ const MainArticle = ({ categories, initialData }: Props) => {
         setSelected={handleCategory}
       />
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {!isLoading && !!data.length
-          ? data.map((item) => <ArticleItem data={item} key={item.id} />)
-          : Array.from({ length: 6 }).map((_, idx) => <ArticleItem key={idx} />)
+        {isLoading || !Array.isArray(data) || data.length <= 0
+          ? Array.from({ length: 6 }).map((_, idx) => <ArticleItem key={idx} />)
+          : data.map((item) => <ArticleItem data={item} key={item.id} />)
         }
       </div>
     </div>

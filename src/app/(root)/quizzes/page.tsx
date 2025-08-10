@@ -1,8 +1,11 @@
+import { fetchCategories } from "@/entities/category/api/fetch-categories"
 import QuizForm from "@/features/solve-quizzes/ui/QuizForm"
 
-const Quizzes = () => {
+const Quizzes = async () => {
+  const categories = await fetchCategories();
+
   return (
-    <QuizForm />
+    <QuizForm categories={categories} />
   )
 }
 

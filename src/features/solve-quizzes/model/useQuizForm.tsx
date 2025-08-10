@@ -1,27 +1,51 @@
 import { Settings } from "@/features/solve-quizzes/types/settings";
-import { QUIZ_DATA } from "../constants/dummy";
 import { useEffect, useState } from "react";
 import { Tab } from "@/widgets/tabs/types/tab";
+import { Category } from "@/entities/category/types/category";
+import { Quiz } from "@/entities/quiz/types/quiz";
+import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
+import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = () => {
-  const [category, setCategory] = useState<Tab>({ name: "전체", value: "ALL" });
-  const [currentIdx, setCurrentIdx] = useState<number>(0);
+export const useQuizForm = (categories: Category[]) => {
+  const categoryList = categories.map(item => ({ name: item.name, value: `${item.id}` }));
+  const [category, setCategory] = useState<Tab>(categoryList[0]);
+  const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showAnswer, setShowAnswer] = useState<boolean>(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   const [settings, setSettings] = useState<Settings>({
     hide7Days: false,
     hideForever: false,
     autoNext: false,
   });
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [isCorrect, setIsCorrect] = useState(false);
 
-  const currentQuiz = QUIZ_DATA[currentIdx];
-  const isCorrect = selectedAnswer
-    ? currentQuiz.options[selectedAnswer] === currentQuiz?.answer
-    : false;
+  const getQuizzes = async () => {
+    const quiz = await fetchQuiz(category?.value || "");
+    if(quiz) {
+      setQuizzes(prev => ([...prev, quiz]));
+    }
+  }
+
+  const submit = async (selectedAnswer: string) => {
+    const { isCorrect } = await solveQuizzes(currentQuiz?.id || "0", selectedAnswer);
+    return isCorrect;
+  }
+
+  useEffect(() => {
+    getQuizzes();
+  }, [currentIdx]);
+
+  useEffect(() => {
+    setQuizzes([]);
+    setCurrentIdx(0);
+  }, [category]);
+
+  const currentQuiz: Quiz | undefined = quizzes[currentIdx];
 
   useEffect(() => {
     if (showAnswer && settings.autoNext) {
-      const timer: NodeJS.Timeout = setTimeout(() => {
+      const timer = setTimeout(() => {
         handleNext();
       }, 3000);
 
@@ -29,19 +53,21 @@ export const useQuizForm = () => {
     }
   }, [showAnswer, settings.autoNext]);
 
-  const handleAnswerSelect = (answerIndex: number) => {
+  const handleAnswerSelect = async (answerIndex: number) => {
     if (showAnswer) return;
-
     setSelectedAnswer(answerIndex);
+    const isCorrect = await submit(currentQuiz.options[answerIndex]);
+    setIsCorrect(isCorrect);
     setShowAnswer(true);
   };
 
   const handleNext = () => {
     setSelectedAnswer(null);
     setShowAnswer(false);
+    setIsCorrect(false);
 
     setTimeout(() => {
-      if (currentIdx < QUIZ_DATA.length - 1) {
+      if (currentIdx < quizzes.length - 1) {
         setCurrentIdx((prev) => prev + 1);
       } else {
         setCurrentIdx(0);
@@ -53,6 +79,7 @@ export const useQuizForm = () => {
     if (currentIdx > 0) {
       setSelectedAnswer(null);
       setShowAnswer(false);
+      setIsCorrect(false);
 
       setTimeout(() => {
         setCurrentIdx((prev) => prev - 1);
@@ -83,10 +110,6 @@ export const useQuizForm = () => {
     }));
   };
 
-  useEffect(() => {
-    window.history.pushState({}, "", `/quizzes/${currentQuiz.id}`);
-  }, [currentQuiz.id]);
-
   return {
     category,
     setCategory,
@@ -100,5 +123,7 @@ export const useQuizForm = () => {
     handlePrev,
     settings,
     handleSettingChange,
+    categoryList,
+    quizzes
   };
 };

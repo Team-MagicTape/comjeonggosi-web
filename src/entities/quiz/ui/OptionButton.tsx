@@ -6,7 +6,7 @@ interface Props {
   circleStyle: string;
   circleContent: string;
   showAnswer: boolean;
-  handleAnswerSelect: (idx: number) => void;
+  handleAnswerSelect: (option: string) => void;
 }
 
 const OptionButton = ({
@@ -22,7 +22,7 @@ const OptionButton = ({
   return (
     <button
       key={optionIdx}
-      onClick={() => isCurrentQuiz && handleAnswerSelect(optionIdx)}
+      onClick={() => isCurrentQuiz && handleAnswerSelect(option)}
       disabled={!isCurrentQuiz || showAnswer}
       className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-200 hover:scale-[1.01] ${buttonStyle} ${
         !isCurrentQuiz || showAnswer ? "cursor-default" : "cursor-pointer"

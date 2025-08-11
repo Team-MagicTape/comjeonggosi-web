@@ -1,10 +1,11 @@
 "use client";
 
 import { Tab } from "../types/tab";
+import { Category } from "@/entities/category/types/category";
 
 interface Props {
-  data: Tab;
-  onClick: (data: Tab) => void;
+  data: Category;
+  onClick: (data: Category) => void;
   isSelected: boolean;
 }
 
@@ -20,5 +21,6 @@ const TabItem = ({ data, onClick, isSelected }: Props) => {
     </button>
   );
 };
+
 
 export default TabItem;

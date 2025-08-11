@@ -1,4 +1,50 @@
-const MailApplyForm = () => {
+"use client"
+
+import { useState } from "react";
+import { subscribeMail } from "../api/subscribe-mail";
+import { unsubscribeMail } from "../api/unsubscribe-mail";
+import { toast } from "@/shared/providers/ToastProvider";
+import axios, { AxiosError } from "axios";
+
+interface Props {
+  initialHour?: number;
+  initialMinute?: number;
+}
+const MailApplyForm = ({initialHour,initialMinute}: Props) => {
+
+  const [time, setTime] = useState(
+    initialHour !== undefined && initialMinute !== undefined
+      ? `${String(initialHour).padStart(2, "0")}:${String(initialMinute).padStart(2, "0")}`
+      : ""
+  );
+  const [isSubscribed, setIsSubscribed] = useState(
+    initialHour !== undefined && initialMinute !== undefined
+  );
+
+  const handleClick = async() =>{
+    if(!isSubscribed && !time){
+      toast.warning("선호 시간을 선택해주세요.");
+      return;
+    }
+
+    try{
+      if(isSubscribed){
+        await unsubscribeMail();
+        toast.success("신청이 취소되었습니다")
+        setIsSubscribed(false);
+      }else{
+        const [hourStr, minuteStr] = time.split(":");
+        await subscribeMail({ hour: +hourStr, minute: +minuteStr })
+        setIsSubscribed(true);
+      }
+    }catch(error){
+      if(axios.isAxiosError(error)){
+        console.error("구독실패", error.response?.data || error.message);
+        toast.error("구독 요청 중 오류가 발생했습니다.");
+      }
+    }
+
+  }
   const topics = [
     "컴퓨터 구조",
     "데이터베이스",
@@ -39,6 +85,8 @@ const MailApplyForm = () => {
             <input
               className="w-[600px] h-[40px] border-gray-500 border-1 p-1 rounded-[7px]"
               type="time"
+              value={time}
+              onChange={(e)=> setTime(e.target.value)}
             />
           </div>
         </div>
@@ -58,8 +106,9 @@ const MailApplyForm = () => {
           ))}
         </div>
         <div className="pb-6 w-[600px]">
-          <button className="w-full h-[50px] bg-[#6B5CE7] text-white rounded-[7px] text-[18px] font-extrabold">
-            메일 신청하기
+          <button className="w-full h-[50px] bg-[#6B5CE7] text-white rounded-[7px] text-[18px] font-extrabold"
+          onClick={handleClick}>
+            {isSubscribed ? "신청 취소" : "메일 신청"}
           </button>
         </div>
       </div>

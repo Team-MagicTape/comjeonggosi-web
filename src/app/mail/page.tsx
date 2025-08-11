@@ -1,11 +1,13 @@
 import MailApplyForm from "@/features/mail-apply/ui/MailApplyForm"
+import { getSubscription } from "@/features/mail-apply/api/getsubscribe-mail"
 
-const page = () => {
+const MailApplyPage  = async() => {
+  const subscription = await getSubscription()
   return (
     <div>
-      <MailApplyForm/>
+      <MailApplyForm initialHour={subscription.hour} initialMinute={subscription.minute}/>
     </div>
   )
 }
 
-export default page
+export default MailApplyPage 

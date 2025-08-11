@@ -1,27 +1,29 @@
-"use client";
+import ArticleList from "@/entities/article/ui/ArticleList";
+import { fetchCategory } from "@/entities/category/api/fetch-category";
+import { fetchArticles } from "@/entities/article/api/fetch-articles";
 
-import Tabs from "@/widgets/tabs/ui/Tabs";
-import { ARTICLE_CATEGORY } from "../constants/article-category";
-import { useArticleCategory } from "../model/useArticleCategory";
-import { ARTICLES } from "@/entities/article/constants/dummy";
-import ArticleItem from "@/entities/article/ui/ArticleItem";
+interface MainArticleProps {
+  searchParams: { categoryId?: string };
+}
 
-const MainArticle = () => {
-  const { category, handleCategory } = useArticleCategory();
+const MainArticle = async ({ searchParams }: MainArticleProps) => {
+  const categories = await fetchCategory();
+  const selectedCategoryId = searchParams?.categoryId
+    ? parseInt(searchParams.categoryId)
+    : categories.length > 0
+    ? categories[0].id
+    : 0;
+
+  const articles = await fetchArticles(selectedCategoryId);
 
   return (
     <div className="bg-white border border-border rounded-2xl p-4 xl:p-8 flex flex-col gap-6 items-start">
       <h2 className="text-xl xl:text-2xl font-bold">아티클</h2>
-      <Tabs
-        tabs={ARTICLE_CATEGORY}
-        selected={category}
-        setSelected={handleCategory}
+      <ArticleList
+        articles={articles || []}
+        categories={categories || []}
+        selectedCategoryId={selectedCategoryId}
       />
-      <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
-        {ARTICLES.map((item) => (
-          <ArticleItem data={item} key={item.id} />
-        ))}
-      </div>
     </div>
   );
 };

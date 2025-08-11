@@ -1,16 +1,15 @@
-import { Tab } from "@/widgets/tabs/types/tab"
-import { useState } from "react"
-import { ARTICLE_CATEGORY } from "../constants/article-category"
+import { useState } from "react";
+import { Category } from "@/entities/category/types/category";
 
-export const useArticleCategory = () => {
-  const [category, setCategory] = useState<Tab>(ARTICLE_CATEGORY[0]);
+export const useArticleCategory = (initialCategories: Category[]) => {
+  const [category, setCategory] = useState<Category>(initialCategories[0]);
 
-  const handleCategory = (category: Tab) => {
+  const handleCategory = (category: Category) => {
     setCategory(category);
-  }
+  };
 
   return {
     category,
-    handleCategory
-  }
-}
+    handleCategory,
+  };
+};

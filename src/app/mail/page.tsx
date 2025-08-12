@@ -1,7 +1,7 @@
 import MailApplyForm from "@/features/mail-apply/ui/MailApplyForm"
-import { getSubscription } from "@/features/mail-apply/api/getsubscribe-mail"
+import { getSubscription } from "@/features/mail-apply/api/get-subscription"
 
-const MailApplyPage  = async() => {
+const MailApply  = async() => {
   const subscription = await getSubscription()
   return (
     <div>
@@ -10,4 +10,4 @@ const MailApplyPage  = async() => {
   )
 }
 
-export default MailApplyPage 
+export default MailApply

@@ -16,8 +16,7 @@ const Header = async () => {
         <NavigationLink href="/quizzes" name="퀴즈" />
         <NavigationLink href="/today-question" name="오늘의 질문" />
         <NavigationLink href="/mail" name="메일 신청" />
-        {!!user && <NavigationLink href="/my-page" name="마이페이지" />}
-        {!user && <LoginButton />}
+        {!!user ? <NavigationLink href="/my-page" name="마이페이지" /> : <LoginButton />}
       </div>
     </header>
   );

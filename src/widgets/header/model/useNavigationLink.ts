@@ -7,5 +7,5 @@ export const useNavigationLink = (href: string) => {
     return pathname === "/";
   }
   
-  return pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(`${href}/`);
 };

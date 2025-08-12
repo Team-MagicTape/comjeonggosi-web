@@ -2,7 +2,7 @@ import React from 'react';
 import CreateArticleForm from '@/features/article/create/ui/CreateArticleForm';
 import { fetchCategory } from '@/entities/category/api/fetch-category';
 
-const WriteArticlePage = async () => {
+const CreateArticlePage = async () => {
   const categories = await fetchCategory();
 
   return (
@@ -12,4 +12,4 @@ const WriteArticlePage = async () => {
   );
 };
 
-export default WriteArticlePage;
+export default CreateArticlePage;

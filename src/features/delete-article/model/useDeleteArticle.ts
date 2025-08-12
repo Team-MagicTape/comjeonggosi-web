@@ -1,4 +1,4 @@
-import { deleteArticle } from "./delete-article";
+import { deleteArticle } from "../api/delete-article";
 import { toast } from "@/shared/providers/ToastProvider";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 

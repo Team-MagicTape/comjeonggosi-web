@@ -4,7 +4,7 @@ import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import TextArea from "@/shared/ui/TextArea";
 import Select from "@/shared/ui/Select";
-import { useCreateArticle } from "./useCreateArticle";
+import { useCreateArticle } from "../model/useCreateArticle";
 import { Category } from "@/entities/category/types/category";
 
 interface Props {

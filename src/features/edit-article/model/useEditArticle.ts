@@ -1,7 +1,7 @@
 "use client";
 
 import { toast } from "@/shared/providers/ToastProvider";
-import { editArticle } from "./edit-article";
+import { editArticle } from "../api/edit-article";
 import { useState } from "react";
 import {useCustomRouter} from "@/shared/model/useCustomRouter";
 

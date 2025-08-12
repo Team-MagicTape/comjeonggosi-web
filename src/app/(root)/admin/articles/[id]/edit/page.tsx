@@ -1,5 +1,5 @@
 import React from 'react';
-import EditArticleForm from '@/features/edit-article/EditArticleForm';
+import EditArticleForm from '@/features/edit-article/ui/EditArticleForm';
 import { PathParams } from "@/shared/types/path-params";
 
 const EditArticlePage = ({ params }: PathParams) => {

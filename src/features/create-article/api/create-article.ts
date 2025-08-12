@@ -1,4 +1,4 @@
-import { CreateArticleData } from "./create-article-data";
+import { CreateArticleData } from "../types/create-article-data";
 import { apiClient } from "@/shared/libs/custom-axios";
 
 export const createArticle = async (data: CreateArticleData) => {

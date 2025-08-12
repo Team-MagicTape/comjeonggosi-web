@@ -3,7 +3,7 @@
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import TextArea from "@/shared/ui/TextArea";
-import { useEditArticle } from "../model/useEditArticle";
+import { useEditArticle } from "../model/useEditArticle"
 
 interface Props {
   articleId: number;

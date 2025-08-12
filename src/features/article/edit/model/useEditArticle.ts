@@ -3,10 +3,10 @@
 import { toast } from "@/shared/providers/ToastProvider";
 import { editArticle } from "../api/edit-article";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useCustomRouter} from "@/shared/model/useCustomRouter";
 
 export const useEditArticle = () => {
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

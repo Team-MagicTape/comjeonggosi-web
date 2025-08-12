@@ -5,6 +5,8 @@ import { useCustomRouter } from "@/shared/model/useCustomRouter";
 import { Category } from "@/entities/category/types/category";
 import { Article } from "@/entities/article/types/article";
 import ArticleItem from "@/entities/article/ui/ArticleItem";
+import { Tab } from "@/widgets/tabs/types/tab";
+import { useState } from "react";
 
 interface Props {
   articles: Article[];
@@ -13,17 +15,20 @@ interface Props {
 }
 
 const ArticleList = ({ articles, categories, selectedCategoryId }: Props) => {
+  const tabs = categories.map(item => ({ name: item.name, value: `${item.id}` }));
   const router = useCustomRouter();
+  const [category, setCategory] = useState(tabs[0]);
 
-  const handleCategoryChange = (category: Category) => {
-    router.push(`?categoryId=${category.id}`);
+  const handleCategoryChange = (tab: Tab) => {
+    setCategory(tab);
+    router.push(`?categoryId=${tab.value}`);
   };
 
   return (
     <>
       <Tabs
-        tabs={categories}
-        selected={categories.find((c) => c.id === selectedCategoryId)!}
+        tabs={tabs}
+        selected={category}
         setSelected={handleCategoryChange}
       />
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">

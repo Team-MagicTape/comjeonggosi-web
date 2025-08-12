@@ -21,7 +21,6 @@ const QuizForm = ({ categories }: Props) => {
     setCategory,
     currentIdx,
     selectedAnswer,
-    currentQuiz,
     showAnswer,
     handleAnswerSelect,
     isCorrect,

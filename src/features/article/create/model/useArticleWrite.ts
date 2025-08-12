@@ -1,9 +1,9 @@
 import { toast } from "@/shared/providers/ToastProvider";
 import { useState } from "react";
-import { writeArticle } from "@/features/article/write/api/write-article";
+import { createArticle } from "@/features/article/create/api/create-article";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
-export const useArticleWrite = () => {
+export const useCreateArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState(0);
@@ -12,7 +12,7 @@ export const useArticleWrite = () => {
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      writeArticle({title, content, categoryId});
+      createArticle({title, content, categoryId});
     } catch {
       toast.error("네트워크 에러");
     }

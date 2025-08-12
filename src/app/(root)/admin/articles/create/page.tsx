@@ -1,5 +1,5 @@
 import React from 'react';
-import WriteArticleForm from '@/features/article/write/ui/WriteArticleForm';
+import CreateArticleForm from '@/features/article/create/ui/CreateArticleForm';
 import { fetchCategory } from '@/entities/category/api/fetch-category';
 
 const WriteArticlePage = async () => {
@@ -7,7 +7,7 @@ const WriteArticlePage = async () => {
 
   return (
     <div>
-      <WriteArticleForm categories={categories} />
+      <CreateArticleForm categories={categories} />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import axios from "axios";
 import setCookieParser from "set-cookie-parser";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
 
-export const handler = async (
+const handler = async (
   req: NextRequest,
   { params }: { params: Promise<{ proxy: string[] }> }
 ): Promise<NextResponse> => {

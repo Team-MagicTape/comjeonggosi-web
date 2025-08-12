@@ -1,7 +1,7 @@
 "use client";
 
 import Tabs from "@/widgets/tabs/ui/Tabs";
-import { useRouter } from "next/navigation";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 import { Category } from "@/entities/category/types/category";
 import { Article } from "@/entities/article/types/article";
 import ArticleItem from "@/entities/article/ui/ArticleItem";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const ArticleList = ({ articles, categories, selectedCategoryId }: Props) => {
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const handleCategoryChange = (category: Category) => {
     router.push(`?categoryId=${category.id}`);

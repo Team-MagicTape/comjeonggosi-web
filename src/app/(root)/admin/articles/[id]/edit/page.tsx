@@ -1,12 +1,9 @@
 import React from 'react';
 import EditArticleForm from '@/features/article/edit/ui/EditArticleForm';
+import { PathParams } from "@/shared/types/path-params";
 
-interface Props {
-  params: { id: string };
-}
-
-const EditArticlePage = ({ params }: Props) => {
-  const articleId = parseInt(params.id);
+const EditArticlePage = ({ params }: PathParams) => {
+  const articleId = Number(params);
 
   return (
     <div>

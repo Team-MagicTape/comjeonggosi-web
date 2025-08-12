@@ -3,13 +3,10 @@ import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
 import DeleteButton from "@/features/article/delete/ui/DeleteButton";
 import EditButton from "@/features/article/edit/ui/EditButton";
+import { PathParams } from "@/shared/types/path-params";
 
-interface Props {
-  params: { id: number };
-}
-
-const ArticleDetailPage = async ({ params }: Props) => {
-  const article = await getArticleDetail(Number(params.id));
+const ArticleDetailPage = async ({ params }: PathParams) => {
+  const article = await getArticleDetail(Number(params));
 
   if (!article) {
     notFound();
@@ -20,8 +17,8 @@ const ArticleDetailPage = async ({ params }: Props) => {
       <span className="flex items-center justify-between w-full">
         <h1 className="font-extrabold text-3xl">{article.title}</h1>
         <div className="flex items-center gap-2">
-          <DeleteButton articleId={Number(params.id)} />
-          <EditButton articleId={Number(params.id)} />
+          <DeleteButton articleId={Number(params)} />
+          <EditButton articleId={Number(params)} />
         </div>
       </span>
       <hr className="border border-gray-200 w-full" />

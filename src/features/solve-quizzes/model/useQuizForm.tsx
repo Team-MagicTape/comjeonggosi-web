@@ -39,10 +39,14 @@ export const useQuizForm = (categories: Category[]) => {
   };
 
   useEffect(() => {
+    getQuizzes();
+  }, [currentIdx]);
+
+  useEffect(() => {
     setQuizzes([]);
     setCurrentIdx(0);
     getQuizzes();
-  }, [category.value]);
+  }, [category]);
 
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
 

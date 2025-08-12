@@ -1,9 +1,9 @@
 import { deleteArticle } from "../api/delete-article";
 import { toast } from "@/shared/providers/ToastProvider";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 
 export const useDeleteArticle = () => {
-    const router = Router;
+  const router = useRouter();
   const handleDelete = async (articleId: number) => {
     try {
       await deleteArticle(articleId);

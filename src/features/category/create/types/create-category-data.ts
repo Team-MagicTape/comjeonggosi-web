@@ -1,4 +1,4 @@
-export interface WriteCategoryData {
+export interface CreateCategoryData {
   name: string;
   description: string;
 }

@@ -1,7 +1,7 @@
-import { WriteCategoryData } from "../types/write-category-data";
+import { CreateCategoryData } from "../types/create-category-data";
 import axios from "axios";
 
-export const writeCategory = async (data: WriteCategoryData) => {
+export const writeCategory = async (data: CreateCategoryData) => {
   try {
     const res = await axios.post("/admin/categories", data);
     return res;

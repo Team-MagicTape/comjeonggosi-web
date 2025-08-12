@@ -1,4 +1,4 @@
-export interface WriteArticleData {
+export interface CreateArticleData {
   title: string;
   content: string;
   categoryId: number;

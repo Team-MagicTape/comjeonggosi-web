@@ -4,14 +4,14 @@ import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import TextArea from "@/shared/ui/TextArea";
 import Select from "@/shared/ui/Select";
-import { useArticleWrite } from "../model/useArticleWrite";
+import { useCreateArticle } from "../model/useArticleWrite";
 import { Category } from "@/entities/category/types/category";
 
 interface Props {
   categories: Category[];
 }
 
-const WriteArticleForm = ({ categories }: Props) => {
+const CrateArticleForm = ({ categories }: Props) => {
   const {
     title,
     setTitle,
@@ -20,7 +20,7 @@ const WriteArticleForm = ({ categories }: Props) => {
     handleSignup,
     categoryId,
     setCategoryId,
-  } = useArticleWrite();
+  } = useCreateArticle();
 
   return (
     <form onSubmit={handleSignup} className="flex flex-col gap-2">
@@ -50,4 +50,4 @@ const WriteArticleForm = ({ categories }: Props) => {
   );
 };
 
-export default WriteArticleForm;
+export default CrateArticleForm;

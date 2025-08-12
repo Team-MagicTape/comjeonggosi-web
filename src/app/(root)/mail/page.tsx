@@ -1,4 +1,4 @@
-import MailApplyForm from "@/features/mail-apply/ui/MailApplyFormClient";
+import MailApplyForm from "@/features/mail-apply/ui/MailApplyForm";
 import { getSubscription } from "@/features/mail-apply/api/get-subscription";
 
 const MailApply = async () => {

@@ -1,17 +1,21 @@
 'use client';
 
 import Button from '@/shared/ui/Button';
-import { useDeleteArticle } from '@/features/article/delete/model/useDeleteArticle';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   articleId: number;
 }
 
 const EditButton = ({ articleId }: Props) => {
-  const { handleDelete } = useDeleteArticle();
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/admin/articles/${articleId}/edit`);
+  };
 
   return (
-    <Button onClick={() => handleDelete(articleId)}>
+    <Button onClick={handleClick}>
       수정
     </Button>
   );

@@ -1,18 +1,24 @@
 import ArticleList from "@/entities/article/ui/ArticleList";
 import { fetchCategory } from "@/entities/category/api/fetch-category";
 import { fetchArticles } from "@/entities/article/api/fetch-articles";
+import { Category } from "@/entities/category/types/category";
+import { Article } from "@/entities/article/types/article";
 
-interface MainArticleProps {
-  searchParams: { categoryId?: string };
+interface Props {
+  Params?: { categoryId?: string };
+  categories: Category[];
+  initialData: Article[];
+  selectedCategoryId: number;
 }
 
-const MainArticle = async ({ searchParams }: MainArticleProps) => {
+const MainArticle = async ({ Params }: Props) => {
   const categories = await fetchCategory();
-  const selectedCategoryId = searchParams?.categoryId
-    ? parseInt(searchParams.categoryId)
-    : categories.length > 0
-    ? categories[0].id
-    : 0;
+  const selectedCategoryId = Params?.categoryId
+    ? parseInt(Params.categoryId)
+    : 1;
+  if (!categories || categories.length === 0) {
+    return <div>카테고리가 없습니다.</div>;
+  }
 
   const articles = await fetchArticles(selectedCategoryId);
 

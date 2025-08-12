@@ -6,11 +6,16 @@ import MainQuiz from "@/widgets/section/ui/MainQuiz";
 
 const Main = async () => {
   const categories = await fetchCategories();
-  const initialArticles = await fetchInitialArticles(`${categories[0]?.id || 0}`);
+  const selectedCategoryId = categories[0]?.id ?? 1;
+  const initialArticles = await fetchInitialArticles(String(selectedCategoryId));
 
   return (
     <div className="flex flex-col xl:flex-row items-start justify-start gap-8">
-      <MainArticle categories={categories} initialData={initialArticles} />
+      <MainArticle
+        categories={categories}
+        initialData={initialArticles}
+        selectedCategoryId={selectedCategoryId}
+      />
       <div className="w-full xl:w-auto flex-1 flex flex-col gap-8">
         <MainQuiz />
         <MainMailApply />

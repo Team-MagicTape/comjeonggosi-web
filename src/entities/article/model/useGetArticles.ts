@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Article } from "../types/article";
 import { fetchArticles } from "../api/fetch-articles";
 
-export const useGetArticles = (categoryId: string, initialData: Article[]) => {
+export const useGetArticles = (categoryId: number, initialData: Article[]) => {
   const { data, isLoading } = useQuery({
     queryKey: ["articles", categoryId],
     initialData,

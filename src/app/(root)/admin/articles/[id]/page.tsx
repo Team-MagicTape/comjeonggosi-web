@@ -1,5 +1,5 @@
 import React from "react";
-import { ArticleDetail } from "@/entities/article/api/article-detail";
+import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
 import DeleteButton from "@/features/article/delete/ui/DeleteButton";
 import EditButton from "@/features/article/edit/ui/EditButton";
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ArticleDetailPage = async ({ params }: Props) => {
-  const article = await ArticleDetail(Number(params.id));
+  const article = await getArticleDetail(Number(params.id));
 
   if (!article) {
     notFound();

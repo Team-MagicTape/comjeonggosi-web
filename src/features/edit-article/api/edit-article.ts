@@ -1,10 +1,16 @@
 import { apiClient } from "@/shared/libs/custom-axios";
 import { EditArticleData } from "../types/edit-article-data";
 
-export const editArticle = async (articleId: number, data: EditArticleData) => {
+export const editArticle = async (
+  articleId: number,
+  editData: EditArticleData
+) => {
   try {
-    const res = await apiClient.patch(`/admin/articles/${articleId}`, data);
-    return res;
+    const { data } = await apiClient.patch(
+      `/admin/articles/${articleId}`,
+      editData
+    );
+    return data;
   } catch (error) {
     console.error("editArticle error", error);
     throw error;

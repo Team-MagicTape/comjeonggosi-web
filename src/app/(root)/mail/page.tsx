@@ -4,12 +4,10 @@ import { getSubscription } from "@/features/mail-apply/api/get-subscription";
 const MailApply = async () => {
   const subscription = await getSubscription();
   return (
-    <div>
-      <MailApplyForm
-        initialHour={subscription.hour}
-        initialMinute={subscription.minute}
-      />
-    </div>
+    <MailApplyForm
+      initialHour={subscription.hour}
+      initialMinute={subscription.minute}
+    />
   );
 };
 

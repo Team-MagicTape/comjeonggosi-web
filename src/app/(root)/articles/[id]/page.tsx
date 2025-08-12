@@ -1,8 +1,8 @@
 import React from "react";
 import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
-import DeleteButton from "@/features/article/delete/ui/DeleteButton";
-import EditButton from "@/features/article/edit/ui/EditButton";
+import DeleteButton from "@/features/delete-article/DeleteButton";
+import EditButton from "@/features/edit-article/EditButton";
 import { PathParams } from "@/shared/types/path-params";
 
 const ArticleDetailPage = async ({ params }: PathParams) => {

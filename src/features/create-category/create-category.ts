@@ -1,4 +1,4 @@
-import { CreateCategoryData } from "../types/create-category-data";
+import { CreateCategoryData } from "./create-category-data";
 import { apiClient } from "@/shared/libs/custom-axios";
 
 export const createCategory = async (data: CreateCategoryData) => {

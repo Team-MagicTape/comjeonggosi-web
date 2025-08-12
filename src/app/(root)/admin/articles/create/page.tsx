@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateArticleForm from '@/features/article/create/ui/CreateArticleForm';
+import CreateArticleForm from '@/features/create-article/CreateArticleForm';
 import { fetchCategory } from '@/entities/category/api/fetch-category';
 
 const CreateArticlePage = async () => {

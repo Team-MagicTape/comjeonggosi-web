@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/shared/ui/Button';
-import { useDeleteArticle } from '@/features/article/delete/model/useDeleteArticle';
+import { useDeleteArticle } from '@/features/delete-article/useDeleteArticle';
 
 interface Props {
   articleId: number;

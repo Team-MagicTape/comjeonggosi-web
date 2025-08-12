@@ -1,6 +1,6 @@
 import { toast } from "@/shared/providers/ToastProvider";
 import { useState } from "react";
-import { createArticle } from "@/features/article/create/api/create-article";
+import { createArticle } from "@/features/create-article/create-article";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 export const useCreateArticle = () => {

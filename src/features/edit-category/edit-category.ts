@@ -1,5 +1,5 @@
 import { apiClient } from "@/shared/libs/custom-axios";
-import { EditCategoryData } from "../types/edit-category-data";
+import { EditCategoryData } from "./edit-category-data";
 
 export const editCategory = async (id: string, data: EditCategoryData) => {
   try {

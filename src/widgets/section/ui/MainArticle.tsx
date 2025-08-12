@@ -16,9 +16,6 @@ const MainArticle = async ({ Params }: Props) => {
   const selectedCategoryId = Params?.categoryId
     ? parseInt(Params.categoryId)
     : 1;
-  if (!categories || categories.length === 0) {
-    return <div>카테고리가 없습니다.</div>;
-  }
 
   const articles = await fetchArticles(selectedCategoryId);
 

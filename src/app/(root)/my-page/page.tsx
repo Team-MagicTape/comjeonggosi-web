@@ -72,7 +72,7 @@ const MyPage = async () => {
           받은 질문들
         </div>
       </div>
-      <div className="w-full xl:w-90 p-4 border border-border bg-white rounded-2xl xl:sticky xl:top-30 flex flex-col gap-4">
+      <div className="w-full xl:w-90 p-4 border border-border bg-white rounded-2xl xl:sticky xl:top-32 flex flex-col gap-4">
         <div className="w-full flex items-center gap-4">
           <UserAvatar user={user} size={80} />
           <div>

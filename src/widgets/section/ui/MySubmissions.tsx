@@ -1,5 +1,7 @@
 import { MySubmission } from "@/entities/quiz/types/my-submission";
 import MySubmissionItem from "@/entities/quiz/ui/MySubmissionItem";
+import Button from "@/shared/ui/Button";
+import CustomLink from "@/shared/ui/CustomLink";
 import { BookOpenCheck, ClipboardList } from "lucide-react";
 
 interface Props {
@@ -7,7 +9,7 @@ interface Props {
 }
 
 const MySubmissions = ({ submissions }: Props) => {
-  const correctCount = submissions.filter(s => s.isCorrected).length;
+  const correctCount = submissions.filter((s) => s.isCorrected).length;
   const totalCount = submissions.length;
 
   return (
@@ -17,7 +19,9 @@ const MySubmissions = ({ submissions }: Props) => {
           <ClipboardList className="text-primary" size={32} />
         </div>
         <div className="flex-1">
-          <h2 className="text-2xl font-semibold text-gray-800">내 제출 현황</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">
+            퀴즈 풀이 현황
+          </h2>
           {totalCount > 0 && (
             <div className="flex items-center gap-4 mt-1">
               <span className="text-sm text-gray-600">
@@ -25,7 +29,9 @@ const MySubmissions = ({ submissions }: Props) => {
               </span>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span className="text-xs text-gray-500">정답률 {Math.round((correctCount / totalCount) * 100)}%</span>
+                <span className="text-xs text-gray-500">
+                  정답률 {Math.round((correctCount / totalCount) * 100)}%
+                </span>
               </div>
             </div>
           )}
@@ -38,8 +44,15 @@ const MySubmissions = ({ submissions }: Props) => {
             <div className="p-4 bg-gray-50 rounded-full w-fit mx-auto mb-4">
               <BookOpenCheck className="text-gray-400" size={32} />
             </div>
-            <p className="text-gray-500 text-base">아직 제출한 퀴즈가 없습니다.</p>
-            <p className="text-gray-400 text-sm mt-1">첫 번째 퀴즈에 도전해보세요!</p>
+            <p className="text-gray text-base">
+              아직 제출한 퀴즈가 없습니다.
+            </p>
+            <p className="text-lightgray text-sm mt-1">
+              첫 번째 퀴즈에 도전해보세요!
+            </p>
+            <CustomLink className="w-full flex justify-center mt-4" href="/quizzes">
+              <Button>퀴즈 바로가기</Button>
+            </CustomLink>
           </div>
         ) : (
           submissions.map((item, idx) => (
@@ -47,9 +60,11 @@ const MySubmissions = ({ submissions }: Props) => {
           ))
         )}
       </div>
-      <div className="w-full border-t border-border text-center mt-6 pt-3 text-gray cursor-pointer">
-        더보기
-      </div>
+      {submissions.length > 5 && (
+        <div className="w-full border-t border-border text-center mt-6 pt-3 text-gray cursor-pointer">
+          더보기
+        </div>
+      )}
     </div>
   );
 };

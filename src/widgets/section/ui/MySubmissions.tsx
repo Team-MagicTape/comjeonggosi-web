@@ -1,56 +1,42 @@
+"use client";
+
 import { MySubmission } from "@/entities/quiz/types/my-submission";
 import MySubmissionItem from "@/entities/quiz/ui/MySubmissionItem";
 import Button from "@/shared/ui/Button";
 import CustomLink from "@/shared/ui/CustomLink";
+import Tabs from "@/widgets/tabs/ui/Tabs";
 import { BookOpenCheck, ClipboardList } from "lucide-react";
+import { SUBMISSION_CATEGORY } from "../constants/submission-category";
+import { useState } from "react";
+import { useGetMySubmissions } from "@/entities/quiz/model/useGetMySubmissions";
 
 interface Props {
   submissions: MySubmission[];
 }
 
 const MySubmissions = ({ submissions }: Props) => {
-  const correctCount = submissions.filter((s) => s.isCorrected).length;
-  const totalCount = submissions.length;
+  const { data, isLoading, setCategory, category } = useGetMySubmissions(submissions);
 
   return (
     <div className="w-full p-4 border border-gray-200 bg-white rounded-2xl">
       <div className="flex items-center gap-3 mb-6 px-1">
-        <div className="p-2 bg-blue-50 rounded-lg">
-          <ClipboardList className="text-primary" size={32} />
-        </div>
-        <div className="flex-1">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            퀴즈 풀이 현황
-          </h2>
-          {totalCount > 0 && (
-            <div className="flex items-center gap-4 mt-1">
-              <span className="text-sm text-gray-600">
-                총 {totalCount}개 중 {correctCount}개 정답
-              </span>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span className="text-xs text-gray-500">
-                  정답률 {Math.round((correctCount / totalCount) * 100)}%
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
+        <ClipboardList className="text-primary" size={32} />
+        <h2 className="text-2xl font-semibold text-gray-800">퀴즈 풀이 현황</h2>
       </div>
-
-      <div className="space-y-3">
+      <Tabs tabs={SUBMISSION_CATEGORY} selected={category} setSelected={setCategory} />
+      <div className="space-y-3 mt-4">
         {submissions.length === 0 ? (
           <div className="text-center py-12">
             <div className="p-4 bg-gray-50 rounded-full w-fit mx-auto mb-4">
               <BookOpenCheck className="text-gray-400" size={32} />
             </div>
-            <p className="text-gray text-base">
-              아직 제출한 퀴즈가 없습니다.
-            </p>
+            <p className="text-gray text-base">아직 제출한 퀴즈가 없습니다.</p>
             <p className="text-lightgray text-sm mt-1">
               첫 번째 퀴즈에 도전해보세요!
             </p>
-            <CustomLink className="w-full flex justify-center mt-4" href="/quizzes">
+            <CustomLink
+              className="w-full flex justify-center mt-4"
+              href="/quizzes">
               <Button>퀴즈 바로가기</Button>
             </CustomLink>
           </div>

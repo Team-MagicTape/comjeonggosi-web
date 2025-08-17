@@ -25,7 +25,7 @@ const MySubmissions = ({ submissions }: Props) => {
       </div>
       <Tabs tabs={SUBMISSION_CATEGORY} selected={category} setSelected={setCategory} />
       <div className="space-y-3 mt-4">
-        {submissions.length === 0 ? (
+        {!data || data.length === 0 ? (
           <div className="text-center py-12">
             <div className="p-4 bg-gray-50 rounded-full w-fit mx-auto mb-4">
               <BookOpenCheck className="text-gray-400" size={32} />
@@ -41,7 +41,7 @@ const MySubmissions = ({ submissions }: Props) => {
             </CustomLink>
           </div>
         ) : (
-          submissions.map((item, idx) => (
+          data?.map((item, idx) => (
             <MySubmissionItem data={item} key={idx} />
           ))
         )}

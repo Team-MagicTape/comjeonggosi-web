@@ -105,7 +105,7 @@ const MyPage = async () => {
   return (
     <div className="w-full flex items-start gap-4 flex-col">
       <div className="w-full p-4 border border-border bg-white rounded-2xl flex flex-col gap-4">
-        <div className="w-full flex items-center gap-4">
+        <div className="w-full flex xl:items-center gap-4 flex-col xl:flex-row">
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
@@ -122,7 +122,7 @@ const MyPage = async () => {
       </div>
       <div className="w-full flex flex-col gap-4">
         <MySubmissions submissions={submissions} />
-        <MailTemplate data={mail} />
+        <MailTemplate data={mail} category={{ id: 1, name: "데이터베이스", description: "데이터베이스 과목" }} />
         <QuestionAccordion mails={mails} />
       </div>
     </div>

@@ -1,12 +1,12 @@
 "use client";
 
-import { Mail } from "../types/mail";
 import { useScrollToMail } from "../model/useScrollToMail";
 import { useToggleAnswer } from "../model/useToggleAnswer";
 import Button from "@/shared/ui/Button";
+import { MailDetail } from "../types/mail-detail";
 
 interface Props {
-  data: Mail;
+  data: MailDetail;
 }
 
 const MailTemplate = ({ data }: Props) => {
@@ -33,15 +33,10 @@ const MailTemplate = ({ data }: Props) => {
         </div>
 
         <div className="w-full text-center text-xl font-semibold text-gray-800 mb-8 leading-relaxed bg-gray-50 py-10 border border-border rounded-item">
-          {data.question}
+          {data.content}
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-200 p-5 rounded-xl shadow-sm flex flex-col gap-2 mb-5">
-          <span className="text-yellow-600 text-xs">힌트</span>
-          <p className="text-yellow-800 font-medium leading-relaxed">
-            {data.hint}
-          </p>
-        </div>
+    
 
         {open ? (
           <div className="w-full text-lg font-semibold text-green-800 leading-relaxed bg-green-50 p-5 border border-green-300 rounded-item break-keep scale-up-center">

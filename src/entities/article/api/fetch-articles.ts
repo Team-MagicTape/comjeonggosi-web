@@ -1,15 +1,13 @@
-import { customFetch } from "@/shared/libs/custom-fetch";
+import { apiClient } from "@/shared/libs/custom-axios";
 import { Article } from "../types/article";
 
-export const fetchArticles = async (
-  categoryId: number
-): Promise<Article[] | undefined> => {
+export const fetchArticles = async (categoryId: string) => {
   try {
-    const { data } = await customFetch.get<Article[]>(
-      `/admin/articles?categoryId=${categoryId}`
+    const { data } = await apiClient.get<Article[]>(
+      `/articles?categoryId=${categoryId}`
     );
     return data;
-  } catch (error) {
-    console.error("fetchArticles error", error);
+  } catch {
+    return [];
   }
 };

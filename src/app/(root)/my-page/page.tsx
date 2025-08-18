@@ -29,8 +29,8 @@ const MyPage = async () => {
     id: 247,
     title: "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
     content: "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-    category: "Database",
-    date: "2025년 8월 14일 수요일",
+    categoryId: 1,
+    day: 1,
     answer:
       "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
   };

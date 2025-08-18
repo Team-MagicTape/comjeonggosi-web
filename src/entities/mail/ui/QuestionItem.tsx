@@ -17,11 +17,11 @@ const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
         className="flex justify-between items-center p-4 cursor-pointer"
         onClick={onToggle}>
         <div className="flex items-center gap-4">
-          <span className="text-primary font-semibold">Q.</span>
-          <p className="font-semibold">{data.question}</p>
+          <span className="text-primary font-semibold">{data.id}.</span>
+          <p className="font-semibold text-sm break-keep xl:text-base">{data.title}</p>
         </div>
         <ChevronDown
-          className={`text-gray-500 transform transition-transform ${
+          className={`text-gray transform transition-transform ${
             isOpen ? "rotate-180" : ""
           }`}
           size={24}
@@ -31,12 +31,20 @@ const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
         className="grid transition-all duration-500 ease-in-out"
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}>
         <div className="overflow-hidden">
-          <div className="p-4 bg-gray-50">
-            <p className="text-gray-700">{data.answer}</p>
+          <div className="p-4 bg-gray-50 space-y-2">
+            <div className="flex text-gray-700">
+              <span className="text-primary font-semibold shrink-0 mr-2">
+                Q:
+              </span>
+              <p className="flex-1 break-keep">{data.content}</p>
+            </div>
+            <div className="flex text-green-700">
+              <span className="font-semibold shrink-0 mr-2">A:</span>
+              <p className="flex-1 break-keep">{data.answer}</p>
+            </div>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

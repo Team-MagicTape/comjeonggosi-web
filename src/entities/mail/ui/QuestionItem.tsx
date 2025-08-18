@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Eye } from "lucide-react";
 import { Mail } from "../types/mail";
+import { useToggleAnswer } from "../model/useToggleAnswer";
 
 interface Props {
   data: Mail;
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
+  const { open, openAnswer } = useToggleAnswer();
+
   return (
     <div className={`${!isLast && "border-b"}  border-border`}>
       <div
@@ -18,7 +21,9 @@ const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
         onClick={onToggle}>
         <div className="flex items-center gap-4">
           <span className="text-primary font-semibold">{data.id}.</span>
-          <p className="font-semibold text-sm break-keep xl:text-base">{data.title}</p>
+          <p className="font-semibold text-sm break-keep xl:text-base">
+            {data.title}
+          </p>
         </div>
         <ChevronDown
           className={`text-gray transform transition-transform ${
@@ -38,9 +43,19 @@ const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
               </span>
               <p className="flex-1 break-keep">{data.content}</p>
             </div>
-            <div className="flex text-green-700">
+            <div className="flex text-green-700 relative">
               <span className="font-semibold shrink-0 mr-2">A:</span>
-              <p className="flex-1 break-keep">{data.answer}</p>
+              <p className={`flex-1 break-keep transition-all ${open ? "blur-0" : "blur-sm"}`}>{data.answer}</p>
+              {!open && (
+                <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+                  <div
+                    className="flex items-center gap-1 text-gray hover:text-lightgray transition-colors cursor-pointer"
+                    onClick={openAnswer}>
+                    <p className="font-semibold">답안 보기</p>
+                    <Eye size={20} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

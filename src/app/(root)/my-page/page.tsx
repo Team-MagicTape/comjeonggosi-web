@@ -1,4 +1,3 @@
-import { User } from "@/entities/user/types/user";
 import UserAvatar from "@/entities/user/ui/UserAvatar";
 import MailTemplate from "@/entities/mail/ui/MailTemplate";
 import LogoutButton from "@/widgets/login-button/ui/LogoutButton";
@@ -7,174 +6,34 @@ import Spacer from "@/shared/ui/Spacer";
 import { parseDate } from "@/shared/utils/parse-date";
 import { fetchInitialSubmissions } from "@/entities/quiz/api/fetch-initial-submissions";
 import QuestionAccordion from "@/widgets/section/ui/QuestionAccordion";
+import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
+import { fetchInitialMailDetail } from "@/entities/mail/api/fetch-initial-mail-detail";
+import { fetchInitialCategoryDetail } from "@/entities/category/api/fetch-initial-category-detail";
+import { fetchUser } from "@/entities/user/api/fetch-user";
+import { redirect } from "next/navigation";
 
 const MyPage = async () => {
-  const user: User = {
-    id: 1,
-    email: "tw080401@naver.com",
-    nickname: "cher1shRXD",
-    profileImageUrl: "https://cher1shrxd.me/assets/profile.JPG",
-    provider: "NAVER",
-    providerId: "NAVER",
-    createdAt: "2025-08-13T10:35:42.000Z",
-    lastLoginAt: "2025-08-13T10:35:42.000Z",
-    updatedAt: "2025-08-13T10:35:42.000Z",
-  };
+  const user = await fetchUser();
 
   const submissions = await fetchInitialSubmissions();
 
-  const mail = {
-    id: 247,
-    question:
-      "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-    options: [
-      "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-      "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-      "데이터베이스가 항상 유효한 상태를 유지하는 것",
-      "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-    ],
-    hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-    category: "Database",
-    date: "2025년 8월 14일 수요일",
-    answer:
-      "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-  };
+  const mails = (await fetchInitialMails()).splice(0, 1);
 
-  const mails = [
-    {
-      id: 248,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 249,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 250,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 251,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 252,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 253,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 254,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-    {
-      id: 255,
-      question:
-        "ACID 속성 중에서 일관성(Consistency)이 보장하는 것은 무엇인가요?",
-      options: [
-        "트랜잭션이 완료된 후에도 데이터가 유지되는 것",
-        "동시에 실행되는 트랜잭션들이 서로 간섭하지 않는 것",
-        "데이터베이스가 항상 유효한 상태를 유지하는 것",
-        "트랜잭션이 모두 실행되거나 전혀 실행되지 않는 것",
-      ],
-      hint: "데이터베이스의 무결성 제약조건과 관련이 있습니다.",
-      category: "Database",
-      date: "2025년 8월 14일 수요일",
-      answer:
-        "트랜잭션 실행 전후에 데이터베이스가 일관된 상태를 유지해야 한다는 속성입니다. 즉, 트랜잭션이 성공적으로 완료되면 무결성 제약 조건을 위반하지 않고 일관된 상태로 데이터가 유지되어야 합니다.",
-    },
-  ];
+  const mail =
+    mails.length > 0 ? await fetchInitialMailDetail(mails[0].id) : null;
+
+  const questionCategory = mail
+    ? await fetchInitialCategoryDetail(mail.categoryId)
+    : null;
+
+  if (!user) {
+    redirect("/");
+  }
 
   return (
     <div className="w-full flex items-start gap-4 flex-col">
       <div className="w-full p-4 border border-border bg-white rounded-2xl flex flex-col gap-4">
-        <div className="w-full flex items-center gap-4">
+        <div className="w-full flex xl:items-center gap-4 flex-col xl:flex-row">
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
@@ -191,7 +50,10 @@ const MyPage = async () => {
       </div>
       <div className="w-full flex flex-col gap-4">
         <MySubmissions submissions={submissions} />
-        <MailTemplate data={mail} />
+        {mail && questionCategory && (
+          <MailTemplate data={mail} category={questionCategory} />
+        )}
+
         <QuestionAccordion mails={mails} />
       </div>
     </div>

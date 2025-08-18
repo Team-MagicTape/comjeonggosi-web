@@ -1,50 +1,47 @@
 "use client";
 
-import { Mail } from "../types/mail";
 import { useScrollToMail } from "../model/useScrollToMail";
 import { useToggleAnswer } from "../model/useToggleAnswer";
 import Button from "@/shared/ui/Button";
+import { MailDetail } from "../types/mail-detail";
+import { Category } from "@/entities/category/types/category";
 
 interface Props {
-  data: Mail;
+  data: MailDetail;
+  category: Category;
 }
 
-const MailTemplate = ({ data }: Props) => {
+const MailTemplate = ({ data, category }: Props) => {
   const ref = useScrollToMail();
   const { open, openAnswer } = useToggleAnswer();
 
   return (
     <div
-      className="w-full mx-auto bg-white rounded-2xl shadow-lg overflow-hidden"
+      className="w-full mx-auto bg-white rounded-2xl overflow-hidden"
       ref={ref}>
-      <div className="bg-primary px-8 pt-8 pb-4 text-white">
-        <h1 className="text-2xl font-bold mb-6">오늘의 CS 면접 질문</h1>
+      <div className="bg-primary px-4 xl:px-8 pt-4 xl:pt-8 pb-4 text-white">
+        <h1 className="xl:text-2xl font-bold mb-2 xl:mb-6 break-keep">{data.title}</h1>
         <div className="w-full flex justify-between items-end">
           <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/20">
-            {data.category}
+            {category.name}
           </span>
-          <p className="text-blue-100 text-sm">{data.date}</p>
+          <p className="text-blue-100 text-sm">{data.day}일 전</p>
         </div>
       </div>
 
-      <div className="px-8 py-10 flex flex-col">
+      <div className="px-4 xl:px-8 py-4 xl:py-10 flex flex-col border-x border-border">
         <div className="text-blue-600 text-sm font-semibold mb-5 uppercase tracking-wide">
           CS 질문 #{data.id}
         </div>
 
-        <div className="w-full text-center text-xl font-semibold text-gray-800 mb-8 leading-relaxed bg-gray-50 py-10 border border-border rounded-item">
-          {data.question}
+        <div className="w-full text-center text-sm xl:text-xl font-semibold text-gray-800 mb-4 xl:mb-8 leading-relaxed bg-gray-50 py-10 px-2 break-keep border border-border rounded-item">
+          {data.content}
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-200 p-5 rounded-xl shadow-sm flex flex-col gap-2 mb-5">
-          <span className="text-yellow-600 text-xs">힌트</span>
-          <p className="text-yellow-800 font-medium leading-relaxed">
-            {data.hint}
-          </p>
-        </div>
+    
 
         {open ? (
-          <div className="w-full text-lg font-semibold text-green-800 leading-relaxed bg-green-50 p-5 border border-green-300 rounded-item break-keep scale-up-center">
+          <div className="w-full text-sm xl:text-lg font-semibold text-green-800 leading-relaxed bg-green-50 p-5 border border-green-300 rounded-item break-keep scale-up-center">
             <span className="text-green-600 text-xs">모범 답안</span>
             <p>{data.answer}</p>
           </div>
@@ -53,7 +50,7 @@ const MailTemplate = ({ data }: Props) => {
         )}
       </div>
 
-      <div className="bg-gray-50 p-4 pb-5 text-center border-t border-border flex flex-col gap-4">
+      <div className="bg-gray-50 p-4 pb-5 text-center border border-border flex flex-col gap-4 rounded-b-2xl">
         <a
           href="#"
           className="text-lightgray hover:text-gray transition-colors">

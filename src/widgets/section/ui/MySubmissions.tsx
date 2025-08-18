@@ -5,9 +5,8 @@ import MySubmissionItem from "@/entities/quiz/ui/MySubmissionItem";
 import Button from "@/shared/ui/Button";
 import CustomLink from "@/shared/ui/CustomLink";
 import Tabs from "@/widgets/tabs/ui/Tabs";
-import { BookOpenCheck, ClipboardList } from "lucide-react";
+import { BookOpenCheck } from "lucide-react";
 import { SUBMISSION_CATEGORY } from "../constants/submission-category";
-import { useState } from "react";
 import { useGetMySubmissions } from "@/entities/quiz/model/useGetMySubmissions";
 
 interface Props {
@@ -15,15 +14,17 @@ interface Props {
 }
 
 const MySubmissions = ({ submissions }: Props) => {
-  const { data, isLoading, setCategory, category } = useGetMySubmissions(submissions);
+  const { data, isLoading, setCategory, category } =
+    useGetMySubmissions(submissions);
 
   return (
     <div className="w-full p-4 border border-gray-200 bg-white rounded-2xl">
-      <div className="flex items-center gap-3 mb-6 px-1">
-        <ClipboardList className="text-primary" size={32} />
-        <h2 className="text-2xl font-semibold text-gray-800">퀴즈 풀이 현황</h2>
-      </div>
-      <Tabs tabs={SUBMISSION_CATEGORY} selected={category} setSelected={setCategory} />
+      <h2 className="text-xl font-semibold mb-4">퀴즈 풀이 현황</h2>
+      <Tabs
+        tabs={SUBMISSION_CATEGORY}
+        selected={category}
+        setSelected={setCategory}
+      />
       <div className="space-y-3 mt-4">
         {!data || data.length === 0 ? (
           <div className="text-center py-12">
@@ -41,9 +42,7 @@ const MySubmissions = ({ submissions }: Props) => {
             </CustomLink>
           </div>
         ) : (
-          data?.map((item, idx) => (
-            <MySubmissionItem data={item} key={idx} />
-          ))
+          data?.map((item, idx) => <MySubmissionItem data={item} key={idx} />)
         )}
       </div>
       {submissions.length > 5 && (

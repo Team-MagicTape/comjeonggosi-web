@@ -14,14 +14,10 @@ import { redirect } from "next/navigation";
 
 const MyPage = async () => {
   const user = await fetchUser();
-
   const submissions = await fetchInitialSubmissions();
-
   const mails = (await fetchInitialMails()).splice(0, 1);
-
   const mail =
     mails.length > 0 ? await fetchInitialMailDetail(mails[0].id) : null;
-
   const questionCategory = mail
     ? await fetchInitialCategoryDetail(mail.categoryId)
     : null;

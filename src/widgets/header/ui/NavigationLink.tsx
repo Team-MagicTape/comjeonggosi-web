@@ -2,6 +2,7 @@
 
 import CustomLink from "@/shared/ui/CustomLink";
 import { useNavigationLink } from "../model/useNavigationLink";
+import { parseIcons } from "../utils/parse-icons";
 
 interface Props {
   href: string;
@@ -13,10 +14,14 @@ const NavigationLink = ({ href, name }: Props) => {
 
   return (
     <CustomLink
-      className={`px-4 py-1 rounded-full ${
+      className={`p-2 xl:px-4 xl:py-1 rounded xl:rounded-full text-[10px] xl:text-base flex-1 xl:flex-none flex flex-col items-center ${
         isActive ? "text-white bg-primary" : "text-black bg-white"
       }`}
-      href={href}>
+      href={href}
+    >
+      <div className="xl:hidden mb-1">
+        {parseIcons(name)}
+      </div>
       {name}
     </CustomLink>
   );

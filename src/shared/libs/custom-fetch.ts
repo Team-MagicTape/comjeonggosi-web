@@ -36,6 +36,9 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
       throw new Error(`${response.status || 500}`);
     }
 
+    const resText = await response.text();
+    console.log(resText);
+
     const res = (await response.json()) as T;
 
     return { data: res, status: response.status };

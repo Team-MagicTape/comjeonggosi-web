@@ -16,6 +16,8 @@ const middleware = async (req: NextRequest) => {
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;
 
+    console.log("middleware accessToken", accessToken);
+
     if(!accessToken) {
       return NextResponse.next();
     }
@@ -45,16 +47,16 @@ const middleware = async (req: NextRequest) => {
       res.cookies.set("accessToken", newAccessToken, {
         httpOnly: true,
         path: "/",
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 60 * 5,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
       });
       res.cookies.set("refreshToken", newRefreshToken, {
         httpOnly: true,
         path: "/",
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 60 * 60 * 24 * 30,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
       });
 
       return res;

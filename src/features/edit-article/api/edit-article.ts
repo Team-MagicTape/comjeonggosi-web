@@ -7,7 +7,7 @@ export const editArticle = async (
 ) => {
   try {
     const { data } = await apiClient.patch(
-      `/admin/articles/${articleId}`,
+      `/api/admin/articles/${articleId}`,
       editData
     );
     return data;

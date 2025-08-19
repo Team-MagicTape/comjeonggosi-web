@@ -3,7 +3,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 
 export const fetchQuiz = async (categoryId: string) => {
   try {
-    const { data } = await apiClient.get<Quiz>(`/quizzes?categoryId=${categoryId}`);
+    const { data } = await apiClient.get<Quiz>(`/api/quizzes?categoryId=${categoryId}`);
     console.log("quiz: ", data);
     return data;
   } catch {

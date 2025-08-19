@@ -13,7 +13,7 @@ const CreateCategory = () => {
 
   const submit = async () => {
     try {
-      await apiClient.post("/admin/categories", data);
+      await apiClient.post("/api/admin/categories", data);
       alert("카테고리 등록 성공");
     } catch {
       alert("카테고리 등록 실패");

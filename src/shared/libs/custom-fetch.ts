@@ -3,22 +3,19 @@ import { cookies } from "next/headers";
 const request = async <T>(url: string, options: RequestInit = {}) => {
   try {
     const cookieStore = await cookies();
+    const accessToken = cookieStore.get("accessToken")?.value;
 
-    console.log("cookie:", cookieStore.toString());
-    console.log("url:", url);
-
+    const authorization = { Authorization: `Bearer ${accessToken}` };
 
     const fetchOptions: RequestInit = {
       ...options,
       headers: {
         ...(options.headers || {}),
-        Cookie: cookieStore.toString()
+        ...(accessToken ?  authorization : {})
        
       },
       credentials: 'include'
     };
-
-    console.log("fetchOptions:", fetchOptions);
 
     if (fetchOptions.body instanceof FormData) {
       fetchOptions.headers = fetchOptions.headers
@@ -35,9 +32,6 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
     if(!response.ok) {
       throw new Error(`${response.status || 500}`);
     }
-
-    const resText = await response.text();
-    console.log(resText);
 
     const res = (await response.json()) as T;
 

@@ -4,7 +4,7 @@ import { Article } from "../types/article";
 export const fetchArticles = async (categoryId: string) => {
   try {
     const { data } = await apiClient.get<Article[]>(
-      `/articles?categoryId=${categoryId}`
+      `/api/articles?categoryId=${categoryId}`
     );
     return data;
   } catch {

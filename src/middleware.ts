@@ -5,26 +5,25 @@ const middleware = async (req: NextRequest) => {
   try {
     const { pathname } = req.nextUrl;
 
-    // if (
-    //   pathname.startsWith("/api/") ||
-    //   pathname.startsWith("/login") ||
-    //   pathname.startsWith("/signup")
-    // ) {
-    //   return NextResponse.next();
-    // }
-
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;
 
     console.log("middleware accessToken", accessToken);
 
-    if(!accessToken) {
+    if (
+      pathname.startsWith("/api/") ||
+      pathname.startsWith("/login") ||
+      pathname.startsWith("/signup")
+    ) {
+      return NextResponse.next();
+    }
+
+    if (!accessToken) {
       return NextResponse.next();
     }
 
     if (isTokenExpired(accessToken)) {
       if (!refreshToken) {
-        console.log("hi1");
         return NextResponse.redirect(new URL("/login", req.url));
       }
 
@@ -32,12 +31,14 @@ const middleware = async (req: NextRequest) => {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json", Cookie: req.cookies.toString() },
+          headers: {
+            "Content-Type": "application/json",
+            Cookie: req.cookies.toString(),
+          },
         }
       );
 
       if (!refreshResponse.ok) {
-        console.log("hi2");
         return NextResponse.redirect(new URL("/login", req.url));
       }
 
@@ -66,7 +67,6 @@ const middleware = async (req: NextRequest) => {
 
     return NextResponse.next();
   } catch {
-    console.log("hi3");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 };

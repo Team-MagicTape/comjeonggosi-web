@@ -5,6 +5,7 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
     const cookieStore = await cookies();
 
     console.log("cookie:", cookieStore.toString());
+    console.log("url:", url);
 
 
     const fetchOptions: RequestInit = {

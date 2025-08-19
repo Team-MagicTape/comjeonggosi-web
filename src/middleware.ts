@@ -5,13 +5,13 @@ const middleware = async (req: NextRequest) => {
   try {
     const { pathname } = req.nextUrl;
 
-    if (
-      pathname.startsWith("/api/") ||
-      pathname.startsWith("/login") ||
-      pathname.startsWith("/signup")
-    ) {
-      return NextResponse.next();
-    }
+    // if (
+    //   pathname.startsWith("/api/") ||
+    //   pathname.startsWith("/login") ||
+    //   pathname.startsWith("/signup")
+    // ) {
+    //   return NextResponse.next();
+    // }
 
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;

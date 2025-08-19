@@ -20,8 +20,6 @@ const middleware = async (req: NextRequest) => {
       return NextResponse.next();
     }
 
-    console.log("accessToken: ",accessToken);
-
     if (isTokenExpired(accessToken)) {
       if (!refreshToken) {
         return NextResponse.redirect(new URL("/login", req.url));

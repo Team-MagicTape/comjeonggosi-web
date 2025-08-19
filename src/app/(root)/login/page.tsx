@@ -1,9 +1,9 @@
 import { cookies } from "next/headers"
 
 const Login = async () => {
-  const cookie = await cookies();
+  // const cookie = await cookies();
 
-  console.log("cookie", cookie.toString());
+  // console.log("cookie", cookie.toString());
 
   return (
     <div>Login</div>

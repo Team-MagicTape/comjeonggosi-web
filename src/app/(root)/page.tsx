@@ -3,12 +3,17 @@ import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MainArticle from "@/widgets/section/ui/MainArticle";
 import MainMailApply from "@/widgets/section/ui/MainMailApply";
 import MainQuiz from "@/widgets/section/ui/MainQuiz";
+import { cookies } from "next/headers";
 
 const Main = async () => {
   const categories = await fetchCategories();
   const initialArticles = await fetchInitialArticles(
     `${categories[0]?.id || 0}`
   );
+
+  const cookieStore = await cookies();
+
+  console.log(cookieStore.toString());
 
   return (
     <div className="flex flex-col xl:flex-row items-start justify-start gap-4 xl:gap-8">

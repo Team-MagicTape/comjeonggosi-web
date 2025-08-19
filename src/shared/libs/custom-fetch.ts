@@ -17,6 +17,8 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
       credentials: 'include'
     };
 
+    console.log("fetchOptions:", fetchOptions);
+
     if (fetchOptions.body instanceof FormData) {
       fetchOptions.headers = fetchOptions.headers
         ? { ...fetchOptions.headers }

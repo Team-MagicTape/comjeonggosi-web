@@ -24,6 +24,7 @@ const middleware = async (req: NextRequest) => {
 
     if (isTokenExpired(accessToken)) {
       if (!refreshToken) {
+        console.log("hi1");
         return NextResponse.redirect(new URL("/login", req.url));
       }
 
@@ -36,6 +37,7 @@ const middleware = async (req: NextRequest) => {
       );
 
       if (!refreshResponse.ok) {
+        console.log("hi2");
         return NextResponse.redirect(new URL("/login", req.url));
       }
 
@@ -64,6 +66,7 @@ const middleware = async (req: NextRequest) => {
 
     return NextResponse.next();
   } catch {
+    console.log("hi3");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 };

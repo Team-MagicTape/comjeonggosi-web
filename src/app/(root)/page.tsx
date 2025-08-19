@@ -11,9 +11,9 @@ const Main = async () => {
   );
 
   return (
-    <div className="flex flex-col xl:flex-row items-start justify-start gap-8">
+    <div className="flex flex-col xl:flex-row items-start justify-start gap-4 xl:gap-8">
       <MainArticle categories={categories} initialData={initialArticles} />
-      <div className="w-full xl:w-auto flex-1 flex flex-col gap-8">
+      <div className="w-full xl:w-auto flex-1 flex flex-col gap-4 xl:gap-8">
         <MainQuiz />
         <MainMailApply />
       </div>

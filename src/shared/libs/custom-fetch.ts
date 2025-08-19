@@ -4,6 +4,8 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
   try {
     const cookieStore = await cookies();
 
+    console.log(cookieStore.toString());
+
 
     const fetchOptions: RequestInit = {
       ...options,

@@ -51,14 +51,10 @@ const handler = async (
     });
   };
 
-  if (!accessToken || !refreshToken) {
-    return NextResponse.next();
-  }
-
   const originalCookieHeader = cookieStore.toString();
   let cookieHeaderToUse = originalCookieHeader;
-
-  if (isTokenExpired(accessToken)) {
+  
+  if (accessToken && isTokenExpired(accessToken)) {
     const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
       {},
@@ -105,7 +101,7 @@ const handler = async (
       status: apiResponse.status,
     });
     
-    if (isRefreshed) {
+    if (isRefreshed && accessToken && refreshToken) {
       response.cookies.set("accessToken", accessToken, ACCESSTOKEN_COOKIE_OPTION);
       response.cookies.set("refreshToken", refreshToken, REFRESHTOKEN_COOKIE_OPTION);
     }

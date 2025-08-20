@@ -6,7 +6,7 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = (categories: Category[]) => {
+export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) => {
   const categoryList = categories.map((item) => ({
     name: item.name,
     value: `${item.id}`,
@@ -20,7 +20,7 @@ export const useQuizForm = (categories: Category[]) => {
     hideForever: false,
     autoNext: false,
   });
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);
   const [isCorrect, setIsCorrect] = useState(false);
 
   const getQuizzes = async () => {

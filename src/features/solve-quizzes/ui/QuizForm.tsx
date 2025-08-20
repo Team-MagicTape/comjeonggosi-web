@@ -10,12 +10,14 @@ import { getButtonStyle } from "../utils/get-button-style";
 import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { Category } from "@/entities/category/types/category";
+import { Quiz } from "@/entities/quiz/types/quiz";
 
 interface Props {
   categories: Category[];
+  initialQuiz: Quiz | null;
 }
 
-const QuizForm = ({ categories }: Props) => {
+const QuizForm = ({ categories, initialQuiz }: Props) => {
   const {
     category,
     setCategory,
@@ -31,7 +33,7 @@ const QuizForm = ({ categories }: Props) => {
     categoryList,
     quizzes,
     options
-  } = useQuizForm(categories);
+  } = useQuizForm(categories, initialQuiz);
 
 
   return (

@@ -80,6 +80,7 @@ const handler = async (
 
   try {
     const apiResponse = await tryRequest(accessToken);
+    console.log("request:", apiResponse.request);
 
     const response = NextResponse.json(apiResponse.data, {
       status: apiResponse.status,

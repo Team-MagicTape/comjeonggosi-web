@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import axios from "axios";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
+import { REFRESHTOKEN_COOKIE_OPTION } from "@/shared/constants/cookie-option";
 
 const handler = async (
   req: NextRequest,
@@ -30,8 +31,7 @@ const handler = async (
     const headers: Record<string, string> = {
       ...Object.fromEntries(req.headers.entries()),
       Authorization: `Bearer ${token}`,
-      cookie: "",
-      host: "",
+      cookie: `accessToken=${token}`,
     };
 
     if (!data || data instanceof FormData) {
@@ -50,7 +50,7 @@ const handler = async (
   };
 
   if (!accessToken || !refreshToken) {
-    return NextResponse.json({ message: "No token provided" }, { status: 401 });
+    return NextResponse.next();
   }
 
   if (isTokenExpired(accessToken)) {
@@ -87,18 +87,8 @@ const handler = async (
     });
 
     if (accessToken && refreshToken && isRefreshed) {
-      response.cookies.set("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-      });
-      response.cookies.set("accessToken", accessToken, {
-        httpOnly: true,
-        secure: true,
-        path: "/",
-        maxAge: 60 * 5,
-      });
+      response.cookies.set("refreshToken", refreshToken, REFRESHTOKEN_COOKIE_OPTION);
+      response.cookies.set("accessToken", accessToken, REFRESHTOKEN_COOKIE_OPTION);
     }
 
     return response

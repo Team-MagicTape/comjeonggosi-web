@@ -3,15 +3,26 @@ import { cookies } from "next/headers";
 const request = async <T>(url: string, options: RequestInit = {}) => {
   try {
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
+    // const accessToken = cookieStore.get("accessToken")?.value;
+    //
+    // const authorization = { Authorization: `Bearer ${accessToken}` };
+    //
+    // const fetchOptions: RequestInit = {
+    //   ...options,
+    //   headers: {
+    //     ...(options.headers || {}),
+    //     ...(accessToken ?  authorization : {})
+       
+    //   },
+    //   credentials: 'include'
+    // };
 
-    const authorization = { Authorization: `Bearer ${accessToken}` };
 
     const fetchOptions: RequestInit = {
       ...options,
       headers: {
         ...(options.headers || {}),
-        ...(accessToken ?  authorization : {})
+        Cookie: cookieStore.toString()
        
       },
       credentials: 'include'

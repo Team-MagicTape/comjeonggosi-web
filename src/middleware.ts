@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isTokenExpired } from "./shared/utils/is-token-expired";
+import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "./shared/constants/cookie-option";
 
 const middleware = async (req: NextRequest) => {
   try {
@@ -43,20 +44,8 @@ const middleware = async (req: NextRequest) => {
 
       const res = NextResponse.next();
 
-      res.cookies.set("accessToken", newAccessToken, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "strict",
-        maxAge: 60 * 5,
-        secure: process.env.NODE_ENV === "production",
-      });
-      res.cookies.set("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 30,
-        secure: process.env.NODE_ENV === "production",
-      });
+      res.cookies.set("accessToken", newAccessToken, ACCESSTOKEN_COOKIE_OPTION);
+      res.cookies.set("refreshToken", newRefreshToken, REFRESHTOKEN_COOKIE_OPTION);
 
       return res;
     }

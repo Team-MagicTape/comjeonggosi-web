@@ -5,9 +5,7 @@ import { Suspense } from "react";
 
 const Quizzes = async () => {
   const categories = await fetchCategories();
-  const quiz = categories.length > 0 ? await fetchInitialQuiz(categories[0].id) : null;
-  console.log(categories);
-  console.log(quiz);
+  const quiz = await fetchInitialQuiz(1);
 
   return (
     <Suspense>

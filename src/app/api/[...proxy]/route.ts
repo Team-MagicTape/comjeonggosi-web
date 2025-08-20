@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import axios from "axios";
+import setCookieParser from "set-cookie-parser";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
-import { REFRESHTOKEN_COOKIE_OPTION } from "@/shared/constants/cookie-option";
+import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "@/shared/constants/cookie-option";
 
 const handler = async (
   req: NextRequest,
@@ -27,11 +28,11 @@ const handler = async (
 
   const data = ["get", "head"].includes(method) ? undefined : await req.json();
 
-  const tryRequest = async (token?: string) => {
+  const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {
       ...Object.fromEntries(req.headers.entries()),
-      Authorization: `Bearer ${token}`,
-      cookie: `accessToken=${token}`,
+      cookie,
+      host: "",
     };
 
     if (!data || data instanceof FormData) {
@@ -46,6 +47,7 @@ const handler = async (
       headers,
       data,
       validateStatus: () => true,
+      withCredentials: true,
     });
   };
 
@@ -53,45 +55,62 @@ const handler = async (
     return NextResponse.next();
   }
 
+  const originalCookieHeader = cookieStore.toString();
+  let cookieHeaderToUse = originalCookieHeader;
+
   if (isTokenExpired(accessToken)) {
-    const reissue = await fetch(
+    const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+      {},
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
+        headers: {
+          Cookie: originalCookieHeader,
+        },
+        withCredentials: true,
+        validateStatus: () => true,
       }
     );
 
-    if (!reissue.ok) {
+    if (!reissue.status.toString().startsWith("2")) {
       return NextResponse.json(
         { message: "Token reissue failed" },
         { status: 401 }
       );
     }
 
-    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-      await reissue.json();
+    const setCookies = reissue.headers["set-cookie"] || "";
+    const parsed = setCookieParser.parse(setCookies, { map: true });
+
+    const newAccessToken = parsed["accessToken"]?.value;
+    const newRefreshToken = parsed["refreshToken"]?.value;
+
+    if (!newAccessToken || !newRefreshToken) {
+      return NextResponse.json(
+        { message: "Reissue missing tokens" },
+        { status: 401 }
+      );
+    }
 
     accessToken = newAccessToken;
     refreshToken = newRefreshToken;
-    isRefreshed = true;
+    isRefreshed = true
+
+    cookieHeaderToUse = `accessToken=${newAccessToken}; refreshToken=${newRefreshToken}`;
   }
 
   try {
-    const apiResponse = await tryRequest(accessToken);
-    console.log("request:", apiResponse.request);
+    const apiResponse = await tryRequest(cookieHeaderToUse);
 
     const response = NextResponse.json(apiResponse.data, {
       status: apiResponse.status,
     });
-
-    if (accessToken && refreshToken && isRefreshed) {
+    
+    if (isRefreshed) {
+      response.cookies.set("accessToken", accessToken, ACCESSTOKEN_COOKIE_OPTION);
       response.cookies.set("refreshToken", refreshToken, REFRESHTOKEN_COOKIE_OPTION);
-      response.cookies.set("accessToken", accessToken, REFRESHTOKEN_COOKIE_OPTION);
     }
 
-    return response
+    return response;
   } catch (e) {
     return NextResponse.json(
       { message: "Internal Server Error" },

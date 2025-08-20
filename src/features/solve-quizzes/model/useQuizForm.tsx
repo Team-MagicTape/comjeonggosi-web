@@ -24,6 +24,9 @@ export const useQuizForm = (categories: Category[]) => {
   const [isCorrect, setIsCorrect] = useState(false);
 
   const getQuizzes = async () => {
+    if (!category) {
+      return;
+    }
     const quiz = await fetchQuiz(category?.value || "");
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
@@ -51,7 +54,7 @@ export const useQuizForm = (categories: Category[]) => {
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
 
   const options = useMemo(() => {
-    if(!currentQuiz) return [];
+    if (!currentQuiz) return [];
     const arr = [...currentQuiz.options, currentQuiz.answer];
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -142,6 +145,6 @@ export const useQuizForm = (categories: Category[]) => {
     handleSettingChange,
     categoryList,
     quizzes,
-    options
+    options,
   };
 };

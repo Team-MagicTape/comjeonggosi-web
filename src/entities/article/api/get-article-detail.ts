@@ -2,7 +2,7 @@ import { customFetch } from "@/shared/libs/custom-fetch";
 import { Article } from "../types/article";
 
 export const getArticleDetail = async (
-  id: number
+  id: number = 1
 ): Promise<Article | undefined> => {
   try {
     const { data } = await customFetch.get<Article>(`/admin/articles/${id}`);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isTokenExpired } from "./shared/utils/is-token-expired";
+import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "./shared/constants/cookie-option";
 
 const middleware = async (req: NextRequest) => {
   try {
@@ -16,7 +17,7 @@ const middleware = async (req: NextRequest) => {
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;
 
-    if(!accessToken) {
+    if (!accessToken) {
       return NextResponse.next();
     }
 
@@ -29,7 +30,8 @@ const middleware = async (req: NextRequest) => {
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json", Cookie: req.cookies.toString() },
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken }),
         }
       );
 
@@ -42,20 +44,8 @@ const middleware = async (req: NextRequest) => {
 
       const res = NextResponse.next();
 
-      res.cookies.set("accessToken", newAccessToken, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "strict",
-        maxAge: 60 * 5,
-        secure: process.env.NODE_ENV === "production",
-      });
-      res.cookies.set("refreshToken", newRefreshToken, {
-        httpOnly: true,
-        path: "/",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 30,
-        secure: process.env.NODE_ENV === "production",
-      });
+      res.cookies.set("accessToken", newAccessToken, ACCESSTOKEN_COOKIE_OPTION);
+      res.cookies.set("refreshToken", newRefreshToken, REFRESHTOKEN_COOKIE_OPTION);
 
       return res;
     }

@@ -18,7 +18,7 @@ const CreateQuizzes = () => {
   const submit = async () => {
     const options = optionsRef.current?.value.split(",");
     try {
-      await apiClient.post("/admin/quizzes", { ...data, options });
+      await apiClient.post("/api/admin/quizzes", { ...data, options });
       alert("퀴즈 등록 성공");
     } catch {
       alert("퀴즈 등록 실패");

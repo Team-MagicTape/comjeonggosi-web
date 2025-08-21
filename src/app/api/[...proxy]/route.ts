@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import axios from "axios";
 import setCookieParser from "set-cookie-parser";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
+import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "@/shared/constants/cookie-option";
 
 const handler = async (
   req: NextRequest,
@@ -14,8 +15,11 @@ const handler = async (
   let isRefreshed = false;
 
   const path = await params;
+  const { search } = new URL(req.url);
   const targetPath = path.proxy.join("/");
-  const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}`;
+  const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}${search}`;
+
+  console.log("targetUrl: ", targetUrl);
 
   const method = req.method.toLowerCase() as
     | "get"
@@ -50,14 +54,10 @@ const handler = async (
     });
   };
 
-  if (!accessToken || !refreshToken) {
-    return NextResponse.json({ message: "No token provided" }, { status: 401 });
-  }
-
   const originalCookieHeader = cookieStore.toString();
   let cookieHeaderToUse = originalCookieHeader;
-
-  if (isTokenExpired(accessToken)) {
+  
+  if (accessToken && isTokenExpired(accessToken)) {
     const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
       {},
@@ -104,19 +104,9 @@ const handler = async (
       status: apiResponse.status,
     });
     
-    if (isRefreshed) {
-      response.cookies.set("accessToken", accessToken, {
-        httpOnly: true,
-        secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
-        path: "/",
-        maxAge: 60 * 5,
-      });
-      response.cookies.set("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30,
-      });
+    if (isRefreshed && accessToken && refreshToken) {
+      response.cookies.set("accessToken", accessToken, ACCESSTOKEN_COOKIE_OPTION);
+      response.cookies.set("refreshToken", refreshToken, REFRESHTOKEN_COOKIE_OPTION);
     }
 
     return response;

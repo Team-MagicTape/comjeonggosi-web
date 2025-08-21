@@ -9,6 +9,7 @@ const Main = async () => {
   const initialArticles = await fetchInitialArticles(
     `${categories[0]?.id || 0}`
   );
+  
 
   return (
     <div className="flex flex-col xl:flex-row items-start justify-start gap-4 xl:gap-8">

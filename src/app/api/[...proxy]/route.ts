@@ -15,8 +15,11 @@ const handler = async (
   let isRefreshed = false;
 
   const path = await params;
+  const { search } = new URL(req.url);
   const targetPath = path.proxy.join("/");
-  const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}`;
+  const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}${search}`;
+
+  console.log("targetUrl: ", targetUrl);
 
   const method = req.method.toLowerCase() as
     | "get"

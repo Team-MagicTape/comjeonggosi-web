@@ -6,10 +6,7 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = (
-  categories: Category[],
-  initialQuiz: Quiz | null
-) => {
+export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) => {
   const categoryList = categories.map((item) => ({
     name: item.name,
     value: `${item.id}`,
@@ -23,9 +20,7 @@ export const useQuizForm = (
     hideForever: false,
     autoNext: false,
   });
-  const [quizzes, setQuizzes] = useState<Quiz[]>(
-    initialQuiz ? [initialQuiz] : []
-  );
+  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);
   const [isCorrect, setIsCorrect] = useState(false);
 
   const getQuizzes = async () => {
@@ -52,18 +47,6 @@ export const useQuizForm = (
     setCurrentIdx(0);
     getQuizzes();
   }, [category]);
-
-  useEffect(() => {
-    if (quizzes.length > 1) {
-      setTimeout(() => {
-        if (currentIdx < quizzes.length - 1) {
-          setCurrentIdx((prev) => prev + 1);
-        } else {
-          setCurrentIdx(0);
-        }
-      }, 50);
-    }
-  }, [quizzes]);
 
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
 
@@ -99,6 +82,14 @@ export const useQuizForm = (
     setSelectedAnswer(null);
     setShowAnswer(false);
     setIsCorrect(false);
+
+    setTimeout(() => {
+      if (currentIdx < quizzes.length - 1) {
+        setCurrentIdx((prev) => prev + 1);
+      } else {
+        setCurrentIdx(0);
+      }
+    }, 500);
   };
 
   const handlePrev = () => {
@@ -109,7 +100,7 @@ export const useQuizForm = (
 
       setTimeout(() => {
         setCurrentIdx((prev) => prev - 1);
-      }, 50);
+      }, 100);
     }
   };
 

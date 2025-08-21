@@ -14,9 +14,7 @@ export const useMailApplyForm = (
         ).padStart(2, "0")}`
       : ""
   );
-  const [isSubscribed, setIsSubscribed] = useState(
-    initialHour !== undefined
-  );
+  const [isSubscribed, setIsSubscribed] = useState(initialHour !== undefined);
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const handleCategoryChange = (id: number) => {
@@ -36,16 +34,22 @@ export const useMailApplyForm = (
     }
 
     try {
-      if (isSubscribed) {
+      if (!isSubscribed) {
         const [hourStr, minuteStr] = time.split(":");
-        await subscribeMail({hour : +hourStr, categoryIds : selectedCategoryIds});
-        toast.success("신청이 취소되었습니다");
-        
-        setIsSubscribed(false);
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+        });
+        toast.success("신청 되었습니다");
+        setIsSubscribed(true);
       } else {
         const [hourStr, minuteStr] = time.split(":");
-        await subscribeMail({hour : +hourStr, categoryIds : selectedCategoryIds});
-        setIsSubscribed(true);
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+        });
+        toast.success("신청이 취소 되었습니다");
+        setIsSubscribed(false);
       }
     } catch (error) {
       const err = error as AxiosError;
@@ -59,6 +63,6 @@ export const useMailApplyForm = (
     isSubscribed,
     handleClick,
     handleCategoryChange,
-    selectedCategoryIds
+    selectedCategoryIds,
   };
 };

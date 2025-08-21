@@ -38,12 +38,9 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
       currentQuiz?.id || "0",
       selectedAnswer
     );
+    getQuizzes();
     return isCorrect;
   };
-
-  useEffect(() => {
-    getQuizzes();
-  }, [currentIdx]);
 
   useEffect(() => {
     setQuizzes([]);

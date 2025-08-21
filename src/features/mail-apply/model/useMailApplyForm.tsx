@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { subscribeMail } from "../api/subscribe-mail";
-import { unsubscribeMail } from "../api/unsubscribe-mail";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
 
@@ -15,25 +14,42 @@ export const useMailApplyForm = (
         ).padStart(2, "0")}`
       : ""
   );
-  const [isSubscribed, setIsSubscribed] = useState(
-    initialHour !== undefined && initialMinute !== undefined
-  );
+  const [isSubscribed, setIsSubscribed] = useState(initialHour !== undefined);
+
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const handleCategoryChange = (id: number) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  };
 
   const handleClick = async () => {
     if (!isSubscribed && !time) {
       toast.warning("선호 시간을 선택해주세요.");
       return;
     }
+    if (selectedCategoryIds.length === 0) {
+      toast.warning("관심 주제를 선택해주세요.");
+      return;
+    }
 
     try {
-      if (isSubscribed) {
-        await unsubscribeMail();
-        toast.success("신청이 취소되었습니다");
-        setIsSubscribed(false);
+      if (!isSubscribed) {
+        const [hourStr, minuteStr] = time.split(":");
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+        });
+        toast.success("신청 되었습니다");
+        setIsSubscribed(true);
       } else {
         const [hourStr, minuteStr] = time.split(":");
-        await subscribeMail({ hour: +hourStr, minute: +minuteStr });
-        setIsSubscribed(true);
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+        });
+        toast.success("신청이 취소 되었습니다");
+        setIsSubscribed(false);
       }
     } catch (error) {
       const err = error as AxiosError;
@@ -41,20 +57,12 @@ export const useMailApplyForm = (
     }
   };
 
-  const topics = [
-    "컴퓨터 구조",
-    "데이터베이스",
-    "자료구조 & 알고리즘",
-    "운영체제",
-    "네트워크",
-    "프로그래밍 언어",
-  ];
-
   return {
     time,
     setTime,
     isSubscribed,
     handleClick,
-    topics,
+    handleCategoryChange,
+    selectedCategoryIds,
   };
 };

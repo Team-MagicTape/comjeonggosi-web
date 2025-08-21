@@ -1,19 +1,24 @@
 "use client";
 
 import { useMailApplyForm } from "../model/useMailApplyForm";
+import { getCategoryType } from "../types/category";
 
 interface Props {
   initialHour?: number;
-  initialMinute?: number;
+  categories: getCategoryType[];
 }
-const MailApplyForm = ({ initialHour, initialMinute }: Props) => {
-  const { time, setTime, isSubscribed, handleClick, topics } = useMailApplyForm(
-    initialHour,
-    initialMinute
-  );
+const MailApplyForm = ({ initialHour, categories }: Props) => {
+  const {
+    time,
+    setTime,
+    isSubscribed,
+    handleClick,
+    handleCategoryChange,
+    selectedCategoryIds,
+  } = useMailApplyForm(initialHour);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen pt-20 xl:pt-20">
       <div className="border-gray-300 border-1 w-1/2 h-full flex flex-col gap-9 items-center justify-center pt-6">
         <div className="w-[600px]">
           <span className="text-[30px] font-bold">메일 신청하기</span>
@@ -24,49 +29,43 @@ const MailApplyForm = ({ initialHour, initialMinute }: Props) => {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col w-full">
-            <span className="text-[17px] font-bold mb-1">이메일 주소</span>
-            <input
-              className="w-[600px] h-[40px] border-gray-500 border-1 p-1 rounded-[7px]"
-              placeholder="이메일을 입력하세요"
-              type="email"
-            />
-          </div>
-          <div className="flex flex-col w-full">
-            <span className="text-[17px] font-bold mb-1">이름</span>
-            <input
-              className="w-[600px] h-[40px] border-gray-500 border-1 p-1 rounded-[7px]"
-              placeholder="이름을 입력하세요"
-              type="text"
-            />
-          </div>
-          <div className="flex flex-col w-full">
             <span className="text-[17px] font-bold mb-1">선호 시간</span>
-            <input
+            <select
               className="w-[600px] h-[40px] border-gray-500 border-1 p-1 rounded-[7px]"
-              type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-            />
+            >
+              {Array.from({ length: 24 }).map((_, i) => {
+                const hour = String(i).padStart(2, "0");
+                return (
+                  <option key={i} value={`${hour}:00`}>
+                    {hour}:00
+                  </option>
+                );
+              })}
+            </select>
           </div>
         </div>
         <div className="w-[600px]">
           <span className="text-[17px] font-bold">
             관심 주제 (복수 선택 가능)
           </span>
-          {topics.map((topic) => (
-            <label key={topic} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                className="w-4 h-4"
-                style={{ accentColor: "#6B5CE7" }}
-              />
-              {topic}
-            </label>
-          ))}
+          <div>
+            {categories.map((cat) => (
+              <label key={cat.id}>
+                <input
+                  type="checkbox"
+                  checked={selectedCategoryIds.includes(cat.id)}
+                  onChange={() => handleCategoryChange(cat.id)}
+                />
+                {cat.name}
+              </label>
+            ))}
+          </div>
         </div>
         <div className="pb-6 w-[600px]">
           <button
-            className="w-full h-[50px] bg-[#6B5CE7] text-white rounded-[7px] text-[18px] font-extrabold"
+            className="w-full h-[50px] bg-[#ff723a] text-white rounded-[7px] text-[18px] font-extrabold"
             onClick={handleClick}
           >
             {isSubscribed ? "신청 취소" : "메일 신청"}

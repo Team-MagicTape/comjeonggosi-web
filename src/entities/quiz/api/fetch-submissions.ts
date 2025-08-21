@@ -3,7 +3,7 @@ import { MySubmission } from "../types/my-submission";
 
 export const fetchSubmissions = async (isCorrected: string) => {
   try{
-    const { data } = await apiClient.get<MySubmission[]>(`/api/quizzes/submissions/my?isCorrected=${isCorrected}`);
+    const { data } = await apiClient.get<MySubmission[]>(`/api/quizzes/submissions/my${isCorrected !== "null" ? `?isCorrected=${isCorrected}` : ""}`);
     return data;
   }catch{
     return [];

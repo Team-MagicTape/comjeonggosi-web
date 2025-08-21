@@ -5,6 +5,7 @@ import DeleteButton from "@/features/delete-article/ui/DeleteButton";
 import EditButton from "@/features/edit-article/ui/EditButton";
 import { PathParams } from "@/shared/types/path-params";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
+import ReactMarkdown from 'react-markdown';
 
 const ArticleDetailPage = async ({ params }: PathParams) => {
   const article = await getArticleDetail(Number(params));
@@ -25,7 +26,9 @@ const ArticleDetailPage = async ({ params }: PathParams) => {
           </div> */}
         </span>
         <hr className="border border-gray-200 w-full" />
-        <p className="font-medium">{article.content}</p>
+        <div className="font-medium">
+        <ReactMarkdown>{article.content}</ReactMarkdown>
+        </div>
       </div>
       </div>
   );

@@ -1,16 +1,22 @@
 "use client";
 
 import { useMailApplyForm } from "../model/useMailApplyForm";
+import { categoriesType } from "../types/categories";
+import { getCategoryType } from "../types/category";
 
 interface Props {
   initialHour?: number;
-  initialMinute?: number;
+  categories: getCategoryType[];
 }
-const MailApplyForm = ({ initialHour, initialMinute }: Props) => {
-  const { time, setTime, isSubscribed, handleClick, topics } = useMailApplyForm(
-    initialHour,
-    initialMinute
-  );
+const MailApplyForm = ({ initialHour, categories }: Props) => {
+  const {
+    time,
+    setTime,
+    isSubscribed,
+    handleClick,
+    handleCategoryChange,
+    selectedCategoryIds,
+  } = useMailApplyForm(initialHour);
 
   return (
     <div className="flex h-screen">
@@ -53,16 +59,18 @@ const MailApplyForm = ({ initialHour, initialMinute }: Props) => {
           <span className="text-[17px] font-bold">
             관심 주제 (복수 선택 가능)
           </span>
-          {topics.map((topic) => (
-            <label key={topic} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                className="w-4 h-4"
-                style={{ accentColor: "#6B5CE7" }}
-              />
-              {topic}
-            </label>
-          ))}
+          <div>
+            {categories.map((cat) => (
+              <label key={cat.id}>
+                <input
+                  type="checkbox"
+                  checked={selectedCategoryIds.includes(cat.id)}
+                  onChange={() => handleCategoryChange(cat.id)}
+                />
+                {cat.name}
+              </label>
+            ))}
+          </div>
         </div>
         <div className="pb-6 w-[600px]">
           <button

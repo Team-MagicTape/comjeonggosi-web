@@ -1,4 +1,9 @@
+export interface Category {
+  id: number;
+  name: string;
+}
+
 export interface SubscribeMail {
-  hour : number;
-  minute : number;
+  hour: number;
+  categories: Category[];
 }

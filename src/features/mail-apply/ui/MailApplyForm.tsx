@@ -3,7 +3,7 @@
 import Spacer from "@/shared/ui/Spacer";
 import { useMailApplyForm } from "../model/useMailApplyForm";
 import { getCategoryType } from "../types/category";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 interface Props {
   initialHour?: number;
@@ -58,11 +58,20 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
           <label className="block text-lg font-semibold mb-2">
             관심 주제 (복수 선택 가능)
           </label>
+
           <div className="w-full max-h-120 overflow-scroll">
             <div className="w-full flex flex-col gap-2">
               {categories.map((cat) => (
-                <div className="w-full flex items-center p-2 rounded-item bg-bg gap-2" onClick={() => handleCategoryChange(cat.id)} key={cat.id}>
-                  <input type="checkbox" checked={selectedCategoryIds.includes(cat.id)} readOnly className="accent-primary bg-white text-white size-4" />
+                <div
+                  className="w-full flex items-center p-2 rounded-item bg-bg gap-2 cursor-pointer"
+                  onClick={() => handleCategoryChange(cat.id)}
+                  key={cat.id}>
+                  <div
+                    className={`size-4 flex items-center justify-center border border-border rounded-sm text-white ${
+                      selectedCategoryIds.includes(cat.id) ? "bg-primary" : "bg-white"
+                    }`}>
+                    <Check size={10} />
+                  </div>
                   <p>{cat.name}</p>
                 </div>
               ))}

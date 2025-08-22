@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { subscribeMail } from "../api/subscribe-mail";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
+import { EMAIL_REGEX } from "../constants/regex";
 
 export const useMailApplyForm = (
   initialHour?: number,
@@ -15,6 +16,7 @@ export const useMailApplyForm = (
       : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(initialHour !== undefined);
+  const [email, setEmail] = useState("");
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const handleCategoryChange = (id: number) => {
@@ -29,6 +31,10 @@ export const useMailApplyForm = (
     setTime(`${newHour.toString().padStart(2, "0")}`);
   };
 
+  const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
   const handleTimeDown = () => {
     const [hourStr] = time.split(":");
     const newHour = (Number(hourStr) - 1 + 24) % 24;
@@ -36,6 +42,14 @@ export const useMailApplyForm = (
   };
 
   const handleClick = async () => {
+    if (email.trim().length <= 0) {
+      toast.warning("이메일을 입력해 주세요.");
+      return;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      toast.warning("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
     if (!isSubscribed && !time) {
       toast.warning("선호 시간을 선택해주세요.");
       return;
@@ -48,9 +62,11 @@ export const useMailApplyForm = (
     try {
       if (!isSubscribed) {
         const [hourStr, minuteStr] = time.split(":");
+
         await subscribeMail({
           hour: +hourStr,
           categoryIds: selectedCategoryIds,
+          email
         });
         toast.success("신청 되었습니다");
         setIsSubscribed(true);
@@ -59,6 +75,7 @@ export const useMailApplyForm = (
         await subscribeMail({
           hour: +hourStr,
           categoryIds: selectedCategoryIds,
+          email
         });
         toast.success("신청이 취소 되었습니다");
         setIsSubscribed(false);
@@ -76,6 +93,8 @@ export const useMailApplyForm = (
     handleCategoryChange,
     selectedCategoryIds,
     handleTimeDown,
-    handleTimeUp
+    handleTimeUp,
+    handleEmail,
+    email,
   };
 };

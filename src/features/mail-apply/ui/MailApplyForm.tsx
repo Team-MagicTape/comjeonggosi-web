@@ -4,6 +4,7 @@ import Spacer from "@/shared/ui/Spacer";
 import { useMailApplyForm } from "../model/useMailApplyForm";
 import { getCategoryType } from "../types/category";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import Input from "@/shared/ui/Input";
 
 interface Props {
   initialHour?: number;
@@ -19,6 +20,8 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
     handleClick,
     handleCategoryChange,
     selectedCategoryIds,
+    handleEmail,
+    email
   } = useMailApplyForm(initialHour);
 
   return (
@@ -56,6 +59,13 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
 
         <div className="w-full">
           <label className="block text-lg font-semibold mb-2">
+            수신할 이메일 입력
+          </label>
+          <Input placeholder="ex) comgo@comgo.dev" onChange={handleEmail} value={email} />
+        </div>
+
+        <div className="w-full">
+          <label className="block text-lg font-semibold mb-2">
             관심 주제 (복수 선택 가능)
           </label>
 
@@ -68,7 +78,9 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
                   key={cat.id}>
                   <div
                     className={`size-4 flex items-center justify-center border border-border rounded-sm text-white ${
-                      selectedCategoryIds.includes(cat.id) ? "bg-primary" : "bg-white"
+                      selectedCategoryIds.includes(cat.id)
+                        ? "bg-primary"
+                        : "bg-white"
                     }`}>
                     <Check size={10} />
                   </div>

@@ -61,7 +61,7 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
           <div className="w-full max-h-120 overflow-scroll">
             <div className="w-full flex flex-col gap-2">
               {categories.map((cat) => (
-                <div className="w-full flex items-center p-2 rounded-item bg-bg gap-2" onClick={() => handleCategoryChange(cat.id)}>
+                <div className="w-full flex items-center p-2 rounded-item bg-bg gap-2" onClick={() => handleCategoryChange(cat.id)} key={cat.id}>
                   <input type="checkbox" checked={selectedCategoryIds.includes(cat.id)} readOnly className="accent-primary bg-white" />
                   <p>{cat.name}</p>
                 </div>

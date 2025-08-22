@@ -58,19 +58,15 @@ const MailApplyForm = ({ initialHour, categories }: Props) => {
           <label className="block text-lg font-semibold mb-2">
             관심 주제 (복수 선택 가능)
           </label>
-          <div className="flex flex-wrap gap-3">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
-                className={`px-4 py-2 rounded-full border transition-colors ${
-                  selectedCategoryIds.includes(cat.id)
-                    ? "bg-primary text-white border-primary"
-                    : "bg-gray-100 text-gray-700 border-border hover:bg-bg"
-                }`}>
-                {cat.name}
-              </button>
-            ))}
+          <div className="w-full max-h-120 overflow-scroll">
+            <div className="w-full flex flex-col gap-2">
+              {categories.map((cat) => (
+                <div className="w-full flex items-center p-2 rounded-item bg-bg gap-2" onClick={() => handleCategoryChange(cat.id)}>
+                  <input type="checkbox" checked={selectedCategoryIds.includes(cat.id)} readOnly className="accent-primary bg-white" />
+                  <p>{cat.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

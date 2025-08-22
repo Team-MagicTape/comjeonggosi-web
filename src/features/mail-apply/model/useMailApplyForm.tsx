@@ -12,7 +12,7 @@ export const useMailApplyForm = (
       ? `${String(initialHour).padStart(2, "0")}:${String(
           initialMinute
         ).padStart(2, "0")}`
-      : ""
+      : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(initialHour !== undefined);
 
@@ -21,6 +21,18 @@ export const useMailApplyForm = (
     setSelectedCategoryIds((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     );
+  };
+
+  const handleTimeUp = () => {
+    const [hourStr] = time.split(":");
+    const newHour = (Number(hourStr) + 1) % 24;
+    setTime(`${newHour.toString().padStart(2, "0")}`);
+  };
+
+  const handleTimeDown = () => {
+    const [hourStr] = time.split(":");
+    const newHour = (Number(hourStr) - 1 + 24) % 24;
+    setTime(`${newHour.toString().padStart(2, "0")}`);
   };
 
   const handleClick = async () => {
@@ -59,10 +71,11 @@ export const useMailApplyForm = (
 
   return {
     time,
-    setTime,
     isSubscribed,
     handleClick,
     handleCategoryChange,
     selectedCategoryIds,
+    handleTimeDown,
+    handleTimeUp
   };
 };

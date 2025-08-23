@@ -41,7 +41,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
   } = useQuizForm(categories, initialQuiz);
 
   return (
-    <div className="flex-1 w-full max-w-6xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
+    <div className="flex-1 w-full mx-auto flex flex-col gap-4 justify-center overflow-hidden">
       <QuizHeader
         tabs={categoryList}
         category={category}
@@ -58,7 +58,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
           </div>
         ) : (
           <div
-            className="absolute top-0 left-8 p-3 rounded-full bg-white border border-border cursor-pointer"
+            className="absolute top-0 left-0 p-3 rounded-full bg-white border border-border cursor-pointer"
             onClick={toggleIsSettingOpen}>
             <Settings className="text-gray" />
           </div>

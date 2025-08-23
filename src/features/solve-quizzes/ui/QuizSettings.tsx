@@ -1,15 +1,17 @@
-import Spacer from "@/shared/ui/Spacer";
 import Toggle from "@/shared/ui/Toggle";
 import { Settings } from "../types/settings";
+import { X } from "lucide-react";
 
 interface Props {
   settings: Settings;
   handleSettingChange: (key: keyof Settings) => void;
+  close: () => void;
 }
 
 const QuizSettings = ({ settings, handleSettingChange }: Props) => {
   return (
     <div className="w-full mx-auto bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 space-y-4">
+      <X onClick={close} className="text-gray" size={20} />
       <div className="space-y-2">
         <label className="flex items-center gap-2 sm:gap-3 cursor-pointer p-2 sm:p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
           <input

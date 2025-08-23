@@ -27,6 +27,11 @@ export const useQuizForm = (
   const [quizzes, setQuizzes] = useState<Quiz[]>(
     initialQuiz ? [initialQuiz] : []
   );
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
+
+  const toggleIsSettingOpen = () => {
+    setIsSettingOpen(prev => !prev);
+  }
 
   const getQuizzes = async () => {
     if (!category) {
@@ -156,5 +161,7 @@ export const useQuizForm = (
     categoryList,
     quizzes,
     options,
+    isSettingOpen,
+    toggleIsSettingOpen
   };
 };

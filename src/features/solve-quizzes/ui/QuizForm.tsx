@@ -53,7 +53,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
             {quizzes.map((quiz, quizIdx) =>
               quiz ? (
                 <div key={quizIdx} className="w-full flex-shrink-0 px-2">
-                  <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden">
+                  <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}

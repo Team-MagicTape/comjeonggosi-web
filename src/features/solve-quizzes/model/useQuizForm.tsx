@@ -50,6 +50,10 @@ export const useQuizForm = (
   };
 
   useEffect(() => {
+    getQuizzes();
+  }, [currentIdx]);
+
+  useEffect(() => {
     setQuizzes([]);
     setCurrentIdx(0);
     getQuizzes();
@@ -88,9 +92,8 @@ export const useQuizForm = (
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
     setSelectedAnswer(answer);
-    getQuizzes();
-    await submit(answer);
     setShowAnswer(true);
+    submit(answer);
   };
 
   const handleNext = () => {

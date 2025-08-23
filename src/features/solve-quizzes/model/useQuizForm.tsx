@@ -34,7 +34,7 @@ export const useQuizForm = (
     }
     const quiz = await fetchQuiz(
       category?.value || "",
-      settings.hide7Days ? "7d" : settings.hideForever ? "forever" : undefined
+      settings.hide7Days ? "7days" : settings.hideForever ? "forever" : undefined
     );
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);

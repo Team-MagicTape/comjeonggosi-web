@@ -117,7 +117,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
             </div>
           </div>
         ) : (
-          <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl h-full overflow-hidden">
+          <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl h-full overflow-hidden" key={quizIdx}>
             <Loader2 className="text-lightgray animate-spin" />
           </div>
         ))}

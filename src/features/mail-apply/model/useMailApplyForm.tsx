@@ -40,6 +40,23 @@ export const useMailApplyForm = (initialData: SubscribeMail) => {
     setTime(`${newHour.toString().padStart(2, "0")}`);
   };
 
+  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    if (value.length > 2) {
+      return;
+    }
+    setTime(value);
+  };
+
+  const handleTimeBlur = () => {
+    const hour = parseInt(time, 10);
+    if (isNaN(hour) || hour < 0 || hour > 23) {
+      setTime("00");
+    } else {
+      setTime(String(hour).padStart(2, "0"));
+    }
+  };
+
   const handleClick = async () => {
     if (email.trim().length <= 0) {
       toast.warning("이메일을 입력해 주세요.");
@@ -95,5 +112,7 @@ export const useMailApplyForm = (initialData: SubscribeMail) => {
     handleTimeUp,
     handleEmail,
     email,
+    handleTimeChange,
+    handleTimeBlur,
   };
 };

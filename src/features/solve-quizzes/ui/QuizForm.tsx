@@ -128,6 +128,11 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                         <Button>관련 아티클 읽으러 가기</Button>
                       </CustomLink>
                     )}
+
+                    <QuizSettings
+                      settings={settings}
+                      handleSettingChange={handleSettingChange}
+                    />
                   </div>
                 </div>
               ) : (
@@ -141,10 +146,6 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
           </div>
         </div>
       </div>
-      <QuizSettings
-        settings={settings}
-        handleSettingChange={handleSettingChange}
-      />
     </div>
   );
 };

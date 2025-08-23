@@ -47,7 +47,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
       />
       <div className="w-full flex items-start gap-2">
         <div
-          className="w-full h-full flex transition-transform duration-500 ease-in-out"
+          className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
           {quizzes.map((quiz, quizIdx) =>
             quiz ? (

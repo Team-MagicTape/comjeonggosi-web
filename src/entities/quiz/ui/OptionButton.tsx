@@ -24,7 +24,7 @@ const OptionButton = ({
       key={optionIdx}
       onClick={() => isCurrentQuiz && handleAnswerSelect(option)}
       disabled={!isCurrentQuiz || showAnswer}
-      className={`p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-200 hover:scale-[1.01] ${buttonStyle} ${
+      className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-200 hover:scale-[1.01] ${buttonStyle} ${
         !isCurrentQuiz || showAnswer ? "cursor-default" : "cursor-pointer"
       }`}>
       <div className="flex items-center gap-3 sm:gap-4">

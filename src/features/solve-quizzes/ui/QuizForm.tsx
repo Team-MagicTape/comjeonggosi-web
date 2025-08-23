@@ -13,6 +13,7 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import Button from "@/shared/ui/Button";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   categories: Category[];
@@ -42,12 +43,12 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
       <div
         className="w-full h-full flex transition-transform duration-500 ease-in-out mb-4"
         style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
-        {quizzes.map((quiz, quizIdx) => (
+        {quizzes.map((quiz, quizIdx) => quiz ? (
           <div key={quizIdx} className="w-full flex-shrink-0 px-2">
             <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl sm:rounded-3xl shadow-xl h-full overflow-hidden">
               <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                 <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
-                  {quiz.content}
+                  {quiz?.content}
                 </h2>
               </div>
 
@@ -106,14 +107,18 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                 />
               )}
 
-              {quiz.articleId && (
+              {quiz?.articleId && (
                 <CustomLink
                   className="w-full"
-                  href={`/articles/${quiz.articleId}`}>
+                  href={`/articles/${quiz?.articleId}`}>
                   <Button>관련 아티클 읽으러 가기</Button>
                 </CustomLink>
               )}
             </div>
+          </div>
+        ) : (
+          <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl h-full overflow-hidden">
+            <Loader2 className="text-lightgray animate-spin" />
           </div>
         ))}
       </div>

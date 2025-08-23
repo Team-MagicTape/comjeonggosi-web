@@ -24,22 +24,32 @@ export const useQuizForm = (
     autoNext: false,
     noDelay: false,
   });
-  const [quizzes, setQuizzes] = useState<Quiz[]>(
+  const [quizzes, setQuizzes] = useState<(Quiz | null)[]>(
     initialQuiz ? [initialQuiz] : []
   );
 
   const getQuizzes = async () => {
-    if (!category) {
-      return;
-    }
-    const quiz = await fetchQuiz(
-      category?.value || "",
-      settings.hide7Days ? "7d" : settings.hideForever ? "forever" : undefined
-    );
-    if (quiz) {
-      setQuizzes((prev) => [...prev, quiz]);
-    }
-  };
+  if (!category) return;
+
+  setQuizzes((prev) => [...prev, null]);
+
+  const quiz = await fetchQuiz(
+    category?.value || "",
+    settings.hide7Days ? "7d" : settings.hideForever ? "forever" : undefined
+  );
+
+  if (quiz) {
+    setQuizzes((prev) => {
+      const newQuizzes = [...prev];
+      const index = newQuizzes.lastIndexOf(null);
+      if (index !== -1) {
+        newQuizzes[index] = quiz;
+      }
+      return newQuizzes;
+    });
+  }
+};
+
 
   const submit = async (selectedAnswer: string) => {
     const { isCorrect } = await solveQuizzes(
@@ -59,7 +69,7 @@ export const useQuizForm = (
     getQuizzes();
   }, [category]);
 
-  const currentQuiz: Quiz | undefined = quizzes[currentIdx];
+  const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
 
   const options = useMemo(() => {

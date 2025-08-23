@@ -3,22 +3,21 @@ import { subscribeMail } from "../api/subscribe-mail";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
 import { EMAIL_REGEX } from "../constants/regex";
+import { SubscribeMail } from "../types/get-mail";
 
-export const useMailApplyForm = (
-  initialHour?: number,
-  initialMinute?: number
-) => {
+export const useMailApplyForm = (initialData: SubscribeMail) => {
   const [time, setTime] = useState(
-    initialHour !== undefined && initialMinute !== undefined
-      ? `${String(initialHour).padStart(2, "0")}:${String(
-          initialMinute
-        ).padStart(2, "0")}`
+    initialData.hour !== undefined
+      ? `${String(initialData.hour).padStart(2, "0")}`
       : "00"
   );
-  const [isSubscribed, setIsSubscribed] = useState(initialHour !== undefined);
-  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(
+    initialData.hour !== undefined
+  );
+  const [email, setEmail] = useState(initialData.email || "");
 
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const initialCategories = initialData.categories.map(item => item.id);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initialCategories || []);
   const handleCategoryChange = (id: number) => {
     setSelectedCategoryIds((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
@@ -66,7 +65,7 @@ export const useMailApplyForm = (
         await subscribeMail({
           hour: +hourStr,
           categoryIds: selectedCategoryIds,
-          email
+          email,
         });
         toast.success("신청 되었습니다");
         setIsSubscribed(true);
@@ -75,7 +74,7 @@ export const useMailApplyForm = (
         await subscribeMail({
           hour: +hourStr,
           categoryIds: selectedCategoryIds,
-          email
+          email,
         });
         toast.success("신청이 취소 되었습니다");
         setIsSubscribed(false);

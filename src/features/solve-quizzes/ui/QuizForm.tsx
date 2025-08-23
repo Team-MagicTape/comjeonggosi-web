@@ -49,7 +49,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
       />
       <div className="w-full flex items-start justify-center relative">
         {isSettingOpen ? (
-          <div className="w-80">
+          <div className="min-w-80 flex-1">
             <QuizSettings
               close={toggleIsSettingOpen}
               settings={settings}

@@ -49,7 +49,7 @@ const MailApplyForm = ({ initialData, categories }: Props) => {
               value={time}
               onChange={handleTimeChange}
               onBlur={handleTimeBlur}
-              className="inline text-xl outline-none py-2"
+              className="w-6 inline text-xl outline-none py-2"
             />
             <span className="text-xl py-2">:00</span>
             <Spacer />

@@ -1,6 +1,5 @@
 import Toggle from "@/shared/ui/Toggle";
 import { Settings } from "../types/settings";
-import { X } from "lucide-react";
 
 interface Props {
   settings: Settings;

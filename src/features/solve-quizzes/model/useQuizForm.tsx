@@ -52,13 +52,12 @@ export const useQuizForm = (
   useEffect(() => {
     if (currentIdx === 0) getQuizzes();
     getQuizzes();
-  }, [currentIdx]);
+  }, [currentIdx, category.value]);
 
   useEffect(() => {
     setQuizzes([]);
     setCurrentIdx(0);
-    getQuizzes();
-  }, [category]);
+  }, [category.value]);
 
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;

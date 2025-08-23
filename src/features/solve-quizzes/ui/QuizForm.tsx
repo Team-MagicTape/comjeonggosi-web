@@ -46,21 +46,21 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
         setCategory={setCategory}
       />
       <div className="w-full flex items-start">
-        <div className="flex-1 pb-4 overflow-hidden">
+        <div className="flex-1 px-4 pb-6 overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
             {quizzes.map((quiz, quizIdx) =>
               quiz ? (
                 <div key={quizIdx} className="w-full flex-shrink-0 px-2">
-                  <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden">
+                  <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-4 border-x border-b border-border">
+                    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-">
                       {quiz
                         ? options.map((option, optionIdx) => {
                             const isCorrectAnswer = quiz.answer === option;

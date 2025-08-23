@@ -16,7 +16,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
             type="checkbox"
             checked={settings.hide7Days}
             onChange={() => handleSettingChange("hide7Days")}
-            className="w-4 h-4 sm:w-5 sm:h-5 accent-primary rounded outline-none"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-primary rounded outline-none"
           />
           <span className="text-sm sm:text-base text-gray-700 font-medium">
             7일간 보지 않기
@@ -28,7 +28,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
             type="checkbox"
             checked={settings.hideForever}
             onChange={() => handleSettingChange("hideForever")}
-            className="w-4 h-4 sm:w-5 sm:h-5 accent-primary rounded outline-none"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-primary rounded outline-none"
           />
           <span className="text-sm sm:text-base text-gray-700 font-medium">
             영원히 보지 않기
@@ -40,7 +40,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
             type="checkbox"
             checked={settings.autoNext}
             onChange={() => handleSettingChange("autoNext")}
-            className="w-4 h-4 sm:w-5 sm:h-5 accent-primary rounded outline-none"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-primary rounded outline-none"
           />
           <span className="text-sm sm:text-base text-gray-700 font-medium">
             자동으로 넘어가기

@@ -101,9 +101,7 @@ export const useQuizForm = (
     setShowAnswer(false);
 
     setTimeout(() => {
-      if (currentIdx < quizzes.length - 1) {
-        setCurrentIdx((prev) => prev + 1);
-      }
+      setCurrentIdx((prev) => prev + 1);
     }, 50);
   };
 

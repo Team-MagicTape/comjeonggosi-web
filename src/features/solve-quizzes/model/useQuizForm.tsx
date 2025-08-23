@@ -50,7 +50,7 @@ export const useQuizForm = (
   };
 
   useEffect(() => {
-    getQuizzes();
+    if (currentIdx === 0) getQuizzes();
     getQuizzes();
   }, [currentIdx]);
 

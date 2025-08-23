@@ -48,11 +48,11 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
       <div className="w-full flex items-start">
         <div className="flex-1 overflow-hidden">
           <div
-            className="flex-1 h-full flex transition-transform duration-500 ease-in-out mx-4 mb-8"
+            className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
             {quizzes.map((quiz, quizIdx) =>
               quiz ? (
-                <div key={quizIdx} className="w-full flex-shrink-0 px-2">
+                <div key={quizIdx} className="w-full flex-shrink-0 mx-4 mb-8">
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">

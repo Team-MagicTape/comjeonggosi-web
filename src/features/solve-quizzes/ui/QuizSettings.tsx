@@ -45,22 +45,21 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
           <span className="text-sm sm:text-base text-gray-700 font-medium">
             자동으로 넘어가기
           </span>
-          <Spacer />
-          {settings.autoNext && (
-            <div
-              className="flex items-center text-xs sm:text-sm"
-              onClick={(e) => e.stopPropagation()}>
-              <span>3초 후 넘어가기</span>
-              <Toggle
-                on={settings.noDelay}
-                setOn={() => {
-                  handleSettingChange("noDelay");
-                }}
-              />
-              <span>즉시 넘어가기</span>
-            </div>
-          )}
         </label>
+        {settings.autoNext && (
+          <div
+            className="flex items-center text-xs sm:text-sm gap-1"
+            onClick={(e) => e.stopPropagation()}>
+            <span>3초 후 넘어가기</span>
+            <Toggle
+              on={settings.noDelay}
+              setOn={() => {
+                handleSettingChange("noDelay");
+              }}
+            />
+            <span>즉시 넘어가기</span>
+          </div>
+        )}
       </div>
     </div>
   );

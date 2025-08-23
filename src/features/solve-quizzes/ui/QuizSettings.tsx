@@ -48,7 +48,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
         </label>
         {settings.autoNext && (
           <div
-            className="flex items-center text-xs sm:text-sm gap-1"
+            className="w-full flex justify-end items-center text-xs sm:text-sm gap-1"
             onClick={(e) => e.stopPropagation()}>
             <span>3초 후 넘어가기</span>
             <Toggle

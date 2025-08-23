@@ -43,14 +43,16 @@ const MailApplyForm = ({ initialData, categories }: Props) => {
         <div className="w-full">
           <label className="block text-lg font-semibold mb-2">선호 시간</label>
           <div className="flex items-center border border-border rounded-2xl overflow-hidden w-[180px]">
+            <Spacer />
             <input
               type="text"
               value={time}
               onChange={handleTimeChange}
               onBlur={handleTimeBlur}
-              className="text-xl outline-none py-2"
+              className="inline text-xl outline-none py-2"
             />
             <span className="text-xl py-2">:00</span>
+            <Spacer />
             <div className="flex flex-col border-l border-border">
               <button
                 className="p-1 hover:bg-gray-100 transition-colors cursor-pointer"

@@ -48,7 +48,7 @@ const MailApplyForm = ({ initialData, categories }: Props) => {
               value={time}
               onChange={handleTimeChange}
               onBlur={handleTimeBlur}
-              className="w-full flex-1 bg-transparent text-center text-xl outline-none py-2"
+              className="text-xl outline-none py-2"
             />
             <span className="text-xl py-2">:00</span>
             <div className="flex flex-col border-l border-border">

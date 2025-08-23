@@ -60,7 +60,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-4">
+                    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-4 border-x border-b border-border">
                       {quiz
                         ? options.map((option, optionIdx) => {
                             const isCorrectAnswer = quiz.answer === option;

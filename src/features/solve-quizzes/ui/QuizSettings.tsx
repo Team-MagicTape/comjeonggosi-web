@@ -49,7 +49,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
           {settings.autoNext && (
             <div
               className="flex items-center text-xs sm:text-sm"
-              onClick={(e) => e.preventDefault()}>
+              onClick={(e) => e.stopPropagation()}>
               <span>3초 후 넘어가기</span>
               <Toggle
                 on={settings.noDelay}

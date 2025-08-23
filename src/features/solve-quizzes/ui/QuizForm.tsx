@@ -39,7 +39,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
   } = useQuizForm(categories, initialQuiz);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-4 justify-center overflow-hidden">
+    <div className="flex-1 w-full max-w-5xl flex flex-col gap-4 justify-center overflow-hidden">
       <QuizHeader
         tabs={categoryList}
         category={category}

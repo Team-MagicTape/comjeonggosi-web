@@ -27,7 +27,6 @@ export const useQuizForm = (
   const [quizzes, setQuizzes] = useState<Quiz[]>(
     initialQuiz ? [initialQuiz] : []
   );
-  const [isCorrect, setIsCorrect] = useState(false);
 
   const getQuizzes = async () => {
     if (!category) {
@@ -47,7 +46,6 @@ export const useQuizForm = (
       currentQuiz?.id || "0",
       selectedAnswer
     );
-    getQuizzes();
     return isCorrect;
   };
 
@@ -58,6 +56,7 @@ export const useQuizForm = (
   }, [category]);
 
   const currentQuiz: Quiz | undefined = quizzes[currentIdx];
+  const isCorrect = currentQuiz?.answer === selectedAnswer;
 
   const options = useMemo(() => {
     if (!currentQuiz) return [];
@@ -89,30 +88,26 @@ export const useQuizForm = (
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
     setSelectedAnswer(answer);
-    const isCorrect = await submit(answer);
-    setIsCorrect(isCorrect);
+    getQuizzes();
+    await submit(answer);
     setShowAnswer(true);
   };
 
   const handleNext = () => {
     setSelectedAnswer(null);
     setShowAnswer(false);
-    setIsCorrect(false);
 
     setTimeout(() => {
       if (currentIdx < quizzes.length - 1) {
         setCurrentIdx((prev) => prev + 1);
-      } else {
-        setCurrentIdx(0);
       }
-    }, 500);
+    }, 50);
   };
 
   const handlePrev = () => {
     if (currentIdx > 0) {
       setSelectedAnswer(null);
       setShowAnswer(false);
-      setIsCorrect(false);
 
       setTimeout(() => {
         setCurrentIdx((prev) => prev - 1);

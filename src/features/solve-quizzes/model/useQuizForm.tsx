@@ -51,6 +51,7 @@ export const useQuizForm = (
 
   useEffect(() => {
     getQuizzes();
+    getQuizzes();
   }, [currentIdx]);
 
   useEffect(() => {

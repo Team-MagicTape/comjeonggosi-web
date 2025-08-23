@@ -61,41 +61,47 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                     </div>
 
                     <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-">
-                      {quiz
-                        ? options.map((option, optionIdx) => {
-                            const isCorrectAnswer = quiz.answer === option;
+                      {quiz ? (
+                        options.map((option, optionIdx) => {
+                          const isCorrectAnswer = quiz.answer === option;
 
-                            return (
-                              <OptionButton
-                                key={optionIdx}
-                                option={option}
-                                optionIdx={optionIdx}
-                                isCurrentQuiz={quizIdx === currentIdx}
-                                buttonStyle={getButtonStyle(
-                                  quizIdx === currentIdx,
-                                  selectedAnswer === option,
-                                  isCorrectAnswer,
-                                  showAnswer
-                                )}
-                                circleStyle={getOptionCircleStyle(
-                                  quizIdx === currentIdx,
-                                  selectedAnswer === option,
-                                  isCorrectAnswer,
-                                  showAnswer
-                                )}
-                                circleContent={getOptionCircleContent(
-                                  quizIdx === currentIdx,
-                                  selectedAnswer === option,
-                                  isCorrectAnswer,
-                                  showAnswer,
-                                  `${optionIdx + 1}`
-                                )}
-                                showAnswer={showAnswer}
-                                handleAnswerSelect={handleAnswerSelect}
-                              />
-                            );
-                          })
-                        : null}
+                          return (
+                            <OptionButton
+                              key={optionIdx}
+                              option={option}
+                              optionIdx={optionIdx}
+                              isCurrentQuiz={quizIdx === currentIdx}
+                              buttonStyle={getButtonStyle(
+                                quizIdx === currentIdx,
+                                selectedAnswer === option,
+                                isCorrectAnswer,
+                                showAnswer
+                              )}
+                              circleStyle={getOptionCircleStyle(
+                                quizIdx === currentIdx,
+                                selectedAnswer === option,
+                                isCorrectAnswer,
+                                showAnswer
+                              )}
+                              circleContent={getOptionCircleContent(
+                                quizIdx === currentIdx,
+                                selectedAnswer === option,
+                                isCorrectAnswer,
+                                showAnswer,
+                                `${optionIdx + 1}`
+                              )}
+                              showAnswer={showAnswer}
+                              handleAnswerSelect={handleAnswerSelect}
+                            />
+                          );
+                        })
+                      ) : (
+                        <div
+                          className="w-full h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
+                          key={quizIdx}>
+                          <Loader2 className="text-lightgray animate-spin" />
+                        </div>
+                      )}
                     </div>
 
                     {quizIdx === currentIdx && showAnswer && (
@@ -126,7 +132,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                 </div>
               ) : (
                 <div
-                  className="w-full max-w-4xl h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
+                  className="w-full h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
                   key={quizIdx}>
                   <Loader2 className="text-lightgray animate-spin" />
                 </div>

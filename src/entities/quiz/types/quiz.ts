@@ -1,4 +1,5 @@
 import { Category } from "@/entities/category/types/category";
+import { QuizType } from "./quiz-type";
 
 export interface Quiz {
   id: string;
@@ -6,4 +7,6 @@ export interface Quiz {
   options: string[];
   answer: string;
   category: Category;
+  articleId: number | null;
+  type: QuizType;
 }

@@ -8,7 +8,7 @@ interface Props {
   close: () => void;
 }
 
-const QuizSettings = ({ settings, handleSettingChange }: Props) => {
+const QuizSettings = ({ settings, handleSettingChange, close }: Props) => {
   return (
     <div className="w-full mx-auto bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 space-y-4">
       <X onClick={close} className="text-gray" size={20} />

@@ -58,13 +58,13 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
           </div>
         ) : (
           <div
-            className="absoulte top-0 left-8 p-6 rounded-full bg-white border border-border cursor-pointer"
+            className="absolute top-0 left-8 p-6 rounded-full bg-white border border-border cursor-pointer"
             onClick={toggleIsSettingOpen}>
             <Settings className="text-gray" />
           </div>
         )}
 
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 max-w-5xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>

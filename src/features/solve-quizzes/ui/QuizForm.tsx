@@ -45,7 +45,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
         category={category}
         setCategory={setCategory}
       />
-      <div className="w-full flex items-start gap-2">
+      <div className="w-full flex items-start">
         <div className="flex-1 pb-4 overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"

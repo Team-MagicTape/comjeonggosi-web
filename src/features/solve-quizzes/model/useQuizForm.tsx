@@ -6,7 +6,10 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) => {
+export const useQuizForm = (
+  categories: Category[],
+  initialQuiz: Quiz | null
+) => {
   const categoryList = categories.map((item) => ({
     name: item.name,
     value: `${item.id}`,
@@ -19,15 +22,21 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
     hide7Days: false,
     hideForever: false,
     autoNext: false,
+    noDelay: false,
   });
-  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);
+  const [quizzes, setQuizzes] = useState<Quiz[]>(
+    initialQuiz ? [initialQuiz] : []
+  );
   const [isCorrect, setIsCorrect] = useState(false);
 
   const getQuizzes = async () => {
     if (!category) {
       return;
     }
-    const quiz = await fetchQuiz(category?.value || "");
+    const quiz = await fetchQuiz(
+      category?.value || "",
+      settings.hide7Days ? "7d" : settings.hideForever ? "forever" : undefined
+    );
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
     }
@@ -62,9 +71,16 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
 
   useEffect(() => {
     if (showAnswer && settings.autoNext) {
-      const timer = setTimeout(() => {
-        handleNext();
-      }, 3000);
+      let timer;
+      if (settings.noDelay) {
+        timer = setTimeout(() => {
+          handleNext();
+        }, 500);
+      } else {
+        timer = setTimeout(() => {
+          handleNext();
+        }, 3000);
+      }
 
       return () => clearTimeout(timer);
     }

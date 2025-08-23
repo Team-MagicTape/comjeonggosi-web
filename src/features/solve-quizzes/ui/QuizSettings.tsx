@@ -1,10 +1,10 @@
+import Spacer from "@/shared/ui/Spacer";
+import Toggle from "@/shared/ui/Toggle";
+import { Settings } from "../types/settings";
+
 interface Props {
-  settings: {
-    hide7Days: boolean;
-    hideForever: boolean;
-    autoNext: boolean;
-  };
-  handleSettingChange: (key: keyof Props["settings"]) => void;
+  settings: Settings;
+  handleSettingChange: (key: keyof Settings) => void;
 }
 
 const QuizSettings = ({ settings, handleSettingChange }: Props) => {
@@ -45,6 +45,10 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
           <span className="text-sm sm:text-base text-gray-700 font-medium">
             자동으로 넘어가기
           </span>
+          <Spacer />
+          <span>3초 후 넘어가기</span>
+          <Toggle on={settings.noDelay} setOn={() => handleSettingChange("noDelay")} />
+          <span>즉시 넘어가기</span>
         </label>
       </div>
     </div>

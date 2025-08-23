@@ -11,6 +11,8 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
+import CustomLink from "@/shared/ui/CustomLink";
+import Button from "@/shared/ui/Button";
 
 interface Props {
   categories: Category[];
@@ -32,14 +34,11 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
     handleSettingChange,
     categoryList,
     quizzes,
-    options
+    options,
   } = useQuizForm(categories, initialQuiz);
 
-
   return (
-    <div className="w-full flex flex-col gap-4 sm:gap-8 py-4 px-2 sm:px-4">
-      <QuizHeader tabs={categoryList} category={category} setCategory={setCategory} />
-
+    <div className="w-full flex flex-col gap-2 sm:gap-4 py-4 px-2 sm:px-4">
       <div className="flex-1 w-full flex flex-col justify-center overflow-hidden">
         <div
           className="w-full h-full flex transition-transform duration-500 ease-in-out"
@@ -48,9 +47,6 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
             <div key={quizIdx} className="w-full flex-shrink-0 px-2">
               <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl sm:rounded-3xl shadow-xl h-full overflow-hidden">
                 <div className="mb-2 bg-primary p-6 text-white flex flex-col gap-3 items-start">
-                  <span className="font-semibold border border-white rounded-full px-4 py-1 bg-[rgba(250,250,250,0.2)]">
-                    {quiz.category?.name}
-                  </span>
                   <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                     {quiz.content}
                   </h2>
@@ -110,10 +106,24 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                     settings={settings}
                   />
                 )}
+
+                {quiz.articleId && (
+                  <CustomLink
+                    className="w-full"
+                    href={`/articles/${quiz.articleId}`}>
+                    <Button>관련 아티클 읽으러 가기</Button>
+                  </CustomLink>
+                )}
               </div>
             </div>
           ))}
         </div>
+
+        <QuizHeader
+          tabs={categoryList}
+          category={category}
+          setCategory={setCategory}
+        />
 
         <QuizSettings
           settings={settings}

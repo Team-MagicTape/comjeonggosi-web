@@ -36,34 +36,16 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
     categoryList,
     quizzes,
     options,
-    toggleIsSettingOpen,
-    isSettingOpen,
   } = useQuizForm(categories, initialQuiz);
 
   return (
-    <div className="flex-1 w-full mx-auto flex flex-col gap-4 justify-center overflow-hidden">
+    <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
       <QuizHeader
         tabs={categoryList}
         category={category}
         setCategory={setCategory}
       />
       <div className="w-full flex items-start justify-center relative">
-        {isSettingOpen ? (
-          <div className="min-w-80 flex-1">
-            <QuizSettings
-              close={toggleIsSettingOpen}
-              settings={settings}
-              handleSettingChange={handleSettingChange}
-            />
-          </div>
-        ) : (
-          <div
-            className="absolute top-0 left-0 p-3 rounded-full bg-white border border-border cursor-pointer"
-            onClick={toggleIsSettingOpen}>
-            <Settings className="text-gray" />
-          </div>
-        )}
-
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
@@ -159,6 +141,10 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
           </div>
         </div>
       </div>
+      <QuizSettings
+        settings={settings}
+        handleSettingChange={handleSettingChange}
+      />
     </div>
   );
 };

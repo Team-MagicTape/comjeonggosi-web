@@ -6,7 +6,8 @@ import Markdown from "@/shared/ui/Markdown";
 import { extractHeadings } from "@/shared/utils/extract-headings";
 
 const ArticleDetail = async ({ params }: PathParams) => {
-  const article = await getArticleDetail(Number(params));
+  const { id } = await params;
+  const article = await getArticleDetail(Number(id));
   if (!article) {
     notFound();
   }

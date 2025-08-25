@@ -1,4 +1,4 @@
-import CreateArticleForm from '@/features/create-article/ui/CreateArticleForm';
+import CreateArticleForm from '@/features/create-article/model/CreateArticleForm';
 import { fetchCategory } from '@/entities/category/api/fetch-category';
 
 const CreateArticlePage = async () => {

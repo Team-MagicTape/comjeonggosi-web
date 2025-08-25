@@ -3,7 +3,7 @@
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import Select from "@/shared/ui/Select";
-import { useCreateArticle } from "../model/useCreateArticle";
+import { useCreateArticle } from "./useCreateArticle";
 import { Category } from "@/entities/category/types/category";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";

@@ -1,4 +1,3 @@
-import React from "react";
 import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
 import DeleteButton from "@/features/delete-article/ui/DeleteButton";

@@ -1,4 +1,3 @@
-import React from "react";
 import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
 import { PathParams } from "@/shared/types/path-params";

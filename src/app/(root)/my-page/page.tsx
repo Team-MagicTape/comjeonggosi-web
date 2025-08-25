@@ -1,6 +1,6 @@
 import UserAvatar from "@/entities/user/ui/UserAvatar";
 import MailTemplate from "@/entities/mail/ui/MailTemplate";
-import LogoutButton from "@/widgets/login-button/ui/LogoutButton";
+import LogoutButton from "@/features/logout/ui/LogoutButton";
 import MySubmissions from "@/widgets/section/ui/MySubmissions";
 import Spacer from "@/shared/ui/Spacer";
 import { parseDate } from "@/shared/utils/parse-date";

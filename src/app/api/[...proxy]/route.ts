@@ -3,7 +3,10 @@ import { cookies } from "next/headers";
 import axios from "axios";
 import setCookieParser from "set-cookie-parser";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
-import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "@/shared/constants/cookie-option";
+import {
+  ACCESSTOKEN_COOKIE_OPTION,
+  REFRESHTOKEN_COOKIE_OPTION,
+} from "@/shared/constants/cookie-option";
 
 const handler = async (
   req: NextRequest,
@@ -29,7 +32,9 @@ const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head"].includes(method) ? undefined : await req.json();
+  const data = ["get", "head"].includes(method)
+    ? undefined
+    : await req.json();
 
   const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {
@@ -56,7 +61,8 @@ const handler = async (
 
   const originalCookieHeader = cookieStore.toString();
   let cookieHeaderToUse = originalCookieHeader;
-  
+
+  // 토큰 만료 시 refresh 요청
   if (accessToken && isTokenExpired(accessToken)) {
     const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
@@ -92,7 +98,7 @@ const handler = async (
 
     accessToken = newAccessToken;
     refreshToken = newRefreshToken;
-    isRefreshed = true
+    isRefreshed = true;
 
     cookieHeaderToUse = `accessToken=${newAccessToken}; refreshToken=${newRefreshToken}`;
   }
@@ -103,10 +109,27 @@ const handler = async (
     const response = NextResponse.json(apiResponse.data, {
       status: apiResponse.status,
     });
-    
+
+    const setCookies = apiResponse.headers["set-cookie"];
+    if (setCookies) {
+      (Array.isArray(setCookies) ? setCookies : [setCookies]).forEach(
+        (cookie) => {
+          response.headers.append("set-cookie", cookie);
+        }
+      );
+    }
+
     if (isRefreshed && accessToken && refreshToken) {
-      response.cookies.set("accessToken", accessToken, ACCESSTOKEN_COOKIE_OPTION);
-      response.cookies.set("refreshToken", refreshToken, REFRESHTOKEN_COOKIE_OPTION);
+      response.cookies.set(
+        "accessToken",
+        accessToken,
+        ACCESSTOKEN_COOKIE_OPTION
+      );
+      response.cookies.set(
+        "refreshToken",
+        refreshToken,
+        REFRESHTOKEN_COOKIE_OPTION
+      );
     }
 
     return response;

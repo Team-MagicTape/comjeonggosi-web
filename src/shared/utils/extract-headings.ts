@@ -2,14 +2,15 @@ import slugify from "slugify";
 import { Heading } from "../types/heading";
 
 export const extractHeadings = (markdown: string): Heading[] => {
-  const headingRegex = /^# (.+)$/gm;
+  const headingRegex = /^(#{1,2}) (.+)$/gm;
   const headings: Heading[] = [];
 
   let match;
   while ((match = headingRegex.exec(markdown)) !== null) {
-    const text = match[1].trim();
+    const level = match[1].length; // # → 1, ## → 2
+    const text = match[2].trim();
     const id = slugify(text, { lower: true, strict: true });
-    headings.push({ text, id });
+    headings.push({ text, id, level });
   }
 
   return headings;

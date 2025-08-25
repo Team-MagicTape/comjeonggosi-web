@@ -12,13 +12,51 @@ const Markdown = ({ content }: { content: string }) => {
           const id = slugify(text, { lower: true, strict: true });
 
           return (
-            <h1 id={id} className="text-3xl font-bold mt-6">
+            <h1 id={id} className="text-3xl font-bold mt-6 mb-4">
               {children}
             </h1>
           );
         },
+        h2: ({ children }) => {
+          const text = String(children);
+          const id = slugify(text, { lower: true, strict: true });
+          return (
+            <h2 id={id} className="text-2xl font-semibold mt-5 mb-3">
+              {children}
+            </h2>
+          );
+        },
+        h3: ({ children }) => {
+          const text = String(children);
+          const id = slugify(text, { lower: true, strict: true });
+          return (
+            <h3 id={id} className="text-xl font-semibold mt-4 mb-2">
+              {children}
+            </h3>
+          );
+        },
+        p: ({ children }) => (
+          <p className="text-base leading-7 mt-2 mb-2">{children}</p>
+        ),
+        ul: ({ children }) => (
+          <ul className="list-disc pl-6 mt-2 mb-2">{children}</ul>
+        ),
+        ol: ({ children }) => (
+          <ol className="list-decimal pl-6 mt-2 mb-2">{children}</ol>
+        ),
+        li: ({ children }) => <li className="mb-1">{children}</li>,
+        a: ({ href, children }) => (
+          <a
+            href={href}
+            className="text-blue-600 underline hover:text-blue-800"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {children}
+          </a>
+        ),
         table: ({ children }) => (
-          <table className="table-auto border border-gray-300 w-full mt-6">
+          <table className="table-auto border border-gray-300 w-full mt-6 mb-4">
             {children}
           </table>
         ),

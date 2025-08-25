@@ -6,10 +6,16 @@ const MailApply = async () => {
   const subscription = await getSubscription();
   const categories = await fetchCategories();
 
+  console.log(subscription);
+
+  if(!subscription) {
+    return null;
+  }
+
   return (
     <div>
       <MailApplyForm
-        initialHour={subscription?.hour}
+        initialData={subscription}
         categories={categories}
       />
     </div>

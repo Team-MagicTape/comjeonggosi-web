@@ -1,0 +1,1 @@
+export type QuizType = "OX" | "SHORT_ANSWER" | "MULTIPLE_CHOICE";

@@ -10,7 +10,7 @@ interface Props {
 
 const QuizHeader = ({ category, tabs, setCategory }: Props) => {
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-gray-200 shadow-lg">
+    <div className="w-full mx-auto bg-white py-2 px-4 sm:py-3 sm:px-6 rounded-xl sm:rounded-2xl border border-gray-200">
       <Tabs tabs={tabs} selected={category} setSelected={setCategory} />
     </div>
   );

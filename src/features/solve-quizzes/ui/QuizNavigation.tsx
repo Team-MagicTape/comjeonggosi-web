@@ -33,7 +33,7 @@ const QuizNavigation = ({
       <button
         onClick={handleNext}
         disabled={!showAnswer}
-        className="bg-blue-600 text-white py-2 sm:py-3 px-4 sm:px-8 rounded-lg sm:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary disabled:hover:bg-blue-600 text-sm sm:text-base">
+        className="bg-orange-400 text-white py-2 sm:py-3 px-4 sm:px-8 rounded-lg sm:rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary disabled:hover:bg-orange-400 text-sm sm:text-base">
         다음
       </button>
     </div>

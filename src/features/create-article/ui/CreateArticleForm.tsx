@@ -3,10 +3,9 @@
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import Select from "@/shared/ui/Select";
-import { useCreateArticle } from "./useCreateArticle";
+import { useCreateArticle } from "../model/useCreateArticle";
 import { Category } from "@/entities/category/types/category";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -23,12 +22,8 @@ const CrateArticleForm = ({ categories }: Props) => {
     handleSignup,
     categoryId,
     setCategoryId,
+    isMounted
   } = useCreateArticle();
-
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <form onSubmit={handleSignup} className="flex flex-col gap-4">

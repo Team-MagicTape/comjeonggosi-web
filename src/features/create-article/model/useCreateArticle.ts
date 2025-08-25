@@ -1,5 +1,5 @@
 import { toast } from "@/shared/providers/ToastProvider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createArticle } from "@/features/create-article/api/create-article";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
@@ -8,11 +8,16 @@ export const useCreateArticle = () => {
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState(0);
   const router = useCustomRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      createArticle({title, content, categoryId});
+      createArticle({ title, content, categoryId });
       toast.success("글이 생성되었습니다.");
       router.push("/admin/articles");
     } catch {
@@ -29,5 +34,6 @@ export const useCreateArticle = () => {
     categoryId,
     setCategoryId,
     router,
+    isMounted
   };
 };

@@ -63,18 +63,14 @@ const CreateQuizzes = () => {
       alert("카테고리 ID를 입력해주세요.");
       return;
     }
-    if (!data.articleId) {
-      alert("아티클 ID를 입력해주세요.");
-      return;
-    }
 
     // 타입별 추가 검증 및 옵션 구성
     let submitOptions: string[] = [];
     
     if (data.type === "MULTIPLE_CHOICE") {
       const filteredOptions = options.filter(option => option.trim() !== "");
-      if (filteredOptions.length < 3) {
-        alert("객관식 문제는 정답 외에 최소 3개의 오답 선택지를 입력해주세요.");
+      if (filteredOptions.length === 3) {
+        alert("객관식 문제는 정답 외에 3개의 오답 선택지를 입력해주세요.");
         return;
       }
       submitOptions = filteredOptions;
@@ -270,7 +266,7 @@ const CreateQuizzes = () => {
 
         <div>
           <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
-            아티클 ID <span className="text-red-500">*</span>
+            아티클 ID
           </label>
           <input
             id="articleId"
@@ -293,7 +289,6 @@ const CreateQuizzes = () => {
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          !data.articleId ||
           (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
         }
         className={`w-full mt-6 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
@@ -301,7 +296,6 @@ const CreateQuizzes = () => {
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          !data.articleId ||
           (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"

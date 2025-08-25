@@ -2,9 +2,9 @@
 
 import { useQuizForm } from "../model/useQuizForm";
 import QuizHeader from "./QuizHeader";
-import OptionButton from "@/entities/quiz/ui/OptionButton";
-import AnswerFeedback from "@/entities/quiz/ui/AnswerFeedback";
-import QuizNavigation from "@/entities/quiz/ui/QuizNavigation";
+import OptionButton from "@/features/solve-quizzes/ui/OptionButton";
+import AnswerFeedback from "@/features/solve-quizzes/ui/AnswerFeedback";
+import QuizNavigation from "@/features/solve-quizzes/ui/QuizNavigation";
 import QuizSettings from "./QuizSettings";
 import { getButtonStyle } from "../utils/get-button-style";
 import { getOptionCircleStyle } from "../utils/get-option-circle-style";
@@ -13,7 +13,9 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import Button from "@/shared/ui/Button";
-import { Loader2, Settings } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import OxOption from "./OxOption";
+import ShortAnswer from "./ShortAnswer";
 
 interface Props {
   categories: Category[];
@@ -36,6 +38,9 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
     categoryList,
     quizzes,
     options,
+    handleShortAnswerSubmit,
+    shortAnswer,
+    setShortAnswer
   } = useQuizForm(categories, initialQuiz);
 
   return (
@@ -60,9 +65,30 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                       </h2>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8 sm:pt-">
-                      {quiz ? (
-                        options.map((option, optionIdx) => {
+                    {quiz.type === "OX" ? (
+                      <OxOption
+                        currentIdx={currentIdx}
+                        handleAnswerSelect={handleAnswerSelect}
+                        quiz={quiz}
+                        quizIdx={quizIdx}
+                        selectedAnswer={selectedAnswer}
+                        showAnswer={showAnswer}
+                      />
+                    ) : quiz.type === "SHORT_ANSWER" ? (
+                      <ShortAnswer
+                        currentIdx={currentIdx}
+                        handleShortAnswerSubmit={handleShortAnswerSubmit}
+                        isCorrect={isCorrect}
+                        quiz={quiz}
+                        quizIdx={quizIdx}
+                        selectedAnswer={selectedAnswer}
+                        setShortAnswer={setShortAnswer}
+                        shortAnswer={shortAnswer}
+                        showAnswer={showAnswer}
+                      />
+                    ) : (
+                      <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">
+                        {options.map((option, optionIdx) => {
                           const isCorrectAnswer = quiz.answer === option;
 
                           return (
@@ -94,15 +120,9 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                               handleAnswerSelect={handleAnswerSelect}
                             />
                           );
-                        })
-                      ) : (
-                        <div
-                          className="w-full h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
-                          key={quizIdx}>
-                          <Loader2 className="text-lightgray animate-spin" />
-                        </div>
-                      )}
-                    </div>
+                        })}
+                      </div>
+                    )}
 
                     {quizIdx === currentIdx && showAnswer && (
                       <AnswerFeedback

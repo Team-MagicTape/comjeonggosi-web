@@ -28,13 +28,23 @@ export const useQuizForm = (
     initialQuiz ? [initialQuiz] : []
   );
 
+  const [shortAnswer, setShortAnswer] = useState("");
+
+  const handleShortAnswerSubmit = () => {
+    handleAnswerSelect(shortAnswer);
+  };
+
   const getQuizzes = async () => {
     if (!category) {
       return;
     }
     const quiz = await fetchQuiz(
       category?.value || "",
-      settings.hide7Days ? "7days" : settings.hideForever ? "forever" : undefined
+      settings.hide7Days
+        ? "7days"
+        : settings.hideForever
+        ? "forever"
+        : undefined
     );
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
@@ -155,5 +165,8 @@ export const useQuizForm = (
     categoryList,
     quizzes,
     options,
+    shortAnswer,
+    handleShortAnswerSubmit,
+    setShortAnswer
   };
 };

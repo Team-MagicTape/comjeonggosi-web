@@ -13,6 +13,8 @@ export const useCreateArticle = () => {
     try {
       e.preventDefault();
       createArticle({title, content, categoryId});
+      toast.success("글이 생성되었습니다.");
+      router.push("/admin/articles");
     } catch {
       toast.error("네트워크 에러");
     }

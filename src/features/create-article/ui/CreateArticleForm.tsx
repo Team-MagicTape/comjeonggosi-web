@@ -2,10 +2,13 @@
 
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
-import TextArea from "@/shared/ui/TextArea";
 import Select from "@/shared/ui/Select";
 import { useCreateArticle } from "../model/useCreateArticle";
 import { Category } from "@/entities/category/types/category";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface Props {
   categories: Category[];
@@ -22,18 +25,29 @@ const CrateArticleForm = ({ categories }: Props) => {
     setCategoryId,
   } = useCreateArticle();
 
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   return (
-    <form onSubmit={handleSignup} className="flex flex-col gap-2">
+    <form onSubmit={handleSignup} className="flex flex-col gap-4">
       <Input
         value={title}
         placeholder="제목을 입력해주세요."
         onChange={(e) => setTitle(e.target.value)}
       />
-      <TextArea
-        value={content}
-        placeholder="내용을 입력해주세요."
-        onChange={(e) => setContent(e.target.value)}
-      />
+
+      {isMounted && (
+        <div data-color-mode="light">
+          <MDEditor
+            value={content}
+            onChange={(val) => setContent(val || "")}
+            height={400}
+          />
+        </div>
+      )}
+
       <Select
         value={categoryId}
         onChange={(e) => setCategoryId(Number(e.target.value))}

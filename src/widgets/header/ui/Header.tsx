@@ -7,7 +7,7 @@ const Header = async () => {
   const user = await fetchUser();
 
   return (
-    <header className="w-full fixed top-0 xl:top-6 z-10 flex justify-center xl:px-13">
+    <header className="w-full fixed top-7 xl:top-10 z-10 flex justify-center xl:px-13">
       <div className="w-full max-w-334 h-14 xl:h-20 bg-white border-b xl:border border-border xl:rounded-2xl px-2 xl:px-8 flex items-center gap-2">
         <h1 className="text-primary text-xl xl:text-3xl font-black">
           COMJEONGGOSI

@@ -4,7 +4,7 @@ interface ArticleSidebarProps {
 
 const ArticleSidebar = ({ headings }: ArticleSidebarProps) => {
   return (
-    <div className="w-72 h-full bg-white border border-border rounded-2xl xl:p-6 flex flex-col gap-4">
+    <div className="w-72 h-fit bg-white border border-border rounded-2xl xl:p-6 flex flex-col gap-4 sticky top-32">
       <p className="font-bold text-xl">목차</p>
       <hr className="border border-primary" />
       <ul className="flex flex-col gap-2">

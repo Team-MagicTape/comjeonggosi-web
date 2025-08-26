@@ -10,7 +10,6 @@ export const extractHeadings = (markdown: string): Heading[] => {
     const text = match[2].trim();
     const href = text.toLowerCase().replace(/\s+/g, "-");
     headings.push({ text, level, href });
-    console.log(headings);
   }
 
   return headings;

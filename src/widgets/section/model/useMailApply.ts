@@ -1,7 +1,7 @@
-import { useRouter } from "next/navigation"
+import { useCustomRouter } from "@/shared/model/useCustomRouter"
 
 export const useMailApply = () => {
-    const router = useRouter()
+    const router = useCustomRouter ()
     const goToMail = () =>{
       router.push("mail")
     }

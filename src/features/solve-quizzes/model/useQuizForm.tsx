@@ -6,7 +6,10 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) => {
+export const useQuizForm = (
+  categories: Category[],
+  initialQuiz: Quiz | null
+) => {
   const categoryList: Tab[] = categories.map((item) => ({
     name: item.name,
     value: String(item.id),
@@ -17,7 +20,9 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);
+  const [quizzes, setQuizzes] = useState<Quiz[]>(
+    initialQuiz ? [initialQuiz] : []
+  );
   const [shortAnswer, setShortAnswer] = useState("");
 
   const [settings, setSettings] = useState<Settings>({
@@ -81,10 +86,18 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
 
   const handleSettingChange = (setting: keyof Settings) => {
     if (setting === "hide7Days" && settings.hideForever) {
-      return setSettings((prev) => ({ ...prev, hide7Days: !prev.hide7Days, hideForever: false }));
+      return setSettings((prev) => ({
+        ...prev,
+        hide7Days: !prev.hide7Days,
+        hideForever: false,
+      }));
     }
     if (setting === "hideForever" && settings.hide7Days) {
-      return setSettings((prev) => ({ ...prev, hide7Days: false, hideForever: !prev.hideForever }));
+      return setSettings((prev) => ({
+        ...prev,
+        hide7Days: false,
+        hideForever: !prev.hideForever,
+      }));
     }
     setSettings((prev) => ({ ...prev, [setting]: !prev[setting] }));
   };
@@ -94,8 +107,10 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
   }, [currentIdx, category]);
 
   useEffect(() => {
-    setQuizzes([]);
-    setCurrentIdx(0);
+    if (category.value !== "1") {
+      setQuizzes([]);
+      setCurrentIdx(0);
+    }
   }, [category]);
 
   useEffect(() => {

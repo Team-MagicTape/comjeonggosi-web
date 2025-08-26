@@ -9,7 +9,7 @@ interface Props {
 
 const StoreUser = ({ user }: Props) => {
   useUser(user);
-  return null;
+  return <div></div>;
 }
 
 export default StoreUser

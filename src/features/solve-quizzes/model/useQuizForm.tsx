@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
@@ -14,7 +14,6 @@ export const useQuizForm = (
     name: item.name,
     value: String(item.id),
   }));
-  console.log(initialQuiz);
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -24,6 +23,7 @@ export const useQuizForm = (
     initialQuiz ? [initialQuiz] : []
   );
   const [shortAnswer, setShortAnswer] = useState("");
+  const isInitialRender = useRef(true);
 
   const [settings, setSettings] = useState<Settings>({
     hide7Days: false,
@@ -107,11 +107,15 @@ export const useQuizForm = (
   }, [currentIdx, category]);
 
   useEffect(() => {
-    if (category.value !== "1") {
+    if (!isInitialRender.current) {
       setQuizzes([]);
       setCurrentIdx(0);
     }
   }, [category]);
+
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;

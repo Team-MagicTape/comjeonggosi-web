@@ -118,6 +118,12 @@ export const useQuizForm = (
   }, []);
 
   useEffect(() => {
+    if(quizzes.length === 1) {
+      getQuizzes();
+    }
+  }, [quizzes]);
+
+  useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
     const delay = settings.noDelay ? 500 : 3000;
     const timer = setTimeout(handleNext, delay);

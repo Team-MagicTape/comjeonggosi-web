@@ -4,18 +4,21 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { apiClient } from "@/shared/libs/custom-axios";
 import { Tab } from "@/widgets/tabs/types/tab";
+import Tabs from "@/widgets/tabs/ui/Tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 const DeleteQuizzes = () => {
   const { invalidateQueries } = useQueryClient();
   const [category, setCategory] = useState<Tab | null>(null);
+  const [categoryList, setCategoryList] = useState<Tab[]>([])
 
   const getCategory = async () => {
     try{
       const { data } = await apiClient.get<Category[]>("/api/categories");
       const categories = data.map(item => ({ name: item.name, value: `${item.id}` }));
       setCategory(categories[0]);
+      setCategoryList(categories);
     }catch{
       alert("카테고리 조회 실패");
     }
@@ -50,7 +53,11 @@ const DeleteQuizzes = () => {
   return (
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">퀴즈 목록</h2>
-
+      <Tabs
+        tabs={categoryList}
+        selected={category}
+        setSelected={setCategory}
+      />
       <div className="grid gap-4">
         {quizzes?.length === 0 && (
           <p className="text-gray-500">퀴즈가 없습니다.</p>

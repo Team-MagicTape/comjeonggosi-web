@@ -48,6 +48,7 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
 
     return { data: res, status: response.status };
   } catch (e) {
+    console.log(e);
     throw e;
   }
 };

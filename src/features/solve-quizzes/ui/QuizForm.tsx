@@ -150,7 +150,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         <CustomLink
                           className="w-full"
                           href={`/articles/${quiz?.articleId}`}>
-                          <Button>관련 아티클 읽으러 가기</Button>
+                          <Button isFullWidth>관련 아티클 읽으러 가기</Button>
                         </CustomLink>
                       </div>
                     )}

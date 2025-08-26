@@ -1,75 +1,32 @@
-import { Settings } from "@/features/solve-quizzes/types/settings";
 import { useEffect, useMemo, useState } from "react";
+import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useQuizForm = (
-  categories: Category[],
-  initialQuiz: Quiz | null
-) => {
-  const categoryList = categories.map((item) => ({
+export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) => {
+  const categoryList: Tab[] = categories.map((item) => ({
     name: item.name,
-    value: `${item.id}`,
+    value: String(item.id),
   }));
+
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);
+  const [shortAnswer, setShortAnswer] = useState("");
+
   const [settings, setSettings] = useState<Settings>({
     hide7Days: false,
     hideForever: false,
     autoNext: false,
     noDelay: false,
   });
-  const [quizzes, setQuizzes] = useState<Quiz[]>(
-    initialQuiz ? [initialQuiz] : []
-  );
 
-  const [shortAnswer, setShortAnswer] = useState("");
-
-  const handleShortAnswerSubmit = () => {
-    handleAnswerSelect(shortAnswer);
-  };
-
-  const getQuizzes = async () => {
-    if (!category) {
-      return;
-    }
-    const quiz = await fetchQuiz(
-      category?.value || "",
-      settings.hide7Days
-        ? "7days"
-        : settings.hideForever
-        ? "forever"
-        : undefined
-    );
-    if (quiz) {
-      setQuizzes((prev) => [...prev, quiz]);
-    }
-  };
-
-  const submit = async (selectedAnswer: string) => {
-    const { isCorrect } = await solveQuizzes(
-      currentQuiz?.id || "0",
-      selectedAnswer
-    );
-    return isCorrect;
-  };
-
-  useEffect(() => {
-    if (currentIdx === 0) getQuizzes();
-    getQuizzes();
-  }, [currentIdx, category]);
-
-  useEffect(() => {
-    setQuizzes([]);
-    setCurrentIdx(0);
-  }, [category]);
-
-  const currentQuiz: Quiz | undefined = quizzes[currentIdx];
+  const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
 
   const options = useMemo(() => {
@@ -82,22 +39,22 @@ export const useQuizForm = (
     return arr;
   }, [currentQuiz]);
 
-  useEffect(() => {
-    if (showAnswer && settings.autoNext) {
-      let timer;
-      if (settings.noDelay) {
-        timer = setTimeout(() => {
-          handleNext();
-        }, 500);
-      } else {
-        timer = setTimeout(() => {
-          handleNext();
-        }, 3000);
-      }
+  const submit = async (answer: string) => {
+    const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
+    return isCorrect;
+  };
 
-      return () => clearTimeout(timer);
-    }
-  }, [showAnswer, settings.autoNext]);
+  const getQuizzes = async () => {
+    if (!category) return;
+    const hideMode = settings.hide7Days
+      ? "7days"
+      : settings.hideForever
+      ? "forever"
+      : undefined;
+
+    const quiz = await fetchQuiz(category.value, hideMode);
+    if (quiz) setQuizzes((prev) => [...prev, quiz]);
+  };
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
@@ -106,67 +63,65 @@ export const useQuizForm = (
     submit(answer);
   };
 
+  const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
+
   const handleNext = () => {
     setSelectedAnswer(null);
     setShowAnswer(false);
-
-    setTimeout(() => {
-      setCurrentIdx((prev) => prev + 1);
-    }, 50);
+    setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
   };
 
   const handlePrev = () => {
-    if (currentIdx > 0) {
-      setSelectedAnswer(null);
-      setShowAnswer(false);
-
-      setTimeout(() => {
-        setCurrentIdx((prev) => prev - 1);
-      }, 100);
-    }
+    if (currentIdx === 0) return;
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+    setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
   const handleSettingChange = (setting: keyof Settings) => {
     if (setting === "hide7Days" && settings.hideForever) {
-      setSettings((prev) => ({
-        ...prev,
-        hide7Days: !prev.hide7Days,
-        hideForever: false,
-      }));
-      return;
+      return setSettings((prev) => ({ ...prev, hide7Days: !prev.hide7Days, hideForever: false }));
     }
     if (setting === "hideForever" && settings.hide7Days) {
-      setSettings((prev) => ({
-        ...prev,
-        hide7Days: false,
-        hideForever: !prev.hideForever,
-      }));
-      return;
+      return setSettings((prev) => ({ ...prev, hide7Days: false, hideForever: !prev.hideForever }));
     }
-    setSettings((prev) => ({
-      ...prev,
-      [setting]: !prev[setting],
-    }));
+    setSettings((prev) => ({ ...prev, [setting]: !prev[setting] }));
   };
+
+  useEffect(() => {
+    getQuizzes();
+  }, [currentIdx, category]);
+
+  useEffect(() => {
+    setQuizzes([]);
+    setCurrentIdx(0);
+  }, [category]);
+
+  useEffect(() => {
+    if (!showAnswer || !settings.autoNext) return;
+    const delay = settings.noDelay ? 500 : 3000;
+    const timer = setTimeout(handleNext, delay);
+    return () => clearTimeout(timer);
+  }, [showAnswer, settings.autoNext, settings.noDelay]);
 
   return {
     category,
     setCategory,
+    categoryList,
     currentIdx,
-    selectedAnswer,
     currentQuiz,
+    quizzes,
+    options,
+    selectedAnswer,
     showAnswer,
-    handleAnswerSelect,
     isCorrect,
+    handleAnswerSelect,
+    handleShortAnswerSubmit,
+    shortAnswer,
+    setShortAnswer,
     handleNext,
     handlePrev,
     settings,
     handleSettingChange,
-    categoryList,
-    quizzes,
-    options,
-    shortAnswer,
-    handleShortAnswerSubmit,
-    setShortAnswer
   };
 };

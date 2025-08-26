@@ -8,7 +8,7 @@ interface Props {
 
 const QuizSettings = ({ settings, handleSettingChange }: Props) => {
   return (
-    <div className="flex xl:items-center flex-col xl:flex-row gap-1 xl:gap-6 text-sm px-4 sm:px-8 pb-4">
+    <div className="flex xl:items-center flex-col xl:flex-row gap-1 xl:gap-6 text-sm px-4 sm:px-8 pb-4 mt-2">
       <label className="flex items-center gap-1 cursor-pointer">
         <input
           type="checkbox"

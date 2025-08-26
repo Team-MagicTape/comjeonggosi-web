@@ -8,7 +8,7 @@ import Input from "@/shared/ui/Input";
 import { SubscribeMail } from "../types/get-mail";
 
 interface Props {
-  initialData: SubscribeMail;
+  initialData: SubscribeMail | null;
   categories: getCategoryType[];
 }
 

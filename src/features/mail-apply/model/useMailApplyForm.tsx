@@ -5,18 +5,18 @@ import { AxiosError } from "axios";
 import { EMAIL_REGEX } from "../constants/regex";
 import { SubscribeMail } from "../types/get-mail";
 
-export const useMailApplyForm = (initialData: SubscribeMail) => {
+export const useMailApplyForm = (initialData: SubscribeMail | null) => {
   const [time, setTime] = useState(
-    initialData.hour !== undefined
+    initialData
       ? `${String(initialData.hour).padStart(2, "0")}`
       : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(
-    initialData.hour !== undefined
+    !!initialData
   );
-  const [email, setEmail] = useState(initialData.email || "");
+  const [email, setEmail] = useState(initialData ? initialData.email : "");
 
-  const initialCategories = initialData.categories.map(item => item.id);
+  const initialCategories = initialData ? initialData.categories.map(item => item.id) : [];
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initialCategories || []);
   const handleCategoryChange = (id: number) => {
     setSelectedCategoryIds((prev) =>

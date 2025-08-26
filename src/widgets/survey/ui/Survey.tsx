@@ -1,8 +1,8 @@
 const Survey = () => {
   return (
     <div className="fixed top-0 w-full flex justify-center xl:px-13 z-20">
-      <div className="w-full max-w-334 h-7 xl:h-10 bg-[#ff8f63] text-white flex items-center px-2 xl:px-8 rounded-none xl:rounded-2xl justify-center gap-3">
-        <span className="font-semibold">컴정고시 피드백 부탁드립니다! </span>
+      <div className="w-full h-7 xl:h-10 bg-[#ff8f63] text-white flex items-center px-2 xl:px-8 justify-center gap-3 text-xs xl:text-base">
+        <span className="font-semibold">더 나는 서비스를 위해 의견을 들려주세요!</span>
         <a
           href="https://naver.me/GypNVc3Y"
           target="_blank"

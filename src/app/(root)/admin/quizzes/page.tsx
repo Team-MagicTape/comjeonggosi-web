@@ -12,14 +12,12 @@ const CreateQuizzes = () => {
     const { value, name } = e.target;
     
     if (name === "type") {
-      // 타입 변경 시 관련 필드 초기화
       setData((prev) => ({ 
         ...prev, 
         [name]: value,
-        answer: value === "OX" ? "O" : "" // OX 타입일 때 기본값 설정
+        answer: value === "OX" ? "O" : ""
       }));
       
-      // 타입 변경 시 선택지 초기화
       if (value === "MULTIPLE_CHOICE") {
         setOptions([""]);
       } else {
@@ -50,7 +48,6 @@ const CreateQuizzes = () => {
   };
 
   const submit = async () => {
-    // 유효성 검증
     if (!data.content.trim()) {
       alert("문제를 입력해주세요.");
       return;
@@ -64,7 +61,6 @@ const CreateQuizzes = () => {
       return;
     }
 
-    // 타입별 추가 검증 및 옵션 구성
     let submitOptions: string[] = [];
     
     if (data.type === "MULTIPLE_CHOICE") {
@@ -75,7 +71,6 @@ const CreateQuizzes = () => {
       }
       submitOptions = filteredOptions;
     } else if (data.type === "OX") {
-      // 선택한 답의 반대를 options에 추가
       submitOptions = [data.answer === "O" ? "X" : "O"];
     } else if (data.type === "SHORT_ANSWER") {
       submitOptions = [];
@@ -90,7 +85,6 @@ const CreateQuizzes = () => {
       
       await apiClient.post("/api/admin/quizzes", submitData);
       alert("퀴즈 등록 성공");
-      // 폼 리셋
       setData({ content: "", answer: "", categoryId: "", articleId: "", type: "MULTIPLE_CHOICE" });
       setOptions([""]);
     } catch {
@@ -108,9 +102,7 @@ const CreateQuizzes = () => {
         <p className="text-gray-600 text-sm">새로운 퀴즈 문제를 추가해보세요</p>
       </div>
 
-      {/* 폼 필드들 */}
       <div className="space-y-6">
-        {/* 퀴즈 타입 선택 */}
         <div>
           <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
             퀴즈 타입 <span className="text-red-500">*</span>
@@ -134,7 +126,6 @@ const CreateQuizzes = () => {
           </p>
         </div>
 
-        {/* 문제 입력 */}
         <div>
           <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
             문제 <span className="text-red-500">*</span>
@@ -151,7 +142,6 @@ const CreateQuizzes = () => {
           />
         </div>
 
-        {/* 정답 입력 - 타입별로 다르게 표시 */}
         <div>
           <label htmlFor="answer" className="block text-sm font-medium text-gray-700 mb-1">
             정답 <span className="text-red-500">*</span>
@@ -200,7 +190,6 @@ const CreateQuizzes = () => {
           )}
         </div>
 
-        {/* 선택지 입력 - 객관식일 때만 표시 */}
         {data.type === "MULTIPLE_CHOICE" && (
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -242,12 +231,11 @@ const CreateQuizzes = () => {
               ))}
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              정답 외에 최소 3개의 오답 선택지가 필요합니다
+              정답 외에 3개의 오답 선택지가 필요합니다
             </p>
           </div>
         )}
 
-        {/* 카테고리 ID 입력 */}
         <div>
           <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
             카테고리 ID <span className="text-red-500">*</span>
@@ -281,7 +269,6 @@ const CreateQuizzes = () => {
         </div>
       </div>
 
-      {/* 제출 버튼 */}
       <button
         onClick={submit}
         disabled={
@@ -311,7 +298,6 @@ const CreateQuizzes = () => {
         )}
       </button>
 
-      {/* 안내 메시지 */}
       <p className="text-xs text-gray-500 mt-3 text-center">
         * 필수 입력 항목
       </p>

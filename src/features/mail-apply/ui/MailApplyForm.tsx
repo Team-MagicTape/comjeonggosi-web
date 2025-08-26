@@ -6,13 +6,15 @@ import { getCategoryType } from "../types/category";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import Input from "@/shared/ui/Input";
 import { SubscribeMail } from "../types/get-mail";
+import { User } from "@/entities/user/types/user";
 
 interface Props {
   initialData: SubscribeMail | null;
   categories: getCategoryType[];
+  user: User | null;
 }
 
-const MailApplyForm = ({ initialData, categories }: Props) => {
+const MailApplyForm = ({ initialData, categories, user }: Props) => {
   const {
     time,
     handleTimeDown,
@@ -25,7 +27,7 @@ const MailApplyForm = ({ initialData, categories }: Props) => {
     email,
     handleTimeChange,
     handleTimeBlur,
-  } = useMailApplyForm(initialData);
+  } = useMailApplyForm(initialData, user);
 
   return (
     <div className="flex flex-col md:flex-row gap-8 p-6">

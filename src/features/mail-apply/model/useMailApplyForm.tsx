@@ -4,8 +4,10 @@ import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
 import { EMAIL_REGEX } from "../constants/regex";
 import { SubscribeMail } from "../types/get-mail";
+import { User } from "@/entities/user/types/user";
+import { login } from "@/widgets/login-modal/libs/modal-controller";
 
-export const useMailApplyForm = (initialData: SubscribeMail | null) => {
+export const useMailApplyForm = (initialData: SubscribeMail | null, user: User | null) => {
   const [time, setTime] = useState(
     initialData
       ? `${String(initialData.hour).padStart(2, "0")}`
@@ -58,6 +60,10 @@ export const useMailApplyForm = (initialData: SubscribeMail | null) => {
   };
 
   const handleClick = async () => {
+    if(!user) {
+      login.open();
+      return;
+    }
     if (email.trim().length <= 0) {
       toast.warning("이메일을 입력해 주세요.");
       return;

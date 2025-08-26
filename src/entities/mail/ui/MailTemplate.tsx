@@ -1,10 +1,10 @@
 "use client";
 
+import Button from "@/shared/ui/Button";
+import { Category } from "@/entities/category/types/category";
+import { MailDetail } from "../types/mail-detail";
 import { useScrollToMail } from "../model/useScrollToMail";
 import { useToggleAnswer } from "../model/useToggleAnswer";
-import Button from "@/shared/ui/Button";
-import { MailDetail } from "../types/mail-detail";
-import { Category } from "@/entities/category/types/category";
 
 interface Props {
   data: MailDetail;

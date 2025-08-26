@@ -23,7 +23,6 @@ const MyPageContentCards = ({
   questionCategory,
 }: Props) => {
   const [activeId, setActiveId] = useState(0);
-  const cards = [0, 1];
 
   return (
     <div className="w-full flex flex-col gap-4">

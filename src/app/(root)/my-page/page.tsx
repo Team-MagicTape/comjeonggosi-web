@@ -43,7 +43,6 @@ const MyPage = async () => {
             </p>
           </div>
           <Spacer />
-          <LogoutButton />
         </div>
       </div>
       <div className="w-full flex flex-col gap-4">

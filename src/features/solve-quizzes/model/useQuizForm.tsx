@@ -11,6 +11,7 @@ export const useQuizForm = (categories: Category[], initialQuiz: Quiz | null) =>
     name: item.name,
     value: String(item.id),
   }));
+  console.log(initialQuiz);
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [currentIdx, setCurrentIdx] = useState(0);

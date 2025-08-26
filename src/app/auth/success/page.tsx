@@ -1,7 +1,7 @@
 "use client"
 
 import { useSuccess } from "@/features/oauth/model/useSuccess";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 
 const OAuthSuccess = () => {

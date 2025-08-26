@@ -6,6 +6,7 @@ import StoreUser from "./StoreUser";
 
 const Header = async () => {
   const user = await fetchUser();
+  console.log(user);
 
   return (
     <header className="w-full fixed top-7 xl:top-10 z-10 flex justify-center xl:px-13">

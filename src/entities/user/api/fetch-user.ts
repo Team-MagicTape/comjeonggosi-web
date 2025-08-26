@@ -5,7 +5,8 @@ export const fetchUser = async () => {
   try {
     const { data } = await customFetch.get<User>("/users/my");
     return data;
-  } catch {
+  } catch(e){
+    console.log(e);
     return null;
   }
 };

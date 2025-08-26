@@ -87,12 +87,16 @@ export const useQuizForm = (
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
-  const handleSettingChange = (setting: keyof Settings) => {
-    if(!user) {
+  const isLoggedIn = () => {
+    if (!user) {
       login.open();
       return;
     }
+  };
+
+  const handleSettingChange = (setting: keyof Settings) => {
     if (setting === "hide7Days" && settings.hideForever) {
+      isLoggedIn();
       return setSettings((prev) => ({
         ...prev,
         hide7Days: !prev.hide7Days,
@@ -100,6 +104,7 @@ export const useQuizForm = (
       }));
     }
     if (setting === "hideForever" && settings.hide7Days) {
+      isLoggedIn();
       return setSettings((prev) => ({
         ...prev,
         hide7Days: false,
@@ -111,6 +116,7 @@ export const useQuizForm = (
 
   useEffect(() => {
     getQuizzes();
+    setShortAnswer("");
   }, [currentIdx, category]);
 
   useEffect(() => {
@@ -125,7 +131,7 @@ export const useQuizForm = (
   }, []);
 
   useEffect(() => {
-    if(quizzes.length === 1) {
+    if (quizzes.length === 1) {
       getQuizzes();
     }
   }, [quizzes]);

@@ -13,7 +13,7 @@ export const getOptionCircleStyle = (
   if (isSelected && isCurrentQuiz && !showAnswer) {
     return "bg-blue-600 text-white";
   }
-  return "bg-gray-200 text-gray-600";
+  return "bg-gray-200 text-gray-400";
 };
 
 

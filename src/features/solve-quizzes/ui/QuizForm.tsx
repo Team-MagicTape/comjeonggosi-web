@@ -40,7 +40,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
     options,
     handleShortAnswerSubmit,
     shortAnswer,
-    setShortAnswer
+    setShortAnswer,
   } = useQuizForm(categories, initialQuiz);
 
   return (
@@ -57,7 +57,9 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
             {quizzes.map((quiz, quizIdx) =>
               quiz ? (
-                <div key={quizIdx} className="w-full flex-shrink-0 xl:px-4 pb-8">
+                <div
+                  key={quizIdx}
+                  className="w-full flex-shrink-0 xl:px-4 pb-8">
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -142,11 +144,13 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
                     )}
 
                     {quiz?.articleId && (
-                      <CustomLink
-                        className="w-full"
-                        href={`/articles/${quiz?.articleId}`}>
-                        <Button>관련 아티클 읽으러 가기</Button>
-                      </CustomLink>
+                      <div className="w-full px-4 sm:px-8">
+                        <CustomLink
+                          className="w-full"
+                          href={`/articles/${quiz?.articleId}`}>
+                          <Button>관련 아티클 읽으러 가기</Button>
+                        </CustomLink>
+                      </div>
                     )}
 
                     <QuizSettings

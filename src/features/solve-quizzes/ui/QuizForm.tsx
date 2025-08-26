@@ -16,13 +16,15 @@ import Button from "@/shared/ui/Button";
 import { Loader2 } from "lucide-react";
 import OxOption from "./OxOption";
 import ShortAnswer from "./ShortAnswer";
+import { User } from "@/entities/user/types/user";
 
 interface Props {
   categories: Category[];
   initialQuiz: Quiz | null;
+  user: User | null;
 }
 
-const QuizForm = ({ categories, initialQuiz }: Props) => {
+const QuizForm = ({ categories, initialQuiz, user }: Props) => {
   const {
     category,
     setCategory,
@@ -41,7 +43,7 @@ const QuizForm = ({ categories, initialQuiz }: Props) => {
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
-  } = useQuizForm(categories, initialQuiz);
+  } = useQuizForm(categories, initialQuiz, user);
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">

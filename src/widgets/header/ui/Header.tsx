@@ -2,11 +2,9 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import Spacer from "@/shared/ui/Spacer";
 import NavigationLink from "./NavigationLink";
 import LoginButton from "@/widgets/login-button/ui/LoginButton";
-import StoreUser from "./StoreUser";
 
 const Header = async () => {
   const user = await fetchUser();
-  console.log(user);
 
   return (
     <header className="w-full fixed top-7 xl:top-10 z-10 flex justify-center xl:px-13">
@@ -23,7 +21,7 @@ const Header = async () => {
           <NavigationLink href="/mail" name="메일 신청" />
         </div>
         {!!user ? (
-          <StoreUser user={user} />
+          <NavigationLink href="/my-page" name="마이페이지" />
         ) : (
           <LoginButton />
         )}

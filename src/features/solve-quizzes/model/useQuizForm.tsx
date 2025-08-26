@@ -5,12 +5,13 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
-import { useUserStore } from "@/entities/user/model/useUserStore";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
+import { User } from "@/entities/user/types/user";
 
 export const useQuizForm = (
   categories: Category[],
-  initialQuiz: Quiz | null
+  initialQuiz: Quiz | null,
+  user: User | null
 ) => {
   const categoryList: Tab[] = categories.map((item) => ({
     name: item.name,
@@ -33,7 +34,6 @@ export const useQuizForm = (
     autoNext: false,
     noDelay: false,
   });
-  const { user } = useUserStore();
 
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
@@ -87,15 +87,11 @@ export const useQuizForm = (
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
-  const isLoggedIn = () => {
+  const handleSettingChange = (setting: keyof Settings) => {
     if (!user) {
       login.open();
       return;
     }
-  };
-
-  const handleSettingChange = (setting: keyof Settings) => {
-    isLoggedIn();
     if (setting === "hide7Days" && settings.hideForever) {
       return setSettings((prev) => ({
         ...prev,

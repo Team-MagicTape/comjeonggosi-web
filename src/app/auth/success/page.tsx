@@ -9,8 +9,8 @@ const OAuthSuccess = () => {
 
   return (
     <div className="w-full h-screen flex items-center justify-center gap-10 flex-col">
-      <div className="w-50 h-50 flex items-center justify-center rounded-[100%] bg-[#f5f5f5]">
-        <div className="w-25 h-25 flex items-center justify-center rounded-[100%] bg-orange-400">
+      <div className="w-50 h-50 flex items-center justify-center rounded-full bg-[#f5f5f5]">
+        <div className="w-25 h-25 flex items-center justify-center rounded-full bg-orange-400">
           <span className="text-4xl text-white">
             ✓
           </span>

@@ -95,8 +95,8 @@ export const useQuizForm = (
   };
 
   const handleSettingChange = (setting: keyof Settings) => {
+    isLoggedIn();
     if (setting === "hide7Days" && settings.hideForever) {
-      isLoggedIn();
       return setSettings((prev) => ({
         ...prev,
         hide7Days: !prev.hide7Days,
@@ -104,7 +104,6 @@ export const useQuizForm = (
       }));
     }
     if (setting === "hideForever" && settings.hide7Days) {
-      isLoggedIn();
       return setSettings((prev) => ({
         ...prev,
         hide7Days: false,

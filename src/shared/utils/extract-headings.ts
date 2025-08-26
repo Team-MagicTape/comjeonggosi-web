@@ -1,4 +1,3 @@
-import slugify from "slugify";
 import { Heading } from "../types/heading";
 
 export const extractHeadings = (markdown: string): Heading[] => {
@@ -9,8 +8,9 @@ export const extractHeadings = (markdown: string): Heading[] => {
   while ((match = headingRegex.exec(markdown)) !== null) {
     const level = match[1].length; // # → 1, ## → 2
     const text = match[2].trim();
-    const id = slugify(text, { lower: true, strict: true });
-    headings.push({ text, id, level });
+    const href = text.toLowerCase().replace(/\s+/g, "-");
+    headings.push({ text, level, href });
+    console.log(headings);
   }
 
   return headings;

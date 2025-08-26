@@ -101,3 +101,16 @@ html {
   --color-border: #eaecef;
   --radius-item: 10px;
 }
+
+:root {
+  --header-height: 74px;
+}
+
+html {
+  scroll-padding-top: var(--header-height);
+}
+
+.wmde-markdown h1,
+.wmde-markdown h2{
+  scroll-margin-top: var(--header-height);
+}

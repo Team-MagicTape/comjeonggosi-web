@@ -1,5 +1,5 @@
 export interface Heading {
   text: string;
-  id: string;
   level: number;
+  href: string;
 }

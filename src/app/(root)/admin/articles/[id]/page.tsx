@@ -1,14 +1,15 @@
 import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 import { notFound } from "next/navigation";
+import { PathParams } from "@/shared/types/path-params";
 import DeleteButton from "@/features/delete-article/ui/DeleteButton";
 import EditButton from "@/features/edit-article/ui/EditButton";
-import { PathParams } from "@/shared/types/path-params";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
 import { extractHeadings } from "@/shared/utils/extract-headings";
 
 const ArticleDetail = async ({ params }: PathParams) => {
-  const article = await getArticleDetail(Number(params));
+  const { id } = await params;
+  const article = await getArticleDetail(Number(id));
   if (!article) {
     notFound();
   }
@@ -27,7 +28,9 @@ const ArticleDetail = async ({ params }: PathParams) => {
         </span>
         <hr className="border border-gray-200 w-full" />
         <div className="font-medium">
-          <Markdown content={article.content} />
+          <div className="wmde-markdown wmde-markdown-color">
+            <Markdown content={article.content} />
+          </div>
         </div>
       </div>
     </div>

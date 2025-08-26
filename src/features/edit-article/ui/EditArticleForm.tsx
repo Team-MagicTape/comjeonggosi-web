@@ -5,18 +5,21 @@ import Button from "@/shared/ui/Button";
 import { useEditArticle } from "../model/useEditArticle";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import { Article } from "@/entities/article/types/article";
 
 interface Props {
   articleId: number;
+  article: Article;
 }
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
 });
 
-const EditArticleForm = ({ articleId }: Props) => {
+const EditArticleForm = ({ articleId, article }: Props) => {
   useEffect(() => {
     setIsMounted(true);
+    setContent(article.content);
   }, []);
 
   const {
@@ -36,7 +39,7 @@ const EditArticleForm = ({ articleId }: Props) => {
     >
       <Input
         value={title}
-        placeholder="제목을 입력해주세요."
+        placeholder={article.title}
         onChange={(e) => setTitle(e.target.value)}
       />
 

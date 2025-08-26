@@ -1,5 +1,5 @@
 interface Props {
-  headings: { text: string; id: string; level: number }[];
+  headings: { text: string; level: number, href: string }[];
 }
 
 const ArticleSidebar = ({ headings }: Props) => {
@@ -9,8 +9,8 @@ const ArticleSidebar = ({ headings }: Props) => {
       <hr className="border border-primary" />
       <ul className="flex flex-col gap-2">
         {headings.map((item) => (
-          <li key={item.id} className={item.level === 2 ? "pl-4 text-gray-600" : ""}>
-            <a href={`#${item.id}`} className="text-sm hover:underline block">
+          <li key={item.text} className={item.level === 2 ? "pl-4 text-gray-600" : ""}>
+            <a href={`#${item.href}`} className="text-sm hover:underline block">
               {item.text}
             </a>
           </li>

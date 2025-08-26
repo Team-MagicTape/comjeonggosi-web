@@ -5,6 +5,8 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
+import { useUserStore } from "@/entities/user/model/useUserStore";
+import { login } from "@/widgets/login-modal/libs/modal-controller";
 
 export const useQuizForm = (
   categories: Category[],
@@ -31,6 +33,7 @@ export const useQuizForm = (
     autoNext: false,
     noDelay: false,
   });
+  const { user } = useUserStore();
 
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
@@ -85,6 +88,10 @@ export const useQuizForm = (
   };
 
   const handleSettingChange = (setting: keyof Settings) => {
+    if(!user) {
+      login.open();
+      return;
+    }
     if (setting === "hide7Days" && settings.hideForever) {
       return setSettings((prev) => ({
         ...prev,

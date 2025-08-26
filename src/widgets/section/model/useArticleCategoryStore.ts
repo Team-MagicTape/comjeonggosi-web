@@ -7,6 +7,6 @@ interface State {
 }
 
 export const useArticleCategoryStore = create<State>((set) => ({
-  category: { name: "디비", value: "1" },
+  category: { name: "없음", value: "0" },
   setCategory: (category) => set({ category }),
 }));

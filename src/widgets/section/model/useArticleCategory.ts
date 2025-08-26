@@ -12,7 +12,7 @@ export const useArticleCategory = (categories: Category[]) => {
   }
 
   useEffect(() => {
-    setCategory(categoryList[0]);
+    if(category.value === "0") setCategory(categoryList[0]);
   }, []);
 
   return {

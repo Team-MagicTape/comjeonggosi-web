@@ -29,7 +29,7 @@ const DeleteArticles = () => {
   }, []);
 
   const { data: articles } = useQuery({
-    queryKey: ['articles', category?.value || ""],
+    queryKey: ['articles', `${category?.value}`],
     queryFn: async () => {
       const { data } = await apiClient.get<Article[]>(`/api/admin/articles?categoryId=${category?.value || 1}`);
       return data;
@@ -39,7 +39,7 @@ const DeleteArticles = () => {
   const handleDelete = async (id: number) => {
     try{
       await apiClient.delete(`/api/admin/articles/${id}`);
-      await invalidateQueries({ queryKey: ["articles", category?.value || ""] });
+      await invalidateQueries({ queryKey: ["articles", `${category?.value}`] });
       alert("삭제 완료");
     }catch(e){
       console.log(e);

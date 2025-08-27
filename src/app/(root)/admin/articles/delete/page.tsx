@@ -15,7 +15,7 @@ const DeleteArticles = () => {
 
   const getCategory = async () => {
     try{
-      const { data } = await apiClient.get<Category[]>("/api/admin/articles");
+      const { data } = await apiClient.get<Category[]>("/api/categories");
       const categories = data.map(item => ({ name: item.name, value: `${item.id}` }));
       setCategory(categories[0]);
       setCategoryList(categories);

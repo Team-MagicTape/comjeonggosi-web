@@ -39,7 +39,7 @@ const DeleteQuizzes = () => {
   const handleDelete = async (id: string) => {
     try{
       await apiClient.delete(`/api/admin/quizzes/${id}`);
-      await invalidateQueries({ queryKey: ["quizzes"] });
+      await invalidateQueries({ queryKey: ["quizzes", category?.value || ""] });
       alert("삭제 완료");
     }catch{
       alert("삭제 실패");

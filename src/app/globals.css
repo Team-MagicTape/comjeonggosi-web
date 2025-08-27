@@ -114,3 +114,24 @@ html {
 .wmde-markdown h2{
   scroll-margin-top: var(--header-height);
 }
+
+.wmde-markdown {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.wmde-markdown pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.wmde-markdown code {
+  white-space: pre-wrap;
+}
+
+.wmde-markdown table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}

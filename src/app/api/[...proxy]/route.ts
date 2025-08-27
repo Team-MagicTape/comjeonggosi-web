@@ -40,6 +40,7 @@ const handler = async (
       cookie,
       host: "",
     };
+    console.log(cookie);
 
     if (!data || data instanceof FormData) {
       delete headers["content-type"];
@@ -103,12 +104,13 @@ const handler = async (
 
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
+    console.log(apiResponse);
 
     let response;
 
     if (apiResponse.status === 204) {
       console.log("code: 204")
-      response = NextResponse.json({} ,{ status:  204 })
+      response = NextResponse.json({}, { status:  204 })
     } else {
       response = NextResponse.json(apiResponse.data, {
         status: apiResponse.status,

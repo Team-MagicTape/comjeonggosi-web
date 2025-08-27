@@ -15,9 +15,9 @@ const ArticleDetail = async ({ params }: PathParams) => {
   const headings = extractHeadings(article.content);
 
   return (
-    <div className="flex xl:flex-row gap-9 pr-[264px]">
+    <div className="xl:gap-8 xl:flex xl:pr-[264px]">
       <ArticleSidebar headings={headings} />
-      <div className="w-full bg-white border border-border rounded-2xl xl:p-8 flex flex-col gap-6">
+      <div className="w-full bg-white border border-border rounded-2xl p-8 flex flex-col gap-6 mt-4">
         <span className="flex items-center justify-between w-full">
           <h1 className="font-extrabold text-3xl">{article.title}</h1>
         </span>

@@ -9,6 +9,19 @@
   }
 }
 
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
 @keyframes modal-animation-out {
   0% {
     transform: translateY(0) scale(1);

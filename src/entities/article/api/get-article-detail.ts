@@ -5,7 +5,7 @@ export const getArticleDetail = async (
   id: number = 1
 ): Promise<Article | undefined> => {
   try {
-    const { data } = await customFetch.get<Article>(`/admin/articles/${id}`);
+    const { data } = await customFetch.get<Article>(`/articles/${id}`);
     return data;
   } catch (error) {
     console.error("fetch getArticleDetail error", error);

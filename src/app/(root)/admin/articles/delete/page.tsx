@@ -8,14 +8,14 @@ import Tabs from "@/widgets/tabs/ui/Tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
-const DeleteQuizzes = () => {
+const DeleteArticles = () => {
   const { invalidateQueries } = useQueryClient();
   const [category, setCategory] = useState<Tab | null>(null);
   const [categoryList, setCategoryList] = useState<Tab[]>([])
 
   const getCategory = async () => {
     try{
-      const { data } = await apiClient.get<Category[]>("/api/categories");
+      const { data } = await apiClient.get<Category[]>("/api/admin/");
       const categories = data.map(item => ({ name: item.name, value: `${item.id}` }));
       setCategory(categories[0]);
       setCategoryList(categories);
@@ -29,7 +29,7 @@ const DeleteQuizzes = () => {
   }, []);
 
   const { data: quizzes } = useQuery({
-    queryKey: ['quizzes', category?.value || ""],
+    queryKey: ['quizzes'],
     queryFn: async () => {
       const { data } = await apiClient.get<Quiz[]>(`/api/admin/quizzes?categoryId=${category?.value}`);
       return data;
@@ -86,4 +86,4 @@ const DeleteQuizzes = () => {
   );
 };
 
-export default DeleteQuizzes;
+export default DeleteArticles;

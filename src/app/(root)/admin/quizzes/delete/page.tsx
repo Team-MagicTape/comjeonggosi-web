@@ -31,7 +31,7 @@ const DeleteQuizzes = () => {
   const { data: quizzes } = useQuery({
     queryKey: ['quizzes', category?.value || ""],
     queryFn: async () => {
-      const { data } = await apiClient.get<Quiz[]>(`/api/admin/quizzes?categoryId=${category?.value}`);
+      const { data } = await apiClient.get<Quiz[]>(`/api/admin/quizzes?categoryId=${category?.value || 1}`);
       return data;
     },
   })

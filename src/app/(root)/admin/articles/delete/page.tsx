@@ -59,7 +59,7 @@ const DeleteArticles = () => {
         selected={category}
         setSelected={setCategory}
       />
-      <div className="grid gap-4">
+      <div className="grid gap-4 mt-4">
         {articles?.length === 0 && (
           <p className="text-gray-500">아티클이 없습니다.</p>
         )}
@@ -67,6 +67,7 @@ const DeleteArticles = () => {
           <div
             key={article.id}
             className="flex justify-between items-center p-4 border rounded-2xl shadow-sm bg-white"
+            title={article.content}
           >
             <div>
               <p className="font-semibold">{article.title}</p>

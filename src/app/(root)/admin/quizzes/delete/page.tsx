@@ -59,7 +59,7 @@ const DeleteQuizzes = () => {
         selected={category}
         setSelected={setCategory}
       />
-      <div className="grid gap-4">
+      <div className="grid gap-4 mt-4">
         {quizzes?.length === 0 && (
           <p className="text-gray-500">퀴즈가 없습니다.</p>
         )}

@@ -104,20 +104,9 @@ const handler = async (
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
 
-    let response: NextResponse;
-
-    if (
-      apiResponse.status === 204 ||
-      apiResponse.data === undefined ||
-      apiResponse.data === null ||
-      (typeof apiResponse.data === "string" && apiResponse.data.trim() === "")
-    ) {
-      response = new NextResponse(null, { status: apiResponse.status });
-    } else {
-      response = NextResponse.json(apiResponse.data, {
-        status: apiResponse.status,
-      });
-    }
+    const response = NextResponse.json(apiResponse.data || { data: null }, {
+      status: apiResponse.status,
+    });
 
     const setCookies = apiResponse.headers["set-cookie"];
     if (setCookies) {

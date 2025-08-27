@@ -1,4 +1,3 @@
-'use client';
 
 import { SelectHTMLAttributes } from 'react';
 

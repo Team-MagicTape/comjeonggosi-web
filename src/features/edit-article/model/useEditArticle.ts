@@ -3,13 +3,13 @@
 import { toast } from "@/shared/providers/ToastProvider";
 import { editArticle } from "../api/edit-article";
 import { useState } from "react";
-import {useCustomRouter} from "@/shared/model/useCustomRouter";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 export const useEditArticle = () => {
   const router = useCustomRouter();
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
 
   const handleEdit = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -26,5 +26,5 @@ export const useEditArticle = () => {
     }
   };
 
-  return { handleEdit, title, setTitle, content, setContent };
+  return { handleEdit, title, setTitle, content, setContent, setIsMounted, isMounted };
 };

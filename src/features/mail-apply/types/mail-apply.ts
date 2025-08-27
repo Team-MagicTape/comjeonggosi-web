@@ -1,4 +1,4 @@
-export interface SubscribeMail {
-  hour : number;
-  minute : number;
+export interface Category {
+  id: number;
+  name: string;
 }

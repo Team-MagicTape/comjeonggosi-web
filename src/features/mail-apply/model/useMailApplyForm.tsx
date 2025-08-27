@@ -1,39 +1,106 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { subscribeMail } from "../api/subscribe-mail";
-import { unsubscribeMail } from "../api/unsubscribe-mail";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
+import { EMAIL_REGEX } from "../constants/regex";
+import { SubscribeMail } from "../types/get-mail";
+import { User } from "@/entities/user/types/user";
+import { login } from "@/widgets/login-modal/libs/modal-controller";
 
-export const useMailApplyForm = (
-  initialHour?: number,
-  initialMinute?: number
-) => {
+export const useMailApplyForm = (initialData: SubscribeMail | null, user: User | null) => {
   const [time, setTime] = useState(
-    initialHour !== undefined && initialMinute !== undefined
-      ? `${String(initialHour).padStart(2, "0")}:${String(
-          initialMinute
-        ).padStart(2, "0")}`
-      : ""
+    initialData
+      ? `${String(initialData.hour).padStart(2, "0")}`
+      : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(
-    initialHour !== undefined && initialMinute !== undefined
+    !!initialData
   );
+  const [email, setEmail] = useState(initialData ? initialData.email : "");
+
+  const initialCategories = initialData ? initialData.categories.map(item => item.id) : [];
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initialCategories || []);
+  const handleCategoryChange = (id: number) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  };
+
+  const handleTimeUp = () => {
+    const [hourStr] = time.split(":");
+    const newHour = (Number(hourStr) + 1) % 24;
+    setTime(`${newHour.toString().padStart(2, "0")}`);
+  };
+
+  const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handleTimeDown = () => {
+    const [hourStr] = time.split(":");
+    const newHour = (Number(hourStr) - 1 + 24) % 24;
+    setTime(`${newHour.toString().padStart(2, "0")}`);
+  };
+
+  const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    if (value.length > 2) {
+      return;
+    }
+    setTime(value);
+  };
+
+  const handleTimeBlur = () => {
+    const hour = parseInt(time, 10);
+    if (isNaN(hour) || hour < 0 || hour > 23) {
+      setTime("00");
+    } else {
+      setTime(String(hour).padStart(2, "0"));
+    }
+  };
 
   const handleClick = async () => {
+    if(!user) {
+      login.open();
+      return;
+    }
+    if (email.trim().length <= 0) {
+      toast.warning("이메일을 입력해 주세요.");
+      return;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      toast.warning("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
     if (!isSubscribed && !time) {
       toast.warning("선호 시간을 선택해주세요.");
       return;
     }
+    if (selectedCategoryIds.length === 0) {
+      toast.warning("관심 주제를 선택해주세요.");
+      return;
+    }
 
     try {
-      if (isSubscribed) {
-        await unsubscribeMail();
-        toast.success("신청이 취소되었습니다");
-        setIsSubscribed(false);
+      if (!isSubscribed) {
+        const [hourStr, minuteStr] = time.split(":");
+
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+          email,
+        });
+        toast.success("신청 되었습니다");
+        setIsSubscribed(true);
       } else {
         const [hourStr, minuteStr] = time.split(":");
-        await subscribeMail({ hour: +hourStr, minute: +minuteStr });
-        setIsSubscribed(true);
+        await subscribeMail({
+          hour: +hourStr,
+          categoryIds: selectedCategoryIds,
+          email,
+        });
+        toast.success("신청이 취소 되었습니다");
+        setIsSubscribed(false);
       }
     } catch (error) {
       const err = error as AxiosError;
@@ -41,20 +108,17 @@ export const useMailApplyForm = (
     }
   };
 
-  const topics = [
-    "컴퓨터 구조",
-    "데이터베이스",
-    "자료구조 & 알고리즘",
-    "운영체제",
-    "네트워크",
-    "프로그래밍 언어",
-  ];
-
   return {
     time,
-    setTime,
     isSubscribed,
     handleClick,
-    topics,
+    handleCategoryChange,
+    selectedCategoryIds,
+    handleTimeDown,
+    handleTimeUp,
+    handleEmail,
+    email,
+    handleTimeChange,
+    handleTimeBlur,
   };
 };

@@ -31,7 +31,7 @@
 }
 
 .h-main {
-  height: calc(100dvh - 64px);
+  height: calc(100dvh - 160px);
 }
 
 @keyframes fade-in {
@@ -95,9 +95,43 @@ html {
 
 @theme {
   --color-bg: #f8f9fa;
-  --color-primary: #6466f1;
+  --color-primary: #FF723A;
   --color-gray: #666666;
   --color-lightgray: #888888;
   --color-border: #eaecef;
   --radius-item: 10px;
+}
+
+:root {
+  --header-height: 74px;
+}
+
+html {
+  scroll-padding-top: var(--header-height);
+}
+
+.wmde-markdown h1,
+.wmde-markdown h2{
+  scroll-margin-top: var(--header-height);
+}
+
+.wmde-markdown {
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.wmde-markdown pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+.wmde-markdown code {
+  white-space: pre-wrap;
+}
+
+.wmde-markdown table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
 }

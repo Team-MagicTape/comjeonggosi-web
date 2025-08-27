@@ -5,6 +5,7 @@ import ToastContainer from "@/shared/providers/ToastProvider";
 import LoadingProvider from "@/shared/providers/LoadingProvider";
 import LoginModal from "@/widgets/login-modal/ui/LoginModal";
 import QueryProvider from "@/shared/providers/QueryProvider";
+import '@uiw/react-markdown-preview/markdown.css';
 
 export const metadata: Metadata = {
   title: "컴정고시",

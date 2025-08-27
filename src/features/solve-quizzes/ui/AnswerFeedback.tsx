@@ -21,7 +21,7 @@ const AnswerFeedback = ({ isCorrect, autoNext }: Props) => {
       </div>
       {autoNext && (
         <div className="mt-3 text-xs sm:text-sm text-gray-500">
-          3초 후 자동으로 다음 문제로 넘어갑니다...
+          자동으로 다음 문제로 넘어갑니다...
         </div>
       )}
     </div>

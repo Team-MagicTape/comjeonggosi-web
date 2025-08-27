@@ -2,31 +2,57 @@
 
 import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
-import TextArea from "@/shared/ui/TextArea";
-import { useEditArticle } from "../model/useEditArticle"
+import { useEditArticle } from "../model/useEditArticle";
+import dynamic from "next/dynamic";
+import { useEffect } from "react";
+import { Article } from "@/entities/article/types/article";
 
 interface Props {
   articleId: number;
+  article: Article;
 }
 
-const EditArticleForm = ({ articleId }: Props) => {
-  const { title, setTitle, content, setContent, handleEdit } = useEditArticle();
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
+
+const EditArticleForm = ({ articleId, article }: Props) => {
+  useEffect(() => {
+    setIsMounted(true);
+    setContent(article.content);
+  }, []);
+
+  const {
+    title,
+    setTitle,
+    content,
+    setContent,
+    handleEdit,
+    isMounted,
+    setIsMounted,
+  } = useEditArticle();
 
   return (
     <form
       onSubmit={(e) => handleEdit(e, articleId)}
-      className="flex flex-col gap-2"
+      className="flex flex-col gap-4"
     >
       <Input
         value={title}
-        placeholder="제목을 입력해주세요."
+        placeholder={article.title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <TextArea
-        value={content}
-        placeholder="내용을 입력해주세요."
-        onChange={(e) => setContent(e.target.value)}
-      />
+
+      {isMounted && (
+        <div data-color-mode="light">
+          <MDEditor
+            value={content}
+            onChange={(val) => setContent(val || "")}
+            height={400}
+          />
+        </div>
+      )}
+
       <Button type="submit">완료</Button>
     </form>
   );

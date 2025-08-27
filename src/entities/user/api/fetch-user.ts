@@ -3,9 +3,10 @@ import { User } from "../types/user";
 
 export const fetchUser = async () => {
   try {
-    const { data } = await customFetch.get<User>("/users/me");
+    const { data } = await customFetch.get<User>("/users/my");
     return data;
-  } catch {
+  } catch(e){
+    console.log(e);
     return null;
   }
 };

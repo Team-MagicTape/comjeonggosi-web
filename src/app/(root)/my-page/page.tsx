@@ -1,19 +1,21 @@
 import UserAvatar from "@/entities/user/ui/UserAvatar";
 import MailTemplate from "@/entities/mail/ui/MailTemplate";
-import LogoutButton from "@/widgets/login-button/ui/LogoutButton";
+import LogoutButton from "@/features/logout/ui/LogoutButton";
 import MySubmissions from "@/widgets/section/ui/MySubmissions";
 import Spacer from "@/shared/ui/Spacer";
 import { parseDate } from "@/shared/utils/parse-date";
 import { fetchInitialSubmissions } from "@/entities/quiz/api/fetch-initial-submissions";
-import QuestionAccordion from "@/widgets/section/ui/QuestionAccordion";
+import QuestionAccordion from "@/entities/mail/ui/QuestionAccordion";
 import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
 import { fetchInitialMailDetail } from "@/entities/mail/api/fetch-initial-mail-detail";
 import { fetchInitialCategoryDetail } from "@/entities/category/api/fetch-initial-category-detail";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
+import { fetchCategories } from "@/entities/category/api/fetch-categories";
 
 const MyPage = async () => {
   const user = await fetchUser();
+  const categories = await fetchCategories();
   const submissions = await fetchInitialSubmissions();
   const mails = (await fetchInitialMails()).splice(0, 1);
   const mail =
@@ -41,7 +43,6 @@ const MyPage = async () => {
             </p>
           </div>
           <Spacer />
-          <LogoutButton />
         </div>
       </div>
       <div className="w-full flex flex-col gap-4">
@@ -50,7 +51,7 @@ const MyPage = async () => {
           <MailTemplate data={mail} category={questionCategory} />
         )}
 
-        <QuestionAccordion mails={mails} />
+        <QuestionAccordion categories={categories} mails={mails} />
       </div>
     </div>
   );

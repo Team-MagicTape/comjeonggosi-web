@@ -104,9 +104,16 @@ const handler = async (
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
 
-    const response = NextResponse.json(apiResponse.data || { data: null }, {
-      status: apiResponse.status,
-    });
+    let response;
+
+    if (apiResponse.status === 204) {
+      console.log("code: 204")
+      response = NextResponse.json({} ,{ status:  204 })
+    } else {
+      response = NextResponse.json(apiResponse.data, {
+        status: apiResponse.status,
+      });
+    }
 
     const setCookies = apiResponse.headers["set-cookie"];
     if (setCookies) {

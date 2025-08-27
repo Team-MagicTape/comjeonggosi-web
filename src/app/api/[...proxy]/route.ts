@@ -32,9 +32,7 @@ const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head"].includes(method)
-    ? undefined
-    : await req.json();
+  const data = ["get", "head"].includes(method) ? undefined : await req.json();
 
   const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {
@@ -106,9 +104,20 @@ const handler = async (
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
 
-    const response = NextResponse.json(apiResponse.data, {
-      status: apiResponse.status,
-    });
+    let response: NextResponse;
+
+    if (
+      apiResponse.status === 204 ||
+      apiResponse.data === undefined ||
+      apiResponse.data === null ||
+      (typeof apiResponse.data === "string" && apiResponse.data.trim() === "")
+    ) {
+      response = new NextResponse(null, { status: apiResponse.status });
+    } else {
+      response = NextResponse.json(apiResponse.data, {
+        status: apiResponse.status,
+      });
+    }
 
     const setCookies = apiResponse.headers["set-cookie"];
     if (setCookies) {
@@ -136,7 +145,7 @@ const handler = async (
   } catch (e) {
     console.log(e);
     return NextResponse.json(
-      (e as AxiosError),
+      { message: (e as AxiosError).message },
       { status: 500 }
     );
   }

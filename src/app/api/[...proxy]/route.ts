@@ -32,7 +32,7 @@ const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head"].includes(method) ? undefined : await req.json();
+  const data = ["get", "head", "delete"].includes(method) ? undefined : await req.json();
 
   const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {

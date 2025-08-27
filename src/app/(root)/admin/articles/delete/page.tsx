@@ -41,7 +41,8 @@ const DeleteArticles = () => {
       await apiClient.delete(`/api/admin/articles/${id}`);
       await invalidateQueries({ queryKey: ["articles", category?.value || ""] });
       alert("삭제 완료");
-    }catch{
+    }catch(e){
+      console.log(e);
       alert("삭제 실패");
     }
   };

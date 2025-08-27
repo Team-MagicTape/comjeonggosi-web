@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import setCookieParser from "set-cookie-parser";
 import { isTokenExpired } from "@/shared/utils/is-token-expired";
 import {
@@ -135,7 +135,7 @@ const handler = async (
     return response;
   } catch (e) {
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      (e as AxiosError).response,
       { status: 500 }
     );
   }

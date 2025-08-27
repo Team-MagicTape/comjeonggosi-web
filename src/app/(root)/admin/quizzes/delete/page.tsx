@@ -9,7 +9,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 const DeleteQuizzes = () => {
-  const { invalidateQueries } = useQueryClient();
+  const queryClient = useQueryClient();
   const [category, setCategory] = useState<Tab | null>(null);
   const [categoryList, setCategoryList] = useState<Tab[]>([])
 
@@ -39,7 +39,7 @@ const DeleteQuizzes = () => {
   const handleDelete = async (id: string) => {
     try{
       await apiClient.delete(`/api/admin/quizzes/${id}`);
-      await invalidateQueries({ queryKey: ["quizzes", `${category?.value}`] });
+      await queryClient.invalidateQueries({ queryKey: ["quizzes", `${category?.value}`] });
       alert("삭제 완료");
     }catch(e){
       console.log(e);

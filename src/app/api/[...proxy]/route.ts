@@ -134,8 +134,9 @@ const handler = async (
 
     return response;
   } catch (e) {
+    console.log(e);
     return NextResponse.json(
-      (e as AxiosError).response,
+      (e as AxiosError),
       { status: 500 }
     );
   }

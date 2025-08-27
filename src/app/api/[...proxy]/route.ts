@@ -110,7 +110,7 @@ const handler = async (
 
     if (apiResponse.status === 204) {
       console.log("code: 204")
-      response = NextResponse.json({}, { status:  204 })
+      response = new NextResponse(null, { status: 204 });
     } else {
       response = NextResponse.json(apiResponse.data, {
         status: apiResponse.status,

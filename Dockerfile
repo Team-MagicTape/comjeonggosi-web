@@ -1,35 +1,39 @@
-# 1단계: 빌드
-FROM node:21-slim AS builder
-WORKDIR /comjeonggosi-web
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
 
-# 의존성 설치용 파일 복사 및 설치
-COPY package.json package-lock.json* pnpm-lock.yaml* ./
-RUN npm install -g pnpm && pnpm install
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
 
-# 🔥 .env.local 파일 먼저 복사 (중요!)
-COPY .env .env.production
-
-# 전체 소스 복사 및 빌드
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN pnpm build
 
-# 2단계: 실행
-FROM node:21-slim AS runner
-WORKDIR /comjeonggosi-web
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN corepack enable pnpm && pnpm prisma generate && pnpm build
 
-# 프로덕션 의존성만 설치
-COPY package.json pnpm-lock.yaml* ./
-RUN npm install -g pnpm && pnpm install --prod
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# 빌드된 파일들 복사
-COPY --from=builder /comjeonggosi-web/.next .next
-COPY --from=builder /comjeonggosi-web/public public
-COPY --from=builder /comjeonggosi-web/next.config.ts ./
-COPY --from=builder /comjeonggosi-web/node_modules ./node_modules
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# 필요 시 환경파일 복사 (optional, 런타임에서도 필요하면)
-COPY --from=builder /comjeonggosi-web/.env .env.production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/package.json ./package.json
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

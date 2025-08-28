@@ -40,7 +40,7 @@ const MyPage = async () => {
         </div>
       </div>
       <MyPageContentCards
-        children={[
+        items={[
           {
             child: <MySubmissions submissions={submissions} />,
             title: "퀴즈 풀이",

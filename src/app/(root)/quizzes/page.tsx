@@ -5,9 +5,11 @@ import QuizForm from "@/features/solve-quizzes/ui/QuizForm";
 import { Suspense } from "react";
 
 const Quizzes = async () => {
-  const categories = await fetchCategories();
-  const quiz = await fetchInitialQuiz(1);
-  const user = await fetchUser();
+  const [categories, quiz, user] = await Promise.all([
+    fetchCategories(),
+    fetchInitialQuiz(1),
+    fetchUser(),
+  ]);
 
   return (
     <Suspense>

@@ -4,9 +4,11 @@ import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 
 const MailApply = async () => {
-  const subscription = await getSubscription();
-  const categories = await fetchCategories();
-  const user = await fetchUser();
+  const [subscription, categories, user] = await Promise.all([
+    getSubscription(),
+    fetchCategories(),
+    fetchUser(),
+  ]);
 
   return (
     <div>

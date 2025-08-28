@@ -119,6 +119,7 @@ html {
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 .wmde-markdown pre {

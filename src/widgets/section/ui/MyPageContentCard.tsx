@@ -1,11 +1,9 @@
 "use client";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
+import { cardItems } from "../types/card-items";
 
-interface Props {
-  items: { child: ReactNode; title: string }[];
-}
 
-const MyPageContentCards = ({ items }: Props) => {
+const MyPageContentCards = ({ items }: cardItems) => {
   const [activeId, setActiveId] = useState(0);
 
   return (

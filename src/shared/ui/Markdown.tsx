@@ -16,6 +16,7 @@ const Markdown = ({ content }: { content: string }) => {
         [&_p]:text-sm
         [&_ul]:text-xs
         [&_li]:text-xs
+        [&_li]:list-disc
         [&_ol]:text-xs
         [&_hr]:!h-0.5
         [&_hr]:!border-0

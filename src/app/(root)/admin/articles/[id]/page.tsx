@@ -5,12 +5,12 @@ import DeleteButton from "@/features/delete-article/ui/DeleteButton";
 import EditButton from "@/features/edit-article/ui/EditButton";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
-import { fetchArticles } from "@/entities/article/api/fetch-articles";
+import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-articles";
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
-  const articles = await fetchArticles(String(id));
+  const articles = await fetchInitialArticles(String(article?.category.id));
   if (!article) {
     notFound();
   }

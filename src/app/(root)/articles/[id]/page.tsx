@@ -8,7 +8,7 @@ import {fetchArticles} from "@/entities/article/api/fetch-articles";
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
-  const articles = await fetchArticles(String(id));
+  const articles = await fetchArticles(String(article?.category.id));
   if (!article) {
     notFound();
   }

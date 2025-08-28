@@ -1,28 +1,22 @@
 import UserAvatar from "@/entities/user/ui/UserAvatar";
-import MailTemplate from "@/entities/mail/ui/MailTemplate";
-import LogoutButton from "@/features/logout/ui/LogoutButton";
 import MySubmissions from "@/widgets/section/ui/MySubmissions";
 import Spacer from "@/shared/ui/Spacer";
 import { parseDate } from "@/shared/utils/parse-date";
 import { fetchInitialSubmissions } from "@/entities/quiz/api/fetch-initial-submissions";
 import QuestionAccordion from "@/entities/mail/ui/QuestionAccordion";
 import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
-import { fetchInitialMailDetail } from "@/entities/mail/api/fetch-initial-mail-detail";
-import { fetchInitialCategoryDetail } from "@/entities/category/api/fetch-initial-category-detail";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
+import MyPageContentCards from "@/widgets/section/ui/MyPageContentCard";
 
 const MyPage = async () => {
-  const user = await fetchUser();
-  const categories = await fetchCategories();
-  const submissions = await fetchInitialSubmissions();
-  const mails = (await fetchInitialMails()).splice(0, 1);
-  const mail =
-    mails.length > 0 ? await fetchInitialMailDetail(mails[0].id) : null;
-  const questionCategory = mail
-    ? await fetchInitialCategoryDetail(mail.categoryId)
-    : null;
+  const [user, categories, submissions, mails] = await Promise.all([
+    fetchUser(),
+    fetchCategories(),
+    fetchInitialSubmissions(),
+    fetchInitialMails(),
+  ]);
 
   if (!user) {
     redirect("/");
@@ -45,14 +39,18 @@ const MyPage = async () => {
           <Spacer />
         </div>
       </div>
-      <div className="w-full flex flex-col gap-4">
-        <MySubmissions submissions={submissions} />
-        {mail && questionCategory && (
-          <MailTemplate data={mail} category={questionCategory} />
-        )}
-
-        <QuestionAccordion categories={categories} mails={mails} />
-      </div>
+      <MyPageContentCards
+        items={[
+          {
+            child: <MySubmissions submissions={submissions} />,
+            title: "퀴즈 풀이",
+          },
+          {
+            child: <QuestionAccordion categories={categories} mails={mails} />,
+            title: "받은 질문",
+          },
+        ]}
+      />
     </div>
   );
 };

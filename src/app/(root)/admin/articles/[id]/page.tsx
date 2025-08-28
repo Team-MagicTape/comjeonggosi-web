@@ -5,22 +5,24 @@ import DeleteButton from "@/features/delete-article/ui/DeleteButton";
 import EditButton from "@/features/edit-article/ui/EditButton";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
-import { extractHeadings } from "@/shared/utils/extract-headings";
+import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-articles";
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
+  const articles = await fetchInitialArticles(String(article?.category.id));
   if (!article) {
     notFound();
   }
-  const headings = extractHeadings(article.content);
 
   return (
-    <div className="flex xl:flex-row gap-9 pr-[264px]">
-      <ArticleSidebar headings={headings} />
-      <div className="w-full bg-white border border-border rounded-2xl xl:p-8 flex flex-col gap-6">
+    <div className="xl:gap-8 xl:flex xl:pr-[264px]">
+      <div className="hidden xl:block">
+        <ArticleSidebar data={articles} />
+      </div>
+      <div className="w-full bg-white border border-border rounded-2xl p-8 flex flex-col gap-6">
         <span className="flex items-center justify-between w-full">
-          <h1 className="font-extrabold text-3xl">{article.title}</h1>
+          <h1 className="font-extrabold xl:text-3xl text-2xl">{article.title}</h1>
           <div className="flex items-center gap-2">
             <DeleteButton articleId={Number(params)} />
             <EditButton articleId={Number(params)} />
@@ -28,10 +30,11 @@ const ArticleDetail = async ({ params }: PathParams) => {
         </span>
         <hr className="border border-gray-200 w-full" />
         <div className="font-medium">
-          <div className="wmde-markdown wmde-markdown-color">
-            <Markdown content={article.content} />
-          </div>
+          <Markdown content={article.content} />
         </div>
+      </div>
+      <div className="block mt-4 xl:hidden">
+        <ArticleSidebar data={articles} />
       </div>
     </div>
   );

@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
-import { cardItems } from "../types/card-items";
+import { CardItem } from "../types/card-item";
 
+interface Props {
+  items: CardItem[];
+}
 
-const MyPageContentCards = ({ items }: cardItems) => {
+const MyPageContentCards = ({ items }: Props) => {
   const [activeId, setActiveId] = useState(0);
 
   return (

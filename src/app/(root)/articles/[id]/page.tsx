@@ -9,7 +9,7 @@ const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
   const articles = await fetchArticles(String(id));
-  if (!article || !articles) {
+  if (!article) {
     notFound();
   }
 

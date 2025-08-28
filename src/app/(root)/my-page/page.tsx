@@ -8,6 +8,7 @@ import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
+import MyPageContentCards from "@/widgets/section/ui/MyPageContentCard";
 
 const MyPage = async () => {
   const [user, categories, submissions, mails] = await Promise.all([
@@ -38,11 +39,18 @@ const MyPage = async () => {
           <Spacer />
         </div>
       </div>
-      <div className="w-full flex flex-col gap-4">
-        <MySubmissions submissions={submissions} />
-
-        <QuestionAccordion categories={categories} mails={mails} />
-      </div>
+      <MyPageContentCards
+        children={[
+          {
+            child: <MySubmissions submissions={submissions} />,
+            title: "퀴즈 풀이",
+          },
+          {
+            child: <QuestionAccordion categories={categories} mails={mails} />,
+            title: "받은 질문",
+          },
+        ]}
+      />
     </div>
   );
 };

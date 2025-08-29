@@ -2,7 +2,6 @@ import TodayQuestionForm from "@/entities/question/ui/TodayQuestionForm";
 import { fetchQuestionById } from "@/entities/question/api/fetch-initial-question";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
-import { notFound, redirect } from "next/navigation";
 import TodayQuestionGuide from "@/entities/question/ui/TodayQuestionGuide";
 
 const TodayQuestion = async () => {
@@ -11,11 +10,15 @@ const TodayQuestion = async () => {
     fetchCategories(),
   ]);
 
+  console.log(questions, categories);
+
   if(questions.length <= 0) {
     return <TodayQuestionGuide />
   }
 
   const question = await fetchQuestionById(questions[0].id);
+
+  console.log(question);
 
   if(!question) {
     return <TodayQuestionGuide />

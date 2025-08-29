@@ -1,17 +1,27 @@
-import CustomLink from "@/shared/ui/CustomLink";
-import { ToolCase } from "lucide-react";
+import TodayQuestionForm from "@/entities/question/ui/TodayQuestionForm";
+import { fetchQuestionById } from "@/entities/question/api/fetch-initial-question";
+import { fetchCategories } from "@/entities/category/api/fetch-categories";
+import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
+import { notFound, redirect } from "next/navigation";
 
-const TodayQuestion = () => {
-  return (
-    <div className="w-full h-body flex flex-col items-center justify-center gap-2">
-      <ToolCase className="text-blue-500" size={56} />
-      <h1 className="text-3xl">Preparing Now {":)"}</h1>
-      <p>페이지를 준비하는 중입니다!</p>
-      <CustomLink href="/" className="text-primary">
-        메인으로 돌아가기
-      </CustomLink>
-    </div>
-  );
+const TodayQuestion = async () => {
+  const [questions, categories] = await Promise.all([
+    fetchInitialMails(),
+    fetchCategories(),
+  ]);
+
+  if(questions.length <= 0) {
+    redirect("/mail");
+  }
+
+  const question = await fetchQuestionById(questions[0].id);
+
+  if(!question) {
+    notFound();
+  }
+  const category = categories.find((c) => c.id === question.categoryId);
+
+  return <TodayQuestionForm question={question} category={category} />;
 };
 
 export default TodayQuestion;

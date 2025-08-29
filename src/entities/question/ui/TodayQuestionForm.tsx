@@ -1,20 +1,18 @@
-import { useTodayQuestion } from "../model/useTodayQuestion";
+"use client"
+
 interface Props {
-  questionId: number;
+  question: {
+    id: number;
+    day: number;
+    categoryId: number;
+    title: string;
+    content: string;
+    answer: string;
+  };
+  category?: { id: number; name: string; description: string };
 }
 
-const TodayQuestionForm = async ({ questionId }: Props) => {
-  const result = await useTodayQuestion(questionId);
-
-  if (!result) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <span className="text-gray-500">질문 불러 오기 실패</span>
-      </div>
-    );
-  }
-  const { question, category } = result;
-
+const TodayQuestionForm = ({ question, category }: Props) => {
   return (
     <div className="w-full flex flex-col justify-center z-20 gap-8">
       <div className="w-full bg-white flex flex-col rounded-2xl pl-15 pr-15 pb-6 mb-5">
@@ -32,7 +30,6 @@ const TodayQuestionForm = async ({ questionId }: Props) => {
         <div className="mt-2">
           <span className="font-bold text-[15px] text-[#333]">{`${question.content}`}</span>
         </div>
-
         <div className="w-full h-[1px] mt-5 bg-gray-400"></div>
         <div className="text-[#ff723a] mt-5 font-bold">정답</div>
         <div className="mt-2">

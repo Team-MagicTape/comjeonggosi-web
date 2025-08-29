@@ -16,7 +16,7 @@ const TodayQuestion = async () => {
     return <TodayQuestionGuide />
   }
 
-  const question = await fetchQuestionById(questions[0].id);
+  const question = await fetchQuestionById(questions[questions.length - 1].id);
 
   console.log(question);
 

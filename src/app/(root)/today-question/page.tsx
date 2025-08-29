@@ -3,6 +3,7 @@ import { fetchQuestionById } from "@/entities/question/api/fetch-initial-questio
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
 import { notFound, redirect } from "next/navigation";
+import TodayQuestionGuide from "@/entities/question/ui/TodayQuestionGuide";
 
 const TodayQuestion = async () => {
   const [questions, categories] = await Promise.all([
@@ -11,13 +12,13 @@ const TodayQuestion = async () => {
   ]);
 
   if(questions.length <= 0) {
-    redirect("/mail");
+    return <TodayQuestionGuide />
   }
 
   const question = await fetchQuestionById(questions[0].id);
 
   if(!question) {
-    notFound();
+    return <TodayQuestionGuide />
   }
   const category = categories.find((c) => c.id === question.categoryId);
 

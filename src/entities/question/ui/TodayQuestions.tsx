@@ -25,7 +25,7 @@ const TodayQuestions = ({ categories, questions }: Props) => {
           매일 새로운 질문으로 생각의 깊이를 더해보세요
         </div>
       </div>
-      <div className="w-full mx-auto bg-white py-2 px-4 sm:py-3 sm:px-6 rounded-xl sm:rounded-2xl border border-gray-200">
+      <div className="w-full mx-auto bg-white py-2 px-4 sm:py-3 sm:px-6 rounded-xl sm:rounded-2xl border border-gray-200 mb-4">
         <Tabs tabs={categoryList} selected={category} setSelected={setCategory} />
       </div>
       <div className="gap-6 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

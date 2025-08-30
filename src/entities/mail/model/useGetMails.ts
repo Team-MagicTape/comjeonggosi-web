@@ -13,8 +13,8 @@ export const useGetMails = (categories: Category[], mails: Mail[]) => {
   const [category, setCategory] = useState<Tab>(categoryList[0]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["mails", category.value || ""],
-    queryFn: async () => await fetchMails(category.value),
+    queryKey: ["mails", category?.value || ""],
+    queryFn: async () => await fetchMails(category?.value),
     initialData: mails,
   });
 

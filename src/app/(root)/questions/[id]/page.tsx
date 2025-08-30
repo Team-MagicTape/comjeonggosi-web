@@ -1,27 +1,24 @@
 import TodayQuestionForm from "@/entities/question/ui/TodayQuestionForm";
 import { fetchQuestionById } from "@/entities/question/api/fetch-initial-question";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
-import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { PathParams } from "@/shared/types/path-params";
 
-const TodayQuestion = async () => {
-  const [questions, categories] = await Promise.all([
-    fetchInitialMails(),
+const TodayQuestionDetail = async ({ params }: PathParams) => {
+  const { id } = await params;
+
+  const [question, categories] = await Promise.all([
+    fetchQuestionById(Number(id)),
     fetchCategories(),
   ]);
-
-  if(questions.length <= 0) {
-    redirect("/mail");
-  }
-
-  const question = await fetchQuestionById(questions[0].id);
 
   if(!question) {
     notFound();
   }
+  
   const category = categories.find((c) => c.id === question.categoryId);
 
   return <TodayQuestionForm question={question} category={category} />;
 };
 
-export default TodayQuestion;
+export default TodayQuestionDetail;

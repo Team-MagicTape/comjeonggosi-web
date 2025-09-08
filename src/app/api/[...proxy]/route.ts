@@ -110,9 +110,17 @@ const handler = async (
     let response;
 
     if (targetPath === "auth/logout") {
-      response = NextResponse.json({ message: "Logged out" }, { status: 200 });
-      response.cookies.delete("accessToken");
-      response.cookies.delete("refreshToken");
+      response = new NextResponse(null, { status: 204 });
+
+      response.cookies.set("accessToken", "", {
+        ...ACCESSTOKEN_COOKIE_OPTION,
+        maxAge: 0,
+      });
+      response.cookies.set("refreshToken", "", {
+        ...REFRESHTOKEN_COOKIE_OPTION,
+        maxAge: 0,
+      });
+
       return response;
     }
 

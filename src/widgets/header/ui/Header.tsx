@@ -33,7 +33,7 @@ const Header = async () => {
             <div className="hidden xl:inline">
               <NavigationLink href="/my-page" name="마이페이지" />
             </div>
-            <Image src={user.profileImageUrl} alt="Profile Image" width={48} height={48} className="rounded-full xl:hidden" />
+            <img src={user.profileImageUrl} alt="Profile Image" width={48} height={48} className="rounded-full xl:hidden" />
           </>
         ) : (
           <LoginButton />

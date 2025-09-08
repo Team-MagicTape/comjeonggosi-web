@@ -108,6 +108,7 @@ const handler = async (
     let response;
 
     if(targetPath === "auth/logout") {
+      console.log("-----------------------------------------------url is logout-----------------------------------------------")
       cookieStore.delete("accessToken");
       cookieStore.delete("refreshToken");
     }

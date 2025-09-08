@@ -1,4 +1,3 @@
-import { useCustomRouter } from "@/shared/model/useCustomRouter"
 import { logout } from "../api/logout";
 import { useLoadingStore } from "@/shared/model/useLoadingStore";
 

@@ -1,14 +1,15 @@
 import { useCustomRouter } from "@/shared/model/useCustomRouter"
 import { logout } from "../api/logout";
+import { useLoadingStore } from "@/shared/model/useLoadingStore";
 
 export const useLogout = () => {
-  const router = useCustomRouter();
+  const { setIsLoading } = useLoadingStore();
 
   const submit = async () => {
     const status = await logout();
     if(status === 204) {
-      router.refresh();
-      router.replace("/");
+      setIsLoading(true);
+      window.location.href = "/";
     }
   }
 

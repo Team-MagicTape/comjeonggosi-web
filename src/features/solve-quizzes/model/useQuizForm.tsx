@@ -110,7 +110,7 @@ export const useQuizForm = (
   };
 
   useEffect(() => {
-    getQuizzes();
+    if (currentIdx !== 0) getQuizzes();
     setShortAnswer("");
   }, [currentIdx, category]);
 
@@ -124,7 +124,7 @@ export const useQuizForm = (
   useEffect(() => {
     isInitialRender.current = false;
   }, []);
-  
+
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
     const delay = settings.noDelay ? 500 : 3000;

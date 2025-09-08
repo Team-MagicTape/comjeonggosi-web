@@ -32,7 +32,9 @@ const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head", "delete"].includes(method) ? undefined : await req.json();
+  const data = ["get", "head", "delete"].includes(method)
+    ? undefined
+    : await req.json();
 
   const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {
@@ -107,22 +109,21 @@ const handler = async (
 
     let response;
 
-    if(targetPath === "auth/logout") {
-      console.log("-----------------------------------------------url is logout-----------------------------------------------")
-      cookieStore.delete("accessToken");
-      cookieStore.delete("refreshToken");
+    if (targetPath === "auth/logout") {
+      response = NextResponse.json({ message: "Logged out" }, { status: 200 });
+      response.cookies.delete("accessToken");
+      response.cookies.delete("refreshToken");
+      return response;
     }
 
     if (apiResponse.status === 204) {
-      console.log("code: 204")
+      console.log("code: 204");
       response = new NextResponse(null, { status: 204 });
     } else {
       response = NextResponse.json(apiResponse.data, {
         status: apiResponse.status,
       });
     }
-
-    
 
     if (isRefreshed && accessToken && refreshToken) {
       response.cookies.set(

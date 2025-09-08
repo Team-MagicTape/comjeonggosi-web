@@ -61,7 +61,6 @@ const handler = async (
   const originalCookieHeader = cookieStore.toString();
   let cookieHeaderToUse = originalCookieHeader;
 
-  // 토큰 만료 시 refresh 요청
   if (accessToken && isTokenExpired(accessToken)) {
     const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
@@ -108,6 +107,11 @@ const handler = async (
 
     let response;
 
+    if(targetPath === "auth/logout") {
+      cookieStore.delete("accessToken");
+      cookieStore.delete("refreshToken");
+    }
+
     if (apiResponse.status === 204) {
       console.log("code: 204")
       response = new NextResponse(null, { status: 204 });
@@ -117,14 +121,7 @@ const handler = async (
       });
     }
 
-    const setCookies = apiResponse.headers["set-cookie"];
-    if (setCookies) {
-      (Array.isArray(setCookies) ? setCookies : [setCookies]).forEach(
-        (cookie) => {
-          response.headers.append("set-cookie", cookie);
-        }
-      );
-    }
+    
 
     if (isRefreshed && accessToken && refreshToken) {
       response.cookies.set(

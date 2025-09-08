@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 export const fetchUser = async () => {
   const cookieStore = await cookies();
+  console.log(cookieStore.toString());
   if(!cookieStore.get("accessToken")?.value) {
     return null;
   }

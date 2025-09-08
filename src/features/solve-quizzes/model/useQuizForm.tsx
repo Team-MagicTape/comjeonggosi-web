@@ -110,7 +110,7 @@ export const useQuizForm = (
   };
 
   useEffect(() => {
-    getQuizzes();
+    if (currentIdx !== 0) getQuizzes();
     setShortAnswer("");
   }, [currentIdx, category]);
 
@@ -124,12 +124,6 @@ export const useQuizForm = (
   useEffect(() => {
     isInitialRender.current = false;
   }, []);
-
-  useEffect(() => {
-    if (quizzes.length === 1) {
-      getQuizzes();
-    }
-  }, [quizzes]);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;

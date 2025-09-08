@@ -3,7 +3,7 @@ import { Mail } from "../types/mail";
 
 export const fetchInitialMails = async () => {
   try {
-    const { data } = await customFetch.get<Mail[]>("/questions");
+    const { data } = await customFetch.get<Mail[]>("/questions?categoryId=1");
     return data;
   } catch {
     return [];

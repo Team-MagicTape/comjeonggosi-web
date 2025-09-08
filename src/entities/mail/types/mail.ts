@@ -3,4 +3,6 @@ export interface Mail {
   title: string;
   content: string;
   answer: string;
+  categoryId: number;
+  day: number;
 }

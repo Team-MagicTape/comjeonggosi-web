@@ -9,9 +9,10 @@ interface Props {
   isOpen: boolean;
   onToggle: () => void;
   isLast: boolean;
+  isLaoding : boolean;
 }
 
-const QuestionItem = ({ data, isOpen, onToggle, isLast }: Props) => {
+const QuestionItem = ({ data, isOpen, onToggle, isLast, isLaoding }: Props) => {
   const { open, openAnswer } = useToggleAnswer();
 
   return (

@@ -5,15 +5,50 @@ import { useToggleAnswer } from "../model/useToggleAnswer";
 import Button from "@/shared/ui/Button";
 import { MailDetail } from "../types/mail-detail";
 import { Category } from "@/entities/category/types/category";
+import Skeleton from "@/shared/ui/Skeleton";
 
 interface Props {
   data: MailDetail;
   category: Category;
+  isLoading : boolean;
 }
 
-const MailTemplate = ({ data, category }: Props) => {
+const MailTemplate = ({ data, category, isLoading }: Props) => {
   const ref = useScrollToMail();
   const { open, openAnswer } = useToggleAnswer();
+
+  if(isLoading){
+    return(
+      <div className="w-full mx-auto bg-white rounded-2xl overflow-hidden">
+      {/* 헤더 스켈레톤 */}
+      <div className="bg-gray-200 px-4 xl:px-8 pt-4 xl:pt-8 pb-4">
+        <Skeleton width="60%" height={32} radius={4} className="mb-2 xl:mb-6" />
+        <div className="w-full flex justify-between items-end">
+          <Skeleton width={80} height={32} radius={16} />
+          <Skeleton width={60} height={20} radius={4} />
+        </div>
+      </div>
+
+      {/* 콘텐츠 스켈레톤 */}
+      <div className="px-4 xl:px-8 py-4 xl:py-10 flex flex-col border-x border-border">
+        <Skeleton width={120} height={16} radius={4} className="mb-5" />
+        
+        <div className="w-full text-center mb-4 xl:mb-8 bg-gray-50 py-10 px-2 border border-border rounded-item">
+          <Skeleton width="90%" height={20} radius={4} className="mb-2" />
+          <Skeleton width="75%" height={20} radius={4} className="mb-2" />
+          <Skeleton width="60%" height={20} radius={4} />
+        </div>
+
+        <Skeleton width="40%" height={40} radius={8} />
+      </div>
+
+      {/* 푸터 스켈레톤 */}
+      <div className="bg-gray-50 p-4 pb-5 text-center border border-border flex flex-col gap-4 rounded-b-2xl">
+        <Skeleton width={80} height={16} radius={4} className="mx-auto" />
+      </div>
+    </div>
+    )
+  }
 
   return (
     <div

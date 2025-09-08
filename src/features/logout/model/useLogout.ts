@@ -7,6 +7,7 @@ export const useLogout = () => {
   const submit = async () => {
     const status = await logout();
     if(status === 204) {
+      router.refresh();
       router.replace("/");
     }
   }

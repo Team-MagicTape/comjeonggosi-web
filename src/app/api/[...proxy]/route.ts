@@ -32,7 +32,9 @@ const handler = async (
     | "delete"
     | "options";
 
-  const data = ["get", "head", "delete"].includes(method) ? undefined : await req.json();
+  const data = ["get", "head", "delete"].includes(method)
+    ? undefined
+    : await req.json();
 
   const tryRequest = async (cookie: string) => {
     const headers: Record<string, string> = {
@@ -61,7 +63,6 @@ const handler = async (
   const originalCookieHeader = cookieStore.toString();
   let cookieHeaderToUse = originalCookieHeader;
 
-  // 토큰 만료 시 refresh 요청
   if (accessToken && isTokenExpired(accessToken)) {
     const reissue = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
@@ -108,22 +109,28 @@ const handler = async (
 
     let response;
 
+    if (targetPath === "auth/logout") {
+      response = new NextResponse(null, { status: 204 });
+
+      response.cookies.set("accessToken", "", {
+        ...ACCESSTOKEN_COOKIE_OPTION,
+        maxAge: 0,
+      });
+      response.cookies.set("refreshToken", "", {
+        ...REFRESHTOKEN_COOKIE_OPTION,
+        maxAge: 0,
+      });
+
+      return response;
+    }
+
     if (apiResponse.status === 204) {
-      console.log("code: 204")
+      console.log("code: 204");
       response = new NextResponse(null, { status: 204 });
     } else {
       response = NextResponse.json(apiResponse.data, {
         status: apiResponse.status,
       });
-    }
-
-    const setCookies = apiResponse.headers["set-cookie"];
-    if (setCookies) {
-      (Array.isArray(setCookies) ? setCookies : [setCookies]).forEach(
-        (cookie) => {
-          response.headers.append("set-cookie", cookie);
-        }
-      );
     }
 
     if (isRefreshed && accessToken && refreshToken) {

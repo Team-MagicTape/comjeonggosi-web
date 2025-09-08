@@ -1,8 +1,8 @@
-import { apiClient } from "@/shared/libs/custom-axios";
+import axios from "axios";
 
 export const logout = async () => {
   try {
-    const { status } = await apiClient.post("/api/auth/logout");
+    const { status } = await axios.post("/api/auth/logout", null, { withCredentials: true });
     return status;
   } catch {
     return null;

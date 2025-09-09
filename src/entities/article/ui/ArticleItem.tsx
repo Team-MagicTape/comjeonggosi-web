@@ -2,18 +2,22 @@
 
 import CustomLink from "@/shared/ui/CustomLink";
 import { Article } from "../types/article";
+import ArticleItemSkeleton from "./ArticleItemSkeleton";
 
 interface Props {
   data?: Article;
+  isLaoding : boolean;
 }
 
-const ArticleItem = ({ data }: Props) => {
+const ArticleItem = ({ data, isLaoding }: Props) => {
+  if(isLaoding){
+    return(
+      <ArticleItemSkeleton/>
+    )
+  }
 
   if(!data) return (
-    <div className="w-full p-5 rounded-item bg-bg border border-border space-y-2">
-      <div className="bg-gray-300 w-1/2 h-7 rounded" />
-      <div className="bg-gray-300 w-2/3 h-6 rounded" />
-    </div>
+    <ArticleItemSkeleton/>
   )
 
   return (

@@ -18,7 +18,10 @@ interface Props {
 
 const QuestionAccordion = ({ categories, mails }: Props) => {
   const { handleToggle, openIndex } = useToggleAccordion();
-  const { data, category, categoryList, setCategory } = useGetMails(categories, mails);
+  const { data, category, categoryList, setCategory, isLoading } = useGetMails(
+    categories,
+    mails
+  );
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -38,6 +41,7 @@ const QuestionAccordion = ({ categories, mails }: Props) => {
                 data={mail}
                 isOpen={openIndex === idx}
                 onToggle={() => handleToggle(idx)}
+                isLoading={isLoading}
               />
             ))
           ) : (
@@ -51,7 +55,8 @@ const QuestionAccordion = ({ categories, mails }: Props) => {
               </p>
               <CustomLink
                 className="w-full flex justify-center mt-4"
-                href="/mail">
+                href="/mail"
+              >
                 <Button>메일 신청하기</Button>
               </CustomLink>
             </div>

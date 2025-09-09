@@ -26,6 +26,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="ko">
+      <head>
+        <meta name="naver-site-verification" content="20f87f30312aa779521bfee11fdd46a4d4cdf3c9" />
+      </head>
       <body className={`${pretendard.variable} antialiased`}>
         <ToastContainer />
         <LoadingProvider color="#6969FF" />

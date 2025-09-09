@@ -3,7 +3,36 @@ import { notFound } from "next/navigation";
 import { PathParams } from "@/shared/types/path-params";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
-import {fetchInitialArticles} from "@/entities/article/api/fetch-initial-articles";
+import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-articles";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: PathParams): Promise<Metadata> {
+  const { id } = await params;
+  const article = await getArticleDetail(Number(id));
+
+  return {
+    title: `${article?.title || ""} | 컴정고시`,
+    description: `${article?.category.name || "자료구조"}도 역시 컴정고시!`,
+    openGraph: {
+      title: `${article?.title || ""} | 컴정고시`,
+      description: `${article?.category.name || "자료구조"}도 역시 컴정고시!`,
+      url: `https://comgo.dev/articles/${id}`,
+      siteName: "컴정고시",
+      images: [
+        {
+          url: "https://comgo.dev/assets/og.png",
+          width: 1200,
+          height: 630,
+          alt: "컴정고시",
+        },
+      ],
+      locale: "ko_KR",
+      type: "website",
+    },
+  };
+}
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
@@ -20,7 +49,9 @@ const ArticleDetail = async ({ params }: PathParams) => {
       </div>
       <div className="w-full bg-white border border-border rounded-2xl p-8 flex flex-col gap-6">
         <span className="flex items-center justify-between w-full">
-          <h1 className="font-extrabold xl:text-3xl text-2xl">{article.title}</h1>
+          <h1 className="font-extrabold xl:text-3xl text-2xl">
+            {article.title}
+          </h1>
         </span>
         <hr className="border border-gray-200 w-full" />
         <div className="font-medium">

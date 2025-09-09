@@ -29,7 +29,20 @@ const Header = async () => {
           <NavigationLink href="/mail" name="메일 신청" />
         </div>
         {!!user ? (
-          <NavigationLink href="/my-page" name="마이페이지" />
+          <>
+            <div className="hidden xl:inline">
+              <NavigationLink href="/my-page" name="마이페이지" />
+            </div>
+            <CustomLink className="" href="/my-page">
+              <img
+                src={user.profileImageUrl}
+                alt="Profile Image"
+                width={40}
+                height={40}
+                className="rounded-full xl:hidden"
+              />
+            </CustomLink>
+          </>
         ) : (
           <LoginButton />
         )}

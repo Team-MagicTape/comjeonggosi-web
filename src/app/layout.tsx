@@ -44,6 +44,7 @@ const RootLayout = ({
     <html lang="ko">
       <head>
         <meta name="naver-site-verification" content="20f87f30312aa779521bfee11fdd46a4d4cdf3c9" />
+        <meta name="google-site-verification" content="PhsLSvkuuE4o7QCk2GvBMuI-Mqvbpf3bfIeDBMhgm0M" />
       </head>
       <body className={`${pretendard.variable} antialiased`}>
         <ToastContainer />

@@ -10,6 +10,22 @@ import '@uiw/react-markdown-preview/markdown.css';
 export const metadata: Metadata = {
   title: "컴정고시",
   description: "CS 공부는 컴정고시!",
+  openGraph: {
+    title: "컴정고시",
+    description: "CS 공부는 컴정고시!",
+    url: "https://comgo.dev",
+    siteName: "컴정고시",
+    images: [
+      {
+        url: "https://comgo.dev/assets/og.png",
+        width: 1200,
+        height: 630,
+        alt: "컴정고시",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website"
+  }
 };
 
 const pretendard = localFont({

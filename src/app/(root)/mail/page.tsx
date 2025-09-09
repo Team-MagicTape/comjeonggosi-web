@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "메일 신청 | 컴정고시",
   description: "CS 공부는 컴정고시!",
   openGraph: {
-    title: "컴정고시",
+    title: "메일 신청 | 컴정고시",
     description: "CS 공부는 컴정고시!",
     url: "https://comgo.dev/mail",
     siteName: "컴정고시",

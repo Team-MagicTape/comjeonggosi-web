@@ -9,7 +9,30 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MyPageContentCards from "@/widgets/section/ui/MyPageContentCard";
+
+import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
+
+export const metadata: Metadata = {
+  title: "마이페이지 | 컴정고시",
+  description: "CS 공부는 컴정고시!",
+  openGraph: {
+    title: "마이페이지 | 컴정고시",
+    description: "CS 공부는 컴정고시!",
+    url: "https://comgo.dev/my-page",
+    siteName: "컴정고시",
+    images: [
+      {
+        url: "https://comgo.dev/assets/og.png",
+        width: 1200,
+        height: 630,
+        alt: "컴정고시",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website"
+  }
+};
 
 const MyPage = async () => {
   const [user, categories, submissions, mails] = await Promise.all([

@@ -17,6 +17,8 @@ import { Loader2 } from "lucide-react";
 import OxOption from "./OxOption";
 import ShortAnswer from "./ShortAnswer";
 import { User } from "@/entities/user/types/user";
+import QuizMode from "./QuizMode";
+import QuizDifficulty from "./QuizDifficulty";
 
 interface Props {
   categories: Category[];
@@ -43,15 +45,23 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
+    modeList,
+    setMode,
+    mode,
+    difficulty,
+    setDifficulty
   } = useQuizForm(categories, initialQuiz, user);
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
-      <QuizHeader
-        tabs={categoryList}
-        category={category}
-        setCategory={setCategory}
-      />
+      <div className="w-full xl:px-4">
+        <QuizHeader
+          tabs={categoryList}
+          category={category}
+          setCategory={setCategory}
+        />
+      </div>
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
@@ -171,6 +181,11 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="w-full xl:px-4 space-y-4">
+        <QuizMode tabs={modeList} category={mode} setCategory={setMode} />
+        <QuizDifficulty difficulty={difficulty} setDifficulty={setDifficulty} />
       </div>
     </div>
   );

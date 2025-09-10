@@ -9,4 +9,6 @@ export interface Quiz {
   category: Category;
   articleId: number | null;
   type: QuizType;
+  difficulty: number;
+  tags: string[];
 }

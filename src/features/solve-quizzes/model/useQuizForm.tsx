@@ -17,8 +17,11 @@ export const useQuizForm = (
     name: item.name,
     value: String(item.id),
   }));
+  const modeList = [{ name: "랜덤퀴즈", value: "RANDOM" },{ name: "추천퀴즈", value: "RECOMMEND" },{ name: "복습퀴즈", value: "REVIEW" },{ name: "약점보강퀴즈", value: "WEAKNESS" }];
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
+  const [mode, setMode] = useState<Tab>(modeList[0]);
+  const [difficulty, setDifficulty] = useState(1);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -55,13 +58,8 @@ export const useQuizForm = (
 
   const getQuizzes = async () => {
     if (!category) return;
-    const hideMode = settings.hide7Days
-      ? "7days"
-      : settings.hideForever
-      ? "forever"
-      : undefined;
 
-    const quiz = await fetchQuiz(category.value, hideMode);
+    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
     if (quiz) setQuizzes((prev) => [...prev, quiz]);
   };
 
@@ -183,5 +181,10 @@ export const useQuizForm = (
     handlePrev,
     settings,
     handleSettingChange,
+    modeList,
+    mode,
+    setMode,
+    difficulty,
+    setDifficulty
   };
 };

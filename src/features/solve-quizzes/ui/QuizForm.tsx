@@ -174,19 +174,18 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
               ))
             ) : (
               <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden">
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="text-4xl animate-bounce">🧠</div>
-                  <div className="text-center">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-1">
-                      퀴즈를 준비중입니다
+                <div className="flex flex-col items-center">
+                  <div className="text-center space-y-4">
+                    <h3 className="text-2xl font-semibold text-gray mb-1">
+                      퀴즈를 준비중입니다!
                     </h3>
                     <div className="flex items-center justify-center space-x-1">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                       <div
-                        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                        className="w-2 h-2 bg-primary rounded-full animate-bounce"
                         style={{ animationDelay: "0.1s" }}></div>
                       <div
-                        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                        className="w-2 h-2 bg-primary rounded-full animate-bounce"
                         style={{ animationDelay: "0.2s" }}></div>
                     </div>
                   </div>

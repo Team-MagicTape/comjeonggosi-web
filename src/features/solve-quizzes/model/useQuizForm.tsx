@@ -134,9 +134,9 @@ export const useQuizForm = (
         }
       }else if(currentQuiz.type === "OX") {
         if(e.key === "o" || e.key === "O") {
-          handleAnswerSelect(options[0])
+          handleAnswerSelect("O")
         }else if(e.key === "x" || e.key === "X") {
-          handleAnswerSelect(options[1])
+          handleAnswerSelect("X")
         }
         if(e.key === "space") {
           handleNext();

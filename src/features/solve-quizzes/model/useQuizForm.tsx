@@ -123,30 +123,38 @@ export const useQuizForm = (
 
   useEffect(() => {
     isInitialRender.current = false;
-    document.addEventListener("keydown", (e) => {
-      console.log(e.key);
-      if (currentQuiz.type === "MULTIPLE_CHOICE") {
-        if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
-          handleAnswerSelect(options[Number(e.key)-1]);
-        }
-        if(e.key === " ") {
-          handleNext();
-        }
-      }else if(currentQuiz.type === "OX") {
-        if(e.key === "o" || e.key === "O") {
-          handleAnswerSelect("O")
-        }else if(e.key === "x" || e.key === "X") {
-          handleAnswerSelect("X")
-        }
-        if(e.key === " ") {
-          handleNext();
-        }
-      }else if(currentQuiz.type === "SHORT_ANSWER") {
-        if(e.key === "enter" && !e.isComposing) {
-          handleShortAnswerSubmit().then(() => handleNext());
-        }
+  }, []);
+
+  const handleKeyboard = (e: KeyboardEvent) => {
+    console.log(e.key);
+    if (currentQuiz.type === "MULTIPLE_CHOICE") {
+      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
+        handleAnswerSelect(options[Number(e.key) - 1]);
       }
-    });
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "OX") {
+      if (e.key === "o" || e.key === "O") {
+        handleAnswerSelect("O");
+      } else if (e.key === "x" || e.key === "X") {
+        handleAnswerSelect("X");
+      }
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "SHORT_ANSWER") {
+      if (e.key === "enter" && !e.isComposing) {
+        handleShortAnswerSubmit().then(() => handleNext());
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyboard);
+    return () => {
+      document.removeEventListener("keydown", handleKeyboard);
+    }
   }, []);
 
   useEffect(() => {

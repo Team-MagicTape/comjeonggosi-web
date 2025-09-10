@@ -125,6 +125,7 @@ export const useQuizForm = (
   useEffect(() => {
     isInitialRender.current = false;
     document.addEventListener("keydown", (e) => {
+      console.log(e.key);
       if (currentQuiz.type === "MULTIPLE_CHOICE") {
         if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
           handleAnswerSelect(options[Number(e.key)-1]);

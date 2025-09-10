@@ -52,6 +52,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     setDifficulty
   } = useQuizForm(categories, initialQuiz, user);
 
+  console.log(quizzes);
+
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
       <div className="w-full xl:px-4">

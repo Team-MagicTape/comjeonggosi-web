@@ -9,7 +9,7 @@ const QuizDifficulty = ({ difficulty, setDifficulty }: Props) => {
   const levels = [1, 2, 3, 4, 5];
 
   return (
-    <div className="flex w-full items-center p-4 bg-white rounded-2xl border border-gray-200">
+    <div className="flex w-full items-center p-4 bg-white rounded-full border border-gray-200">
       {levels.map((level) => (
         <button
           key={level}
@@ -22,12 +22,12 @@ const QuizDifficulty = ({ difficulty, setDifficulty }: Props) => {
             }
             ${
               level === 1
-                ? "rounded-l-xl border"
+                ? "rounded-l-full border"
                 : level === 5
-                ? "rounded-r-xl"
+                ? "rounded-r-full"
                 : ""
             }`}>
-          {level}
+          난이도 {level}
         </button>
       ))}
     </div>

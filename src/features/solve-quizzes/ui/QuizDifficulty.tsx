@@ -21,7 +21,11 @@ const QuizDifficulty = ({ difficulty, setDifficulty }: Props) => {
                 : "bg-gray-100 text-gray-500 hover:bg-gray-200 border-gray-200"
             }
             ${
-              level === 1 ? "rounded-l-xl border" : level === 5 ? "rounded-r-xl"
+              level === 1
+                ? "rounded-l-xl border"
+                : level === 5
+                ? "rounded-r-xl"
+                : ""
             }`}>
           {level}
         </button>

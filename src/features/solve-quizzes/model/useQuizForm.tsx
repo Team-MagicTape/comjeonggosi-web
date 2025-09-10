@@ -112,12 +112,13 @@ export const useQuizForm = (
   useEffect(() => {
     if (currentIdx !== 0) getQuizzes();
     setShortAnswer("");
-  }, [currentIdx, category]);
+  }, [currentIdx]);
 
   useEffect(() => {
     if (!isInitialRender.current) {
       setQuizzes([]);
       setCurrentIdx(0);
+      getQuizzes();
     }
   }, [category]);
 

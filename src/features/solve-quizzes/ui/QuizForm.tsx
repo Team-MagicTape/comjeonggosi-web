@@ -49,10 +49,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     setMode,
     mode,
     difficulty,
-    setDifficulty
+    setDifficulty,
   } = useQuizForm(categories, initialQuiz, user);
-
-  console.log(quizzes);
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
@@ -69,8 +67,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
-            {quizzes.map((quiz, quizIdx) =>
-              quiz ? (
+            {quizzes.length > 0 ? (
+              quizzes.map((quiz, quizIdx) => (
                 <div
                   key={quizIdx}
                   className="w-full flex-shrink-0 xl:px-4 pb-8">
@@ -173,13 +171,27 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                     />
                   </div>
                 </div>
-              ) : (
-                <div
-                  className="w-full h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
-                  key={quizIdx}>
-                  <Loader2 className="text-lightgray animate-spin" />
+              ))
+            ) : (
+              <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="text-4xl animate-bounce">🧠</div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-1">
+                      퀴즈를 준비중입니다
+                    </h3>
+                    <div className="flex items-center justify-center space-x-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                      <div
+                        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.1s" }}></div>
+                      <div
+                        className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                        style={{ animationDelay: "0.2s" }}></div>
+                    </div>
+                  </div>
                 </div>
-              )
+              </div>
             )}
           </div>
         </div>

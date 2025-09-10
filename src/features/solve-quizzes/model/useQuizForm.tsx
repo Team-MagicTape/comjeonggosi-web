@@ -126,24 +126,23 @@ export const useQuizForm = (
     document.addEventListener("keydown", (e) => {
       if (currentQuiz.type === "MULTIPLE_CHOICE") {
         if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
-          setSelectedAnswer(options[Number(e.key)]);
+          handleAnswerSelect(options[Number(e.key)-1]);
         }
         if(e.key === "space") {
           handleNext();
         }
       }else if(currentQuiz.type === "OX") {
         if(e.key === "o" || e.key === "O") {
-          setSelectedAnswer(options[0])
+          handleAnswerSelect(options[0])
         }else if(e.key === "x" || e.key === "X") {
-          setSelectedAnswer(options[1])
+          handleAnswerSelect(options[1])
         }
         if(e.key === "space") {
           handleNext();
         }
       }else if(currentQuiz.type === "SHORT_ANSWER") {
         if(e.key === "enter" && !e.isComposing) {
-          submit(shortAnswer);
-          handleNext();
+          handleShortAnswerSubmit().then(() => handleNext());
         }
       }
     });

@@ -118,7 +118,6 @@ export const useQuizForm = (
     if (!isInitialRender.current) {
       setQuizzes([]);
       setCurrentIdx(0);
-      getQuizzes();
     }
   }, [category]);
 

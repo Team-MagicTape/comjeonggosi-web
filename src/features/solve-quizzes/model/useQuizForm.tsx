@@ -129,7 +129,7 @@ export const useQuizForm = (
         if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
           handleAnswerSelect(options[Number(e.key)-1]);
         }
-        if(e.key === "space") {
+        if(e.key === " ") {
           handleNext();
         }
       }else if(currentQuiz.type === "OX") {
@@ -138,7 +138,7 @@ export const useQuizForm = (
         }else if(e.key === "x" || e.key === "X") {
           handleAnswerSelect("X")
         }
-        if(e.key === "space") {
+        if(e.key === " ") {
           handleNext();
         }
       }else if(currentQuiz.type === "SHORT_ANSWER") {

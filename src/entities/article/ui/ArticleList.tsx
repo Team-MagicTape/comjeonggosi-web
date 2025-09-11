@@ -7,6 +7,7 @@ import { Article } from "@/entities/article/types/article";
 import ArticleItem from "@/entities/article/ui/ArticleItem";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { useState } from "react";
+import { useGetArticles } from "../model/useGetArticles";
 
 interface Props {
   articles: Article[];
@@ -18,6 +19,7 @@ const ArticleList = ({ articles, categories, selectedCategoryId }: Props) => {
   const tabs = categories.map(item => ({ name: item.name, value: `${item.id}` }));
   const router = useCustomRouter();
   const [category, setCategory] = useState(tabs[0]);
+  const {isLoading} = useGetArticles(category.value, articles)
 
   const handleCategoryChange = (tab: Tab) => {
     setCategory(tab);
@@ -33,7 +35,7 @@ const ArticleList = ({ articles, categories, selectedCategoryId }: Props) => {
       />
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
         {articles.map((item) => (
-          <ArticleItem data={item} key={item.id} />
+          <ArticleItem data={item} key={item.id} isLoading={isLoading}/>
         ))}
       </div>
     </>

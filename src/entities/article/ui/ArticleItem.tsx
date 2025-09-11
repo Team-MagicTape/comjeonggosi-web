@@ -6,11 +6,11 @@ import ArticleItemSkeleton from "./ArticleItemSkeleton";
 
 interface Props {
   data?: Article;
-  isLaoding : boolean;
+  isLoading : boolean;
 }
 
-const ArticleItem = ({ data, isLaoding }: Props) => {
-  if(isLaoding){
+const ArticleItem = ({ data, isLoading }: Props) => {
+  if(isLoading){
     return(
       <ArticleItemSkeleton/>
     )

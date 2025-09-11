@@ -12,8 +12,8 @@ const EditQuizModal = () => {
   const [data, setData] = useState({
     content: "",
     answer: "",
-    categoryId: "",
-    articleId: "",
+    categoryId: NaN,
+    articleId: NaN,
     type: "MULTIPLE_CHOICE" as QuizType,
   });
   const [options, setOptions] = useState<string[]>([""]);
@@ -25,8 +25,8 @@ const EditQuizModal = () => {
       setData({
         content: value.content,
         answer: value.answer,
-        categoryId: value.category.id.toString(),
-        articleId: value.articleId?.toString() || "",
+        categoryId: value.category.id!,
+        articleId: value.articleId || 0,
         type: value.type,
       });
 
@@ -61,10 +61,7 @@ const EditQuizModal = () => {
     } else {
       setData((prev) => ({
         ...prev,
-        [name]:
-          name === "categoryId" || name === "articleId"
-            ? Number(inputValue) || inputValue
-            : inputValue,
+        [name]: inputValue,
       }));
     }
   };
@@ -124,6 +121,8 @@ const EditQuizModal = () => {
     try {
       const submitData = {
         ...data,
+        articleId: Number(data.articleId),
+        categoryId: Number(data.categoryId),
         options: submitOptions,
       };
       await apiClient.patch(`/api/admin/quizzes/${value.id}`, submitData);

@@ -6,7 +6,6 @@ import { useEditArticle } from "../model/useEditArticle";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { Article } from "@/entities/article/types/article";
-import "katex/dist/katex.min.css";
 import Markdown from "@/shared/ui/Markdown";
 
 interface Props {
@@ -33,7 +32,7 @@ const EditArticleForm = ({ articleId, article }: Props) => {
     setIsMounted(true);
     setTitle(article.title);
     setContent(article.content);
-  }, [article, setIsMounted, setContent, setTitle]);
+  }, [article]);
 
   return (
     <form

@@ -21,7 +21,7 @@ const EditQuizzes = () => {
         value: `${item.id}`,
       }));
 
-      setCategory(categories[0]);
+      setCategory(categories[0] || null);
       setCategoryList(categories);
     } catch {
       alert("카테고리 조회 실패");

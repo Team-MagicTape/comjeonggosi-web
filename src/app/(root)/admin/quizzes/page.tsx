@@ -65,7 +65,7 @@ const CreateQuizzes = () => {
     
     if (data.type === "MULTIPLE_CHOICE") {
       const filteredOptions = options.filter(option => option.trim() !== "");
-      if (filteredOptions.length === 3) {
+      if (filteredOptions.length !== 3) {
         alert("객관식 문제는 정답 외에 3개의 오답 선택지를 입력해주세요.");
         return;
       }

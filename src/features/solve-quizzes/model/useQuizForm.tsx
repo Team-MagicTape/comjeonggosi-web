@@ -17,8 +17,11 @@ export const useQuizForm = (
     name: item.name,
     value: String(item.id),
   }));
+  const modeList = [{ name: "랜덤퀴즈", value: "RANDOM" },{ name: "추천퀴즈", value: "RECOMMEND" },{ name: "복습퀴즈", value: "REVIEW" },{ name: "약점보강퀴즈", value: "WEAKNESS" }];
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
+  const [mode, setMode] = useState<Tab>(modeList[0]);
+  const [difficulty, setDifficulty] = useState(1);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -55,13 +58,8 @@ export const useQuizForm = (
 
   const getQuizzes = async () => {
     if (!category) return;
-    const hideMode = settings.hide7Days
-      ? "7days"
-      : settings.hideForever
-      ? "forever"
-      : undefined;
 
-    const quiz = await fetchQuiz(category.value, hideMode);
+    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
     if (quiz) setQuizzes((prev) => [...prev, quiz]);
   };
 
@@ -125,6 +123,38 @@ export const useQuizForm = (
     isInitialRender.current = false;
   }, []);
 
+  const handleKeyboard = (e: KeyboardEvent) => {
+    console.log(e.key);
+    if (currentQuiz.type === "MULTIPLE_CHOICE") {
+      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
+        handleAnswerSelect(options[Number(e.key) - 1]);
+      }
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "OX") {
+      if (e.key === "o" || e.key === "O") {
+        handleAnswerSelect("O");
+      } else if (e.key === "x" || e.key === "X") {
+        handleAnswerSelect("X");
+      }
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "SHORT_ANSWER") {
+      if (e.key === "enter" && !e.isComposing) {
+        handleShortAnswerSubmit().then(() => handleNext());
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyboard);
+    return () => {
+      document.removeEventListener("keydown", handleKeyboard);
+    }
+  }, []);
+
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
     const delay = settings.noDelay ? 500 : 3000;
@@ -151,5 +181,10 @@ export const useQuizForm = (
     handlePrev,
     settings,
     handleSettingChange,
+    modeList,
+    mode,
+    setMode,
+    difficulty,
+    setDifficulty
   };
 };

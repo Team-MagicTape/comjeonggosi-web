@@ -2,14 +2,20 @@
 
 import { toast } from "@/shared/providers/ToastProvider";
 import { editArticle } from "../api/edit-article";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
-export const useEditArticle = () => {
+export const useEditArticle = (article: { title: string; content: string }) => {
   const router = useCustomRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setTitle(article.title);
+    setContent(article.content);
+  }, [article]);
 
   const handleEdit = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -26,5 +32,13 @@ export const useEditArticle = () => {
     }
   };
 
-  return { handleEdit, title, setTitle, content, setContent, setIsMounted, isMounted };
+  return {
+    handleEdit,
+    isMounted,
+    setIsMounted,
+    title,
+    setTitle,
+    content,
+    setContent,
+  };
 };

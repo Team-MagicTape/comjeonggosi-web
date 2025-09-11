@@ -14,7 +14,7 @@ const NavigationLink = ({ href, name }: Props) => {
 
   return (
     <CustomLink
-      className={`p-2 xl:px-4 xl:py-1 rounded xl:rounded-full text-[10px] xl:text-base flex-1 xl:flex-none flex flex-col items-center ${
+      className={`p-2 xl:px-4 xl:py-1 rounded xl:rounded-full text-xs xl:text-base flex-1 xl:flex-none flex flex-col items-center ${
         isActive ? "text-white bg-primary" : "text-black bg-white"
       }`}
       href={href}

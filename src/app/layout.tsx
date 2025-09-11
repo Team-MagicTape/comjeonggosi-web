@@ -10,6 +10,7 @@ import '@uiw/react-markdown-preview/markdown.css';
 export const metadata: Metadata = {
   title: "컴정고시",
   description: "CS 공부는 컴정고시!",
+  icons: "https://comgo.dev/favicon.ico",
   openGraph: {
     title: "컴정고시",
     description: "CS 공부는 컴정고시!",

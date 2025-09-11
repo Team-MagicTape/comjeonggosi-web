@@ -31,10 +31,10 @@ const MainArticle = ({ categories, initialData }: Props) => {
       <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
         {isLoading || !Array.isArray(data) || data.length <= 0
           ? Array.from({ length: 6 }).map((_, idx) => (
-              <ArticleItem key={idx} isLaoding={isLoading} />
+              <ArticleItem key={idx} isLoading={isLoading} />
             ))
           : data.map((item) => (
-              <ArticleItem data={item} key={item.id} isLaoding={isLoading} />
+              <ArticleItem data={item} key={item.id} isLoading={isLoading} />
             ))}
       </div>
     </div>

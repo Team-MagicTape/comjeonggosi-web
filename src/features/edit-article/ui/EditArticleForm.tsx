@@ -4,7 +4,6 @@ import Input from "@/shared/ui/Input";
 import Button from "@/shared/ui/Button";
 import { useEditArticle } from "../model/useEditArticle";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
 import { Article } from "@/entities/article/types/article";
 import Markdown from "@/shared/ui/Markdown";
 
@@ -25,14 +24,7 @@ const EditArticleForm = ({ articleId, article }: Props) => {
     setContent,
     handleEdit,
     isMounted,
-    setIsMounted,
-  } = useEditArticle();
-
-  useEffect(() => {
-    setIsMounted(true);
-    setTitle(article.title);
-    setContent(article.content);
-  }, [article]);
+  } = useEditArticle(article);
 
   return (
     <form

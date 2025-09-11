@@ -20,7 +20,7 @@ const EditQuizzes = () => {
         name: item.name,
         value: `${item.id}`,
       }));
-      
+
       setCategory(categories[0]);
       setCategoryList(categories);
     } catch {
@@ -35,13 +35,19 @@ const EditQuizzes = () => {
   const { data: quizzes } = useQuery({
     queryKey: ["quizzes", `${category?.value}`],
     queryFn: async () => {
-      const { data } = await apiClient.get<Quiz[]>(
-        `/api/admin/quizzes?categoryId=${category?.value || 1}`
-      );
-      console.log(typeof data);
-      
-      return data;
+      try {
+        const { data } = await apiClient.get<Quiz[]>(
+          `/api/admin/quizzes?categoryId=${category!.value}`
+        );
+        if (typeof data === "string") {
+          throw new Error("로그인이 필요합니다");
+        }
+        return data;
+      } catch (e) {
+        alert(e);
+      }
     },
+    enabled: !!category,
   });
 
   if (!category) {
@@ -59,7 +65,7 @@ const EditQuizzes = () => {
         {quizzes?.map((quiz) => (
           <div
             onClick={() => {
-              editQuiz.open(quiz)
+              editQuiz.open(quiz);
             }}
             key={quiz.id}
             className="flex items-center justify-between p-4 bg-white border shadow-sm cursor-pointer rounded-2xl"

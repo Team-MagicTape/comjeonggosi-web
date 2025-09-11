@@ -126,8 +126,7 @@ const EditQuizModal = () => {
         ...data,
         options: submitOptions,
       };
-
-      await apiClient.put(`/api/admin/quizzes/${value.id}`, submitData);
+      await apiClient.patch(`/api/admin/quizzes/${value.id}`, submitData);
       alert("퀴즈 수정 성공");
       handleClose();
     } catch {

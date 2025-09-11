@@ -12,7 +12,7 @@ const EditArticlePage = async ({ params }: PathParams) => {
   }
 
   return (
-    <div>
+    <div className="h-full">
       <EditArticleForm articleId={Number(params)} article={article} />
     </div>
   );

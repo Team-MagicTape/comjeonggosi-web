@@ -20,6 +20,7 @@ const EditQuizzes = () => {
         name: item.name,
         value: `${item.id}`,
       }));
+      
       setCategory(categories[0]);
       setCategoryList(categories);
     } catch {
@@ -37,6 +38,8 @@ const EditQuizzes = () => {
       const { data } = await apiClient.get<Quiz[]>(
         `/api/admin/quizzes?categoryId=${category?.value || 1}`
       );
+      console.log(typeof data);
+      
       return data;
     },
   });

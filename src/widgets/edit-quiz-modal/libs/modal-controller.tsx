@@ -1,7 +1,7 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
 
-let openFn: (value: Quiz) => void;
-let closeFn: () => void;
+let openFn: (value: Quiz) => void = () => {};
+let closeFn: () => void = () => {};
 
 export const editQuiz = {
   open: (value: Quiz) => openFn(value),

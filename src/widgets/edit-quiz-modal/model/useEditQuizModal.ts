@@ -21,6 +21,13 @@ export const useEditQuizModal = () => {
         }, 300);
       }
     );
+
+    return () => {
+      registerEditQuizModal(
+        () => {},
+        () => {}
+      );
+    };
   }, []);
 
   return {

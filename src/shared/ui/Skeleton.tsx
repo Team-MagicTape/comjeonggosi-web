@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 
-const Skeleton: React.FC<Props> = ({
+const Skeleton = ({
   width = "100%",
   height = 20,
   radius = 4,

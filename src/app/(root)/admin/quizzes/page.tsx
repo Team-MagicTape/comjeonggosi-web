@@ -276,14 +276,14 @@ const CreateQuizzes = () => {
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+          !(data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length === 3)
         }
         className={`w-full mt-6 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
           isLoading || 
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+          !(data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length === 3)
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"
         }`}

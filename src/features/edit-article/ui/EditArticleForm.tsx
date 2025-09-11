@@ -6,6 +6,8 @@ import { useEditArticle } from "../model/useEditArticle";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { Article } from "@/entities/article/types/article";
+import "katex/dist/katex.min.css";
+import Markdown from "@/shared/ui/Markdown";
 
 interface Props {
   articleId: number;
@@ -17,11 +19,6 @@ const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
 });
 
 const EditArticleForm = ({ articleId, article }: Props) => {
-  useEffect(() => {
-    setIsMounted(true);
-    setContent(article.content);
-  }, []);
-
   const {
     title,
     setTitle,
@@ -32,6 +29,12 @@ const EditArticleForm = ({ articleId, article }: Props) => {
     setIsMounted,
   } = useEditArticle();
 
+  useEffect(() => {
+    setIsMounted(true);
+    setTitle(article.title);
+    setContent(article.content);
+  }, [article, setIsMounted, setContent, setTitle]);
+
   return (
     <form
       onSubmit={(e) => handleEdit(e, articleId)}
@@ -39,21 +42,31 @@ const EditArticleForm = ({ articleId, article }: Props) => {
     >
       <Input
         value={title}
-        placeholder={article.title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
       {isMounted && (
-        <div data-color-mode="light">
+        <div
+          className="grid grid-cols-1 xl:grid-cols-2 gap-4"
+          data-color-mode="light"
+        >
           <MDEditor
             value={content}
             onChange={(val) => setContent(val || "")}
-            height={400}
+            height={840}
+            preview="edit"
           />
+
+          <div className="flex flex-col gap-2">
+            <div className="p-4 border border-gray-300 rounded bg-white overflow-y-auto max-h-[800px] flex-1">
+              <Markdown content={content} />
+            </div>
+            <Button type="submit" className="w-full h-12">
+              완료
+            </Button>
+          </div>
         </div>
       )}
-
-      <Button type="submit">완료</Button>
     </form>
   );
 };

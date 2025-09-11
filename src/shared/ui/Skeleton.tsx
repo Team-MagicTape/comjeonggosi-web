@@ -1,6 +1,8 @@
+import React from "react";
+
 interface Props {
-  width?: number | string;
-  height?: number | string;
+  width?: number | string; 
+  height?: number | string;  
   radius?: number;
   className?: string;
 }
@@ -11,9 +13,8 @@ const Skeleton = ({
   radius = 4,
   className = "",
 }) => {
-  const getStyleValue = (value: number | string) => {
-    return typeof value === "number" ? `${value}px` : value;
-  };
+  const getStyleValue = (value: number | string) =>
+    typeof value === "number" ? `${value}px` : value;
 
   return (
     <div

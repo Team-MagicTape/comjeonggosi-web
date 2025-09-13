@@ -4,7 +4,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 import { ChangeEvent, useState } from "react";
 
 const CreateQuizzes = () => {
-  const [data, setData] = useState({ content: "", answer: "", categoryId: "", articleId: "", type: "MULTIPLE_CHOICE" });
+  const [data, setData] = useState({ content: "", answer: "", categoryId: "3", articleId: "", difficulty: "", type: "MULTIPLE_CHOICE" });
   const [options, setOptions] = useState<string[]>([""]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,7 +85,7 @@ const CreateQuizzes = () => {
       
       await apiClient.post("/api/admin/quizzes", submitData);
       alert("퀴즈 등록 성공");
-      setData({ content: "", answer: "", categoryId: "", articleId: "", type: "MULTIPLE_CHOICE" });
+      setData({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "", type: "MULTIPLE_CHOICE" });
       setOptions([""]);
     } catch {
       alert("퀴즈 등록 실패");
@@ -254,6 +254,24 @@ const CreateQuizzes = () => {
 
         <div>
           <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+            난이도
+          </label>
+          <input
+            id="difficulty"
+            type="number"
+            placeholder="난이도를 입력하세요"
+            name="difficulty"
+            min={1}
+            max={5}
+            value={data.difficulty}
+            onChange={handleData}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
             아티클 ID
           </label>
           <input
@@ -276,14 +294,14 @@ const CreateQuizzes = () => {
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          !(data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length === 3)
+          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
         }
         className={`w-full mt-6 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
           isLoading || 
           !data.content.trim() || 
           !data.answer.trim() || 
           !data.categoryId ||
-          !(data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length === 3)
+          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"
         }`}

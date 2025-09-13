@@ -39,8 +39,8 @@ const middleware = async (req: NextRequest) => {
     }
 
     if (
-      (accessToken && isTokenExpired(accessToken))
-      // (!accessToken && refreshToken)
+      (accessToken && isTokenExpired(accessToken)) ||
+      (!accessToken && refreshToken)
     ) {
       const refreshResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
@@ -50,6 +50,9 @@ const middleware = async (req: NextRequest) => {
           body: JSON.stringify({ refreshToken }),
         }
       );
+
+      console.log(refreshResponse.ok);
+      console.log(await refreshResponse.text());
 
       if (!refreshResponse.ok) {
         return NextResponse.redirect(new URL("/login", req.url));

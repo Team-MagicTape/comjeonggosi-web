@@ -131,6 +131,7 @@ export const useQuizForm = (
   const handleKeyboard = (e: KeyboardEvent) => {
     if(!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
+      console.log(options);
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         handleAnswerSelect(options[Number(e.key) - 1]);
       }

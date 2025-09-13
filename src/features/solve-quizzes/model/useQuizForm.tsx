@@ -26,7 +26,7 @@ export const useQuizForm = (
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [mode, setMode] = useState<Tab>(modeList[0]);
-  const [difficulty, setDifficulty] = useState(1);
+  const [difficulty, setDifficulty] = useState(3);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);

@@ -54,7 +54,7 @@ export const useQuizForm = (
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
-  }, [currentQuiz]);
+  }, [currentIdx]);
 
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);

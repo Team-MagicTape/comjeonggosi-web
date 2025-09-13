@@ -4,7 +4,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 import { ChangeEvent, useState } from "react";
 
 const CreateQuizzes = () => {
-  const [data, setData] = useState({ content: "", answer: "", categoryId: "3", articleId: "", difficulty: "", type: "MULTIPLE_CHOICE" });
+  const [data, setData] = useState({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "3", type: "MULTIPLE_CHOICE" });
   const [options, setOptions] = useState<string[]>([""]);
   const [isLoading, setIsLoading] = useState(false);
 

@@ -6,7 +6,6 @@ import LoadingProvider from "@/shared/providers/LoadingProvider";
 import LoginModal from "@/widgets/login-modal/ui/LoginModal";
 import QueryProvider from "@/shared/providers/QueryProvider";
 import "@uiw/react-markdown-preview/markdown.css";
-import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "컴정고시",
@@ -53,13 +52,12 @@ const RootLayout = ({
           name="google-site-verification"
           content="PhsLSvkuuE4o7QCk2GvBMuI-Mqvbpf3bfIeDBMhgm0M"
         />
-        <Script
+        <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-ZPY0C72F9Y"
         />
-        <Script
+        <script
           id="google-analytics"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];

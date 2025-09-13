@@ -39,8 +39,8 @@ const middleware = async (req: NextRequest) => {
     }
 
     if (
-      (accessToken && isTokenExpired(accessToken)) ||
-      (!accessToken && refreshToken)
+      (accessToken && isTokenExpired(accessToken))
+      // (!accessToken && refreshToken)
     ) {
       const refreshResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,

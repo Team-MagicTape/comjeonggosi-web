@@ -17,7 +17,12 @@ export const useQuizForm = (
     name: item.name,
     value: String(item.id),
   }));
-  const modeList = [{ name: "랜덤퀴즈", value: "RANDOM" },{ name: "추천퀴즈", value: "RECOMMEND" },{ name: "복습퀴즈", value: "REVIEW" },{ name: "약점보강퀴즈", value: "WEAKNESS" }];
+  const modeList = [
+    { name: "랜덤퀴즈", value: "RANDOM" },
+    { name: "추천퀴즈", value: "RECOMMEND" },
+    { name: "복습퀴즈", value: "REVIEW" },
+    { name: "약점보강퀴즈", value: "WEAKNESS" },
+  ];
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
   const [mode, setMode] = useState<Tab>(modeList[0]);
@@ -124,7 +129,7 @@ export const useQuizForm = (
   }, []);
 
   const handleKeyboard = (e: KeyboardEvent) => {
-    console.log(e.key);
+    if(!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         handleAnswerSelect(options[Number(e.key) - 1]);
@@ -152,7 +157,7 @@ export const useQuizForm = (
     document.addEventListener("keydown", handleKeyboard);
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -185,6 +190,6 @@ export const useQuizForm = (
     mode,
     setMode,
     difficulty,
-    setDifficulty
+    setDifficulty,
   };
 };

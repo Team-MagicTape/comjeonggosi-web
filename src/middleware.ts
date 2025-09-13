@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 const middleware = async (req: NextRequest) => {
   const isVisited = !!req.cookies.get("visited")?.value;
   if(!isVisited) {
-    redirect("/quizzes");
+    // redirect("/quizzes");
   }
 
   try {

@@ -55,7 +55,7 @@ const middleware = async (req: NextRequest) => {
       console.log(await refreshResponse.text());
 
       if (!refreshResponse.ok) {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.next();
       }
 
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =

@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isTokenExpired } from "./shared/utils/is-token-expired";
 import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "./shared/constants/cookie-option";
+import { redirect } from "next/navigation";
 
 const middleware = async (req: NextRequest) => {
+  const isVisited = !!req.cookies.get("visited")?.value;
+  if(!isVisited) {
+    redirect("/quizzes");
+  }
+
   try {
     const { pathname } = req.nextUrl;
 

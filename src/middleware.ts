@@ -75,7 +75,7 @@ const middleware = async (req: NextRequest) => {
 
     return NextResponse.next();
   } catch {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.next();
   }
 };
 

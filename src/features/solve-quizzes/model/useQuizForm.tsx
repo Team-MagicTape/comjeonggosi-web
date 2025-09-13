@@ -147,7 +147,7 @@ export const useQuizForm = (
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {
-      if (e.key === "enter" && !e.isComposing) {
+      if (e.key === "Enter" && !e.isComposing) {
         handleShortAnswerSubmit().then(() => handleNext());
       }
     }

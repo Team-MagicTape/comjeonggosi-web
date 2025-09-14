@@ -8,15 +8,16 @@ import CustomLink from "@/shared/ui/CustomLink";
 
 const WorkbookDetail = ({ workbook }: { workbook: Workbook }) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(true);
-
+  const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
+    workbook.quizIds.length > 0
+  );
   useEffect(() => {
+    if (workbook.quizIds.length === 0) {
+      return;
+    }
     const loadQuizzes = async () => {
-      if (workbook.quizIds.length > 0) {
-        setIsLoadingQuizzes(true);
-        const quizzesData = await fetchWorkbookQuizzes(workbook.quizIds);
-        setQuizzes(quizzesData);
-      }
+      const quizzesData = await fetchWorkbookQuizzes(workbook.quizIds);
+      setQuizzes(quizzesData);
       setIsLoadingQuizzes(false);
     };
 
@@ -127,7 +128,7 @@ const WorkbookDetail = ({ workbook }: { workbook: Workbook }) => {
 
         {isLoadingQuizzes ? (
           <div className="grid gap-4">
-            {Array.from({ length: workbook.quizIds.length || 3 }).map(
+            {Array.from({ length: workbook.quizIds.length }).map(
               (_, index) => (
                 <div
                   key={index}

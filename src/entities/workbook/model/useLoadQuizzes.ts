@@ -1,6 +1,6 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { useState, useEffect } from "react";
-import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quiz";
+import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 import { Workbook } from "../types/workbook";
 
 export const useLoadQuizzes = (workbook: Workbook) => {

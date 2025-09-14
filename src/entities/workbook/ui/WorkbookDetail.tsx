@@ -208,11 +208,6 @@ const WorkbookDetail = ({ workbook }: Props) => {
                     </p>
                     <p className="text-sm text-gray-500">
                       ID: {quiz.id}
-                      {quiz.tags.length > 0 && (
-                        <span className="ml-2">
-                          태그: {quiz.tags.join(", ")}
-                        </span>
-                      )}
                     </p>
                   </div>
                 </div>

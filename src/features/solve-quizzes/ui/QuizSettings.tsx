@@ -12,8 +12,8 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
       <label className="flex items-center gap-1 cursor-pointer">
         <input
           type="checkbox"
-          checked={settings.hide7Days}
-          onChange={() => handleSettingChange("hide7Days")}
+          checked={settings.hideSolved}
+          onChange={() => handleSettingChange("hideSolved")}
           className="w-4 h-4"
         />
         <span>푼 문제 다시 보지 않기</span>

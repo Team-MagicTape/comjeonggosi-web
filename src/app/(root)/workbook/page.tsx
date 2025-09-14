@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 const Workbooks = async () => {
-  let data = await fetchWorkbooks();
+  const data = await fetchWorkbooks();
   if (!data)
     return (
       <div className="flex justify-center items-center min-h-[400px]">

@@ -33,14 +33,16 @@ const TodayQuestions = ({ categories, questions }: Props) => {
         />
       </div>
       <div className="gap-6 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((item) => (
+        {data ? data.map((item) => (
           <TodayQuestionItem
             data={item}
             category={categories.find((c) => c.id === item.id) || null}
             key={item.id}
             isLoading={isLoading}
           />
-        ))}
+        )) : (
+          <p className="text-gray">데이터를 불러올 수 없습니다.</p>
+        )}
       </div>
     </div>
   );

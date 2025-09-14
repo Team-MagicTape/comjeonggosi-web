@@ -6,7 +6,7 @@ import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 export const useLoadQuizzes = (workbook: Workbook) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
-    workbook.quizIds.length > 0
+    workbook ? workbook.quizIds.length > 0 : false
   );
   useEffect(() => {
     if (workbook && workbook.quizIds.length === 0) {

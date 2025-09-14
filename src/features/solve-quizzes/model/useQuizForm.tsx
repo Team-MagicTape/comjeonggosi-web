@@ -53,7 +53,7 @@ export const useQuizForm = (
 
   const getQuizzes = useCallback(async () => {
     if (!category) return;
-    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`, hideSolved);
+    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`, settings.hideSolved);
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
     }

@@ -4,7 +4,7 @@ import { Workbook } from "@/entities/workbook/types/workbook";
 import WorkbookSearch from "@/entities/workbook/ui/WorkbookSearch";
 import { useWorkbookSearch } from "@/entities/workbook/model/useWorkbookSearch";
 import { SearchIcon } from "lucide-react";
-import WorkbookItem from "@/entities/workbook/ui/WorkbookItem";
+import WorkbookElement from "./WorkbookElement";
 
 const WorkbookList = ({ workbooks }: { workbooks: Workbook[] }) => {
   const { filteredWorkbooks, setSearchQuery } = useWorkbookSearch(workbooks);
@@ -44,7 +44,7 @@ const WorkbookList = ({ workbooks }: { workbooks: Workbook[] }) => {
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredWorkbooks.map((value) => (
-              <WorkbookItem key={value.id} workbook={value} />
+              <WorkbookElement key={value.id} workbook={value} />
             ))}
           </div>
         </>

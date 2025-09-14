@@ -7,7 +7,7 @@ interface Props {
   workbook: Workbook;
 }
 
-const WorkbookItem = ({ workbook }: Props) => {
+const WorkbookElement = ({ workbook }: Props) => {
   return (
     <CustomLink
       href={`/workbook/${workbook.id}`}
@@ -51,4 +51,4 @@ const WorkbookItem = ({ workbook }: Props) => {
   );
 };
 
-export default WorkbookItem;
+export default WorkbookElement;

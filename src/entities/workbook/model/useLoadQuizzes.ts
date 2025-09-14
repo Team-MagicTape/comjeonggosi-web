@@ -9,7 +9,7 @@ export const useLoadQuizzes = (workbook: Workbook) => {
     workbook.quizIds.length > 0
   );
   useEffect(() => {
-    if (workbook.quizIds.length === 0) {
+    if (workbook && workbook.quizIds.length === 0) {
       return;
     }
     const loadQuizzes = async () => {

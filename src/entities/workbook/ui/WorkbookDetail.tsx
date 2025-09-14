@@ -7,6 +7,7 @@ import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
 import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
+import { useAddQuiz } from "../model/useAddQuiz";
 
 interface Props {
   workbook: Workbook;
@@ -14,6 +15,9 @@ interface Props {
 
 const WorkbookDetail = ({ workbook }: Props) => {
   const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
+  const { newQuizId, setNewQuizId, isAdding, handleAddQuiz } = useAddQuiz(
+    workbook.id
+  );
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* 헤더 섹션 */}
@@ -25,7 +29,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               href="/workbook"
               className="flex items-center text-gray-600 hover:text-primary transition-colors"
             >
-              <ArrowLeftIcon/>
+              <ArrowLeftIcon />
               문제집 목록으로 돌아가기
             </CustomLink>
           </div>
@@ -60,7 +64,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               href={`/workbook/${workbook.id}/solve`}
               className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
             >
-              <TrophyIcon/>
+              <TrophyIcon />
               문제 풀기 시작
             </CustomLink>
 
@@ -87,10 +91,71 @@ const WorkbookDetail = ({ workbook }: Props) => {
       {/* 문제 목록 섹션 */}
       <div className="bg-white border border-border rounded-2xl p-8">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">문제 목록</h2>
-          <p className="text-gray-600">
-            총 {workbook.quizIds.length}개의 문제가 있습니다
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                문제 목록
+              </h2>
+              <p className="text-gray-600">
+                총 {workbook.quizIds.length}개의 문제가 있습니다
+              </p>
+            </div>
+          </div>
+
+          {/* 퀴즈 추가 폼 */}
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              새 퀴즈 추가
+            </h3>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={newQuizId}
+                  onChange={(e) => setNewQuizId(e.target.value)}
+                  placeholder="퀴즈 ID를 입력하세요 (예: quiz-123)"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                  disabled={isAdding}
+                />
+              </div>
+              <button
+                onClick={handleAddQuiz}
+                disabled={isAdding || !newQuizId.trim()}
+                className={`px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 ${
+                  isAdding || !newQuizId.trim()
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-primary hover:bg-primary/90 text-white"
+                }`}
+              >
+                {isAdding ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    추가 중...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    추가
+                  </>
+                )}
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              퀴즈 ID는 시스템에 등록된 유효한 ID여야 합니다.
+            </p>
+          </div>
         </div>
 
         {isLoadingQuizzes ? (
@@ -114,7 +179,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
         ) : workbook.quizIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <FileSpreadsheetIcon/>
+              <FileSpreadsheetIcon />
             </div>
             <p className="text-xl font-semibold text-gray-600 mb-2">
               아직 문제가 등록되지 않았습니다

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Quiz } from "../types/quiz";
-import { shuffleArray } from "@/features/solve-quizzes/utils/shuffle-array";
 
 export const fetchQuiz = async (
   categoryId: string,

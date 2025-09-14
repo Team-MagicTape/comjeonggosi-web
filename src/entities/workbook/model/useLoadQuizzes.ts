@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Workbook } from "../types/workbook";
 import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 
-export const useLoadQuizzes = (workbook: Workbook) => {
+export const useLoadQuizzes = (workbook: Workbook)  => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
     workbook ? workbook.quizIds.length > 0 : false

@@ -1,7 +1,7 @@
 "use client";
 
 import { Workbook } from "@/entities/workbook/types/workbook";
-import WorkbookItem from "@/entities/workbook/ui/workbookItem";
+import WorkbookItem from "@/entities/workbook/ui/WorkbookItem";
 import WorkbookSearch from "@/entities/workbook/ui/WorkbookSearch";
 import { useWorkbookSearch } from "@/entities/workbook/model/useWorkbookSearch";
 import { SearchIcon } from "lucide-react";

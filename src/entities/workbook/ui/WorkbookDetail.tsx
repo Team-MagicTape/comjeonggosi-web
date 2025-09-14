@@ -4,14 +4,56 @@ import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
 import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
-import { useAddQuiz } from "../model/useAddQuiz";
-
 interface Props {
   workbook: Workbook;
 }
 
 const WorkbookDetail = ({ workbook }: Props) => {
   const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
+
+  if (!workbook) {
+    return (
+      <div className="w-full max-w-4xl mx-auto">
+        {/* 헤더 섹션 */}
+        <div className="bg-white border border-border rounded-2xl p-8 mb-8">
+          <div className="flex flex-col gap-6">
+            {/* 뒤로가기 버튼 */}
+            <div className="flex items-center">
+              <CustomLink
+                href="/workbook"
+                className="flex items-center text-gray-600 hover:text-primary transition-colors">
+                <ArrowLeftIcon />
+                문제집 목록으로 돌아가기
+              </CustomLink>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-8 bg-primary inline-flex items-center justify-center rounded-full px-4">
+              <span className="text-white font-semibold text-sm">
+                찾을 수 없음
+              </span>
+            </div>
+            <div className="h-8 bg-[#f1f3f4] inline-flex items-center justify-center rounded-full px-4">
+              <span className="text-[#858586] font-semibold text-sm">
+                문제집
+              </span>
+            </div>
+          </div>
+
+          <h1 className="font-extrabold text-3xl xl:text-4xl text-gray-900">
+            찾을 수 없음
+          </h1>
+
+          <p className="text-lg text-gray-600 leading-relaxed">
+            찾을 수 없음
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -22,8 +64,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
           <div className="flex items-center">
             <CustomLink
               href="/workbook"
-              className="flex items-center text-gray-600 hover:text-primary transition-colors"
-            >
+              className="flex items-center text-gray-600 hover:text-primary transition-colors">
               <ArrowLeftIcon />
               문제집 목록으로 돌아가기
             </CustomLink>
@@ -57,8 +98,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
           <div className="flex gap-4 pt-4">
             <CustomLink
               href={`/workbook/${workbook.id}/solve`}
-              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
-            >
+              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2">
               <TrophyIcon />
               문제 풀기 시작
             </CustomLink>
@@ -96,7 +136,6 @@ const WorkbookDetail = ({ workbook }: Props) => {
               </p>
             </div>
           </div>
-
         </div>
 
         {isLoadingQuizzes ? (
@@ -104,8 +143,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
             {Array.from({ length: workbook.quizIds.length }).map((_, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse"
-              >
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse">
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
                   <div>
@@ -132,8 +170,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
             {quizzes.map((quiz, index) => (
               <div
                 key={quiz.id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
-              >
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-4 flex-1">
                   <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
                     <span className="text-sm font-bold text-primary">
@@ -149,8 +186,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                             : quiz.type === "OX"
                             ? "bg-green-100 text-green-700"
                             : "bg-purple-100 text-purple-700"
-                        }`}
-                      >
+                        }`}>
                         {quiz.type === "MULTIPLE_CHOICE"
                           ? "객관식"
                           : quiz.type === "OX"
@@ -180,8 +216,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
                 <CustomLink
                   href={`/workbook/${workbook.id}/quizzes`}
-                  className="ml-4 text-primary hover:text-primary/80 font-medium text-sm transition-colors whitespace-nowrap"
-                >
+                  className="ml-4 text-primary hover:text-primary/80 font-medium text-sm transition-colors whitespace-nowrap">
                   바로 풀기 →
                 </CustomLink>
               </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
-import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -10,7 +9,6 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [shortAnswer, setShortAnswer] = useState("");
   const [corrected, setCorrected] = useState(0);
-  const router = useCustomRouter();
 
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
@@ -80,7 +78,8 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   };
 
   const restart = () => {
-    router.refresh();
+    setCurrentIdx(0);
+    setCorrected(0);
   }
 
   useEffect(() => {

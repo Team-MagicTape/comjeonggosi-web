@@ -3,7 +3,7 @@
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
-import { ArrowLeftIcon, FileSpreadsheetIcon,  PlusIcon, TrophyIcon } from "lucide-react";
+import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
 import { useAddQuiz } from "../model/useAddQuiz";
 
 interface Props {

@@ -1,7 +1,7 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { useState, useEffect } from "react";
-import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 import { Workbook } from "../types/workbook";
+import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 
 export const useLoadQuizzes = (workbook: Workbook) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);

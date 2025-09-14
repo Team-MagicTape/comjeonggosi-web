@@ -7,6 +7,7 @@ import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
 import { User } from "@/entities/user/types/user";
+import { shuffleArray } from "../utils/shuffle-array";
 
 export const useQuizForm = (
   categories: Category[],
@@ -56,7 +57,10 @@ export const useQuizForm = (
 
     const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
     console.log(quiz);
-    if (quiz) setQuizzes((prev) => [...prev, quiz]);
+    if (quiz) {
+      const options = shuffleArray([...quiz.options, quiz.answer]);
+      setQuizzes((prev) => [...prev, { ...quiz, options }]);
+    }
   };
 
   const handleAnswerSelect = async (answer: string) => {
@@ -120,7 +124,7 @@ export const useQuizForm = (
   }, []);
 
   const handleKeyboard = (e: KeyboardEvent) => {
-    if(!currentQuiz) return;
+    if (!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
       console.log(currentQuiz);
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {

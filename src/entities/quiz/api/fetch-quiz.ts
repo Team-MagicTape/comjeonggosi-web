@@ -11,10 +11,7 @@ export const fetchQuiz = async (
     const { data } = await axios.get<Quiz>(
       `${process.env.NEXT_PUBLIC_API_URL}/quizzes?categoryId=${categoryId}&mode=${mode}&difficulty=${difficulty}`
     );
-    console.log("quiz: ", data);
-    const result = { ...data };
-    result.options = shuffleArray([...data.options, data.answer]);
-    return result;
+    return data;
   } catch {
     return null;
   }

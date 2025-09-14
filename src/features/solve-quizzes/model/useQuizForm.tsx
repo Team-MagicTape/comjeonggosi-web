@@ -55,6 +55,7 @@ export const useQuizForm = (
     if (!category) return;
 
     const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
+    console.log(quiz);
     if (quiz) setQuizzes((prev) => [...prev, quiz]);
   };
 

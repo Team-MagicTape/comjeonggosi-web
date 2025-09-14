@@ -56,9 +56,9 @@ export const useQuizForm = (
     if (!category) return;
 
     const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
-    console.log(quiz);
     if (quiz) {
       const options = shuffleArray([...quiz.options, quiz.answer]);
+      console.log(options);
       setQuizzes((prev) => [...prev, { ...quiz, options }]);
     }
   };
@@ -126,13 +126,13 @@ export const useQuizForm = (
   const handleKeyboard = (e: KeyboardEvent) => {
     if (!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      console.log(currentQuiz);
+      console.log(currentQuiz.options);
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         console.log(currentQuiz.options[Number(e.key) - 1]);
         console.log(Number(e.key) - 1);
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
-      if (e.key === " " && selectedAnswer) {
+      if (e.key === " ") {
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
@@ -141,7 +141,7 @@ export const useQuizForm = (
       } else if (e.key === "x" || e.key === "X") {
         handleAnswerSelect("X");
       }
-      if (e.key === " " && selectedAnswer) {
+      if (e.key === " ") {
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {

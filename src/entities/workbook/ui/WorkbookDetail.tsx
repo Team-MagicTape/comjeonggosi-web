@@ -11,6 +11,8 @@ interface Props {
 const WorkbookDetail = ({ workbook }: Props) => {
   const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
 
+  console.log(workbook);
+
   if (!workbook) {
     return (
       <div className="w-full max-w-4xl mx-auto">

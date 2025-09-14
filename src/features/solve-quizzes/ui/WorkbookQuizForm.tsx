@@ -170,7 +170,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 </div>
               </div>
             )}
-            <div className="w-full xl:px-4" key={10000}>
+            <div className="w-full flex-shrink-0 xl:px-4" key={10000}>
               <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden">
                 <div className="flex flex-col items-center">
                   <div className="text-center space-y-4">

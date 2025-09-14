@@ -7,7 +7,7 @@ export const parseIcons = (name: string) => {
 
   switch(name) {
     case "홈": return <Home {...iconSetting} />;
-    case "위키": return <BookCopy {...iconSetting} />;
+    case "아티클": return <BookCopy {...iconSetting} />;
     case "퀴즈": return <BrainCircuit {...iconSetting} />;
     case "문제집": return <LucideFileText {...iconSetting} />;
     case "오늘의 질문": return <Calendar1 {...iconSetting} />;

@@ -34,7 +34,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
-    corrected
+    corrected,
+    restart
   } = useWorkbookQuizForm(data);
 
   return (
@@ -169,7 +170,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       문제집의 모든 문제를 풀었습니다!
                     </h3>
                     <p className="text-3xl font-bold text-gray mb-8"><span className="text-green-500">{corrected}</span>/{quizzes.length}</p>
-                    <Button isFullWidth>
+                    <Button isFullWidth onClick={restart}>
                       <p>다시풀기</p>
                     </Button>
                     <CustomLink

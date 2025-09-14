@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Workbook } from "../types/workbook";
-import { Quiz } from "@/entities/quiz/types/quiz";
-import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
 import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";

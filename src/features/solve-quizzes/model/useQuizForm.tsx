@@ -31,9 +31,7 @@ export const useQuizForm = (
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [quizzes, setQuizzes] = useState<Quiz[]>(
-    initialQuiz ? [initialQuiz] : []
-  );
+  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);  
   const [shortAnswer, setShortAnswer] = useState("");
   const isInitialRender = useRef(true);
 
@@ -57,9 +55,7 @@ export const useQuizForm = (
 
     const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
     if (quiz) {
-      const options = shuffleArray([...quiz.options, quiz.answer]);
-      console.log(options);
-      setQuizzes((prev) => [...prev, { ...quiz, options }]);
+      setQuizzes((prev) => [...prev, quiz]);
     }
   };
 
@@ -116,6 +112,7 @@ export const useQuizForm = (
     if (!isInitialRender.current) {
       setQuizzes([]);
       setCurrentIdx(0);
+      getQuizzes();
     }
   }, [category]);
 
@@ -126,10 +123,7 @@ export const useQuizForm = (
   const handleKeyboard = (e: KeyboardEvent) => {
     if (!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      console.log(currentQuiz.options);
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
-        console.log(currentQuiz.options[Number(e.key) - 1]);
-        console.log(Number(e.key) - 1);
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       if (e.key === " ") {

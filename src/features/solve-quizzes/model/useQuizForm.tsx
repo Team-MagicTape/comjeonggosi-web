@@ -124,7 +124,8 @@ export const useQuizForm = (
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
       console.log(currentQuiz.options)
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
-        console.log(currentQuiz.options[Number(e.key) - 1])
+        console.log(currentQuiz.options[Number(e.key) - 1]);
+        console.log(Number(e.key) - 1);
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       if (e.key === " ") {

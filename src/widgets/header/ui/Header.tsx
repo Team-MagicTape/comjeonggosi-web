@@ -25,6 +25,7 @@ const Header = async () => {
           <NavigationLink href="/" name="홈" />
           <NavigationLink href="/articles" name="아티클" />
           <NavigationLink href="/quizzes" name="퀴즈" />
+          <NavigationLink href="/workbook" name="문제집" />
           <NavigationLink href="/questions" name="오늘의 질문" />
           <NavigationLink href="/mail" name="메일 신청" />
         </div>

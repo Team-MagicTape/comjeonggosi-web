@@ -3,12 +3,12 @@ import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 
-export const useWorkbookQuizForm = (data: Quiz[]) => {
+export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const quizzes = data;
   const [shortAnswer, setShortAnswer] = useState("");
+  const [corrected, setCorrected] = useState(0);
 
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
@@ -21,14 +21,14 @@ export const useWorkbookQuizForm = (data: Quiz[]) => {
 
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    return isCorrect;
+    return isCorrect as boolean;
   };
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
     setSelectedAnswer(answer);
     setShowAnswer(true);
-    submit(answer);
+    submit(answer).then((isCorrect) => { if(isCorrect) setCorrected(prev => prev+1) });
   };
 
   const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
@@ -106,5 +106,6 @@ export const useWorkbookQuizForm = (data: Quiz[]) => {
     handlePrev,
     settings,
     handleSettingChange,
+    corrected
   };
 };

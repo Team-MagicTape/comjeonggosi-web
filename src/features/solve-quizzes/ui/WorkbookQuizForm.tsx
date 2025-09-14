@@ -34,6 +34,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
+    corrected
   } = useWorkbookQuizForm(data);
 
   return (
@@ -163,16 +164,17 @@ const WorkbookQuizForm = ({ data }: Props) => {
             <div className="w-full flex-shrink-0 pb-8 xl:px-4" key={10000}>
               <div className="w-full h-146 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl">
                 <div className="flex flex-col items-center">
-                  <div className="text-center space-y-4">
-                    <h3 className="text-2xl font-semibold text-gray">
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-semibold mb-4">
                       문제집의 모든 문제를 풀었습니다!
                     </h3>
+                    <p className="text-3xl font-bold text-gray mb-8"><span className="text-green-500">{corrected}</span>/{quizzes.length}</p>
                     <Button isFullWidth>
                       <p>다시풀기</p>
                     </Button>
                     <CustomLink
                       href="/workbook"
-                      className="flex items-center justify-center py-2 bg-gray-300 rounded-xl text-gray-600 hover:text-primary transition-colors">
+                      className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors">
                       <ArrowLeftIcon />
                       종료하기
                     </CustomLink>

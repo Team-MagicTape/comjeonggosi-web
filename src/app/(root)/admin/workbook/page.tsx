@@ -48,10 +48,11 @@ const WorkbookAdmin = () => {
     if (!query.trim()) {
       setFilteredWorkbooks(workbooks);
     } else {
+      const lowercasedQuery = query.toLowerCase();
       const filtered = workbooks.filter(
         (workbook) =>
-          workbook.name.toLowerCase().includes(query.toLowerCase()) ||
-          workbook.description.toLowerCase().includes(query.toLowerCase())
+          workbook.name.toLowerCase().includes(lowercasedQuery) ||
+          workbook.description.toLowerCase().includes(lowercasedQuery)
       );
       setFilteredWorkbooks(filtered);
     }

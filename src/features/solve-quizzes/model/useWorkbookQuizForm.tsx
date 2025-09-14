@@ -9,7 +9,6 @@ export const useWorkbookQuizForm = (data: Quiz[]) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const quizzes = data;
   const [shortAnswer, setShortAnswer] = useState("");
-  const isEnd = currentIdx > quizzes.length - 1;
 
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
@@ -107,6 +106,5 @@ export const useWorkbookQuizForm = (data: Quiz[]) => {
     handlePrev,
     settings,
     handleSettingChange,
-    isEnd
   };
 };

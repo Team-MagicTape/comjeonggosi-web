@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
-import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
+import { ArrowLeftIcon, FileSpreadsheetIcon,  PlusIcon, TrophyIcon } from "lucide-react";
 import { useAddQuiz } from "../model/useAddQuiz";
 
 interface Props {
@@ -132,19 +131,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                   </>
                 ) : (
                   <>
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
+                    <PlusIcon/>
                     추가
                   </>
                 )}

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
@@ -31,7 +31,9 @@ export const useQuizForm = (
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [quizzes, setQuizzes] = useState<Quiz[]>(initialQuiz ? [initialQuiz] : []);  
+  const [quizzes, setQuizzes] = useState<Quiz[]>(
+    initialQuiz ? [initialQuiz] : []
+  );
   const [shortAnswer, setShortAnswer] = useState("");
   const isInitialRender = useRef(true);
 
@@ -50,14 +52,13 @@ export const useQuizForm = (
     return isCorrect;
   };
 
-  const getQuizzes = async () => {
+  const getQuizzes = useCallback(async () => {
     if (!category) return;
-
     const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
     }
-  };
+  }, [category, mode, difficulty]);
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
@@ -109,10 +110,15 @@ export const useQuizForm = (
   }, [currentIdx, category]);
 
   useEffect(() => {
+    if (quizzes.length === 0 && currentIdx === 0) {
+      getQuizzes();
+    }
+  }, [currentIdx, quizzes.length, getQuizzes]);
+
+  useEffect(() => {
     if (!isInitialRender.current) {
       setQuizzes([]);
       setCurrentIdx(0);
-      getQuizzes();
     }
   }, [category]);
 

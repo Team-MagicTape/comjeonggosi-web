@@ -16,17 +16,7 @@ const QuizSettings = ({ settings, handleSettingChange }: Props) => {
           onChange={() => handleSettingChange("hide7Days")}
           className="w-4 h-4"
         />
-        <span>7일간 보지 않기</span>
-      </label>
-
-      <label className="flex items-center gap-1 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={settings.hideForever}
-          onChange={() => handleSettingChange("hideForever")}
-          className="w-4 h-4"
-        />
-        <span>영원히 보지 않기</span>
+        <span>푼 문제 다시 보지 않기</span>
       </label>
 
       <label className="flex items-center gap-1 cursor-pointer">

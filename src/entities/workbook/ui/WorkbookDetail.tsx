@@ -5,28 +5,15 @@ import { Workbook } from "../types/workbook";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quiz";
 import CustomLink from "@/shared/ui/CustomLink";
+import { useLoadQuizzes } from "../model/useLoadQuizzes";
+import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
 
 interface Props {
   workbook: Workbook;
 }
 
 const WorkbookDetail = ({ workbook }: Props) => {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
-    workbook.quizIds.length > 0
-  );
-  useEffect(() => {
-    if (workbook.quizIds.length === 0) {
-      return;
-    }
-    const loadQuizzes = async () => {
-      const quizzesData = await fetchWorkbookQuizzes(workbook.quizIds);
-      setQuizzes(quizzesData);
-      setIsLoadingQuizzes(false);
-    };
-
-    loadQuizzes();
-  }, [workbook.quizIds]);
+  const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* 헤더 섹션 */}
@@ -38,19 +25,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               href="/workbook"
               className="flex items-center text-gray-600 hover:text-primary transition-colors"
             >
-              <svg
-                className="w-5 h-5 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <ArrowLeftIcon/>
               문제집 목록으로 돌아가기
             </CustomLink>
           </div>
@@ -85,19 +60,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               href={`/workbook/${workbook.id}/solve`}
               className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
             >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.5a2.5 2.5 0 110 5H9V10z"
-                />
-              </svg>
+              <TrophyIcon/>
               문제 풀기 시작
             </CustomLink>
 
@@ -151,19 +114,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
         ) : workbook.quizIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <svg
-                className="w-8 h-8 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+              <FileSpreadsheetIcon/>
             </div>
             <p className="text-xl font-semibold text-gray-600 mb-2">
               아직 문제가 등록되지 않았습니다

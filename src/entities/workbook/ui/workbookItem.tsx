@@ -1,8 +1,13 @@
 import React from "react";
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
+import { ArrowRightIcon } from "lucide-react";
 
-const WorkbookItem = ({ workbook }: { workbook: Workbook }) => {
+interface Props {
+  workbook: Workbook;
+}
+
+const WorkbookItem = ({ workbook }: Props) => {
   return (
     <CustomLink
       href={`/workbook/${workbook.id}`}
@@ -38,19 +43,7 @@ const WorkbookItem = ({ workbook }: { workbook: Workbook }) => {
             </div>
           </div>
           <div className="flex items-center text-gray-400 group-hover:text-primary transition-colors">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <ArrowRightIcon/>
           </div>
         </div>
       </div>

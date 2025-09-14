@@ -4,6 +4,7 @@ import { Workbook } from "@/entities/workbook/types/workbook";
 import WorkbookItem from "@/entities/workbook/ui/workbookItem";
 import WorkbookSearch from "@/entities/workbook/ui/WorkbookSearch";
 import { useWorkbookSearch } from "@/entities/workbook/model/useWorkbookSearch";
+import { SearchIcon } from "lucide-react";
 
 const WorkbookList = ({ workbooks }: { workbooks: Workbook[] }) => {
   const { filteredWorkbooks, setSearchQuery } = useWorkbookSearch(workbooks);
@@ -20,19 +21,7 @@ const WorkbookList = ({ workbooks }: { workbooks: Workbook[] }) => {
       {filteredWorkbooks.length === 0 ? (
         <div className="flex justify-center items-center min-h-[400px]">
           <div className="text-center">
-            <svg
-              className="w-16 h-16 text-gray-300 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
+            <SearchIcon />
             <p className="text-xl font-semibold text-gray-600 mb-2">
               {workbooks.length === 0
                 ? "아직 문제집이 없습니다"

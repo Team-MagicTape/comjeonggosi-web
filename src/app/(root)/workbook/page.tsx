@@ -24,17 +24,7 @@ export const metadata: Metadata = {
 };
 
 const Workbooks = async () => {
-  let data = await fetchWorkbooks();
-  if (!data) {
-    data = [
-      {
-        id: 0,
-        name: "string",
-        description: "string",
-        quizIds: ["string"],
-      },
-    ];
-  }
+  const data = await fetchWorkbooks();
   if (!data)
     return (
       <div className="flex justify-center items-center min-h-[400px]">

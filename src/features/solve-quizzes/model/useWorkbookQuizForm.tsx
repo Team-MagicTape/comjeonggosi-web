@@ -37,6 +37,8 @@ export const useWorkbookQuizForm = (data: Quiz[]) => {
   const handleNext = () => {
     setSelectedAnswer(null);
     setShowAnswer(false);
+
+    if(currentIdx >= quizzes.length - 1) return;
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
   };
 

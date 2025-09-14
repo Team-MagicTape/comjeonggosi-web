@@ -6,7 +6,11 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 
-const WorkbookDetail = ({ workbook }: { workbook: Workbook }) => {
+interface Props {
+  workbook: Workbook;
+}
+
+const WorkbookDetail = ({ workbook }: Props) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
     workbook.quizIds.length > 0
@@ -128,23 +132,21 @@ const WorkbookDetail = ({ workbook }: { workbook: Workbook }) => {
 
         {isLoadingQuizzes ? (
           <div className="grid gap-4">
-            {Array.from({ length: workbook.quizIds.length }).map(
-              (_, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                    <div>
-                      <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-16"></div>
-                    </div>
+            {Array.from({ length: workbook.quizIds.length }).map((_, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                  <div>
+                    <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
                   </div>
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
                 </div>
-              )
-            )}
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </div>
+            ))}
           </div>
         ) : workbook.quizIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">

@@ -4,11 +4,12 @@ import { Quiz } from "../types/quiz";
 export const fetchQuiz = async (
   categoryId: string,
   mode: string,
-  difficulty: string
+  difficulty: string,
+  hideSolved: boolean
 ) => {
   try {
     const { data } = await axios.get<Quiz>(
-      `${process.env.NEXT_PUBLIC_API_URL}/quizzes?categoryId=${categoryId}&mode=${mode}&difficulty=${difficulty}`
+      `${process.env.NEXT_PUBLIC_API_URL}/quizzes?categoryId=${categoryId}&mode=${mode}&difficulty=${difficulty}&hideSolved=${hideSolved}`
     );
     return data;
   } catch {

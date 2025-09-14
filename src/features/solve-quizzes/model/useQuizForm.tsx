@@ -38,8 +38,7 @@ export const useQuizForm = (
   const isInitialRender = useRef(true);
 
   const [settings, setSettings] = useState<Settings>({
-    hide7Days: false,
-    hideForever: false,
+    hideSolved: false,
     autoNext: false,
     noDelay: false,
   });
@@ -54,7 +53,7 @@ export const useQuizForm = (
 
   const getQuizzes = useCallback(async () => {
     if (!category) return;
-    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`);
+    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`, hideSolved);
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
     }
@@ -86,20 +85,6 @@ export const useQuizForm = (
     if (!user) {
       login.open();
       return;
-    }
-    if (setting === "hide7Days" && settings.hideForever) {
-      return setSettings((prev) => ({
-        ...prev,
-        hide7Days: !prev.hide7Days,
-        hideForever: false,
-      }));
-    }
-    if (setting === "hideForever" && settings.hide7Days) {
-      return setSettings((prev) => ({
-        ...prev,
-        hide7Days: false,
-        hideForever: !prev.hideForever,
-      }));
     }
     setSettings((prev) => ({ ...prev, [setting]: !prev[setting] }));
   };

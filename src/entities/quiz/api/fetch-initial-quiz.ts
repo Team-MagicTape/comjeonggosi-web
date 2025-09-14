@@ -3,7 +3,7 @@ import { Quiz } from "../types/quiz";
 
 export const fetchInitialQuiz = async (categoryId: number) => {
   try{
-    const { data } = await customFetch.get<Quiz>(`/quizzes?categoryId=${categoryId}&mode=RANDOM&difficulty=3`);
+    const { data } = await customFetch.get<Quiz>(`/quizzes?categoryId=${categoryId}&mode=RANDOM&difficulty=3&hideSolved=false`);
     return data;
   }catch(e){
     console.log(e);

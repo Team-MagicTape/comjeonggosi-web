@@ -3,7 +3,7 @@ import { Workbook } from "../types/workbook";
 
 export const fetchWorkbook = async (id: number) => {
   try {
-    const { data } = await customFetch.get<Workbook>(`/workbook/${id}`);
+    const { data } = await customFetch.get<Workbook>(`/workbooks/${id}`);
     return data;
   } catch (e) {
     console.log(e);

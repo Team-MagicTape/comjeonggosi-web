@@ -3,7 +3,7 @@
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
-import { ArrowLeftIcon, FileSpreadsheetIcon,  PlusIcon, TrophyIcon } from "lucide-react";
+import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
 import { useAddQuiz } from "../model/useAddQuiz";
 
 interface Props {
@@ -12,9 +12,7 @@ interface Props {
 
 const WorkbookDetail = ({ workbook }: Props) => {
   const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
-  const { newQuizId, setNewQuizId, isAdding, handleAddQuiz } = useAddQuiz(
-    workbook.id
-  );
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* 헤더 섹션 */}
@@ -99,48 +97,6 @@ const WorkbookDetail = ({ workbook }: Props) => {
             </div>
           </div>
 
-          {/* 퀴즈 추가 폼 */}
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">
-              새 퀴즈 추가
-            </h3>
-            <div className="flex gap-3">
-              <div className="flex-1">
-                <input
-                  type="text"
-                  value={newQuizId}
-                  onChange={(e) => setNewQuizId(e.target.value)}
-                  placeholder="퀴즈 ID를 입력하세요 (예: quiz-123)"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                  disabled={isAdding}
-                />
-              </div>
-              <button
-                onClick={handleAddQuiz}
-                disabled={isAdding || !newQuizId.trim()}
-                className={`px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 ${
-                  isAdding || !newQuizId.trim()
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-primary hover:bg-primary/90 text-white"
-                }`}
-              >
-                {isAdding ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    추가 중...
-                  </>
-                ) : (
-                  <>
-                    <PlusIcon/>
-                    추가
-                  </>
-                )}
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">
-              퀴즈 ID는 시스템에 등록된 유효한 ID여야 합니다.
-            </p>
-          </div>
         </div>
 
         {isLoadingQuizzes ? (
@@ -223,7 +179,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                 </div>
 
                 <CustomLink
-                  href={`/workbook/${workbook.id}/solve?start=${index}`}
+                  href={`/workbook/${workbook.id}/quizzes`}
                   className="ml-4 text-primary hover:text-primary/80 font-medium text-sm transition-colors whitespace-nowrap"
                 >
                   바로 풀기 →

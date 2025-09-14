@@ -6,7 +6,6 @@ export const subscribeMail = async (subscribeRequest : subscribeRequest): Promis
     const { data } = await apiClient.post("/api/questions/subscribe", subscribeRequest);
     return data;
   }catch(error){
-    console.log("구독 실패", error)
     return null
   }
 };

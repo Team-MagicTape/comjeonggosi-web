@@ -6,7 +6,6 @@ export const fetchQuizById = async (quizId: string) => {
     const { data } = await apiClient.get<Quiz>(`/api/quizzes/${quizId}`);
     return data;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };

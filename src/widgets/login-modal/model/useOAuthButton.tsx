@@ -8,7 +8,6 @@ export const useOAuthButton = () => {
     const pathToStore = `${pathname}${
       searchParams.toString().length > 0 ? "?" + searchParams.toString() : ""
     }`;
-    console.log(pathToStore);
     localStorage.setItem("redirect", pathToStore);
   };
 

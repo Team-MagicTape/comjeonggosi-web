@@ -51,8 +51,6 @@ const middleware = async (req: NextRequest) => {
         }
       );
 
-      console.log(refreshResponse.ok);
-      console.log(await refreshResponse.text());
 
       if (!refreshResponse.ok) {
         return NextResponse.next();

@@ -10,7 +10,6 @@ export const fetchWorkbookQuizzes = async (quizIds: string[]) => {
     // null이 아닌 퀴즈들만 필터링
     return quizzes.filter((quiz): quiz is Quiz => quiz !== null);
   } catch (e) {
-    console.log(e);
     return [];
   }
 };

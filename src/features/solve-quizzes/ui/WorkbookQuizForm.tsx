@@ -131,16 +131,6 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       />
                     )}
 
-                    {quiz?.articleId && (
-                      <div className="w-full px-4 sm:px-8">
-                        <CustomLink
-                          className="w-full"
-                          href={`/articles/${quiz?.articleId}`}>
-                          <Button isFullWidth>관련 아티클 읽으러 가기</Button>
-                        </CustomLink>
-                      </div>
-                    )}
-
                     <WorkbookQuizSettings
                       settings={settings}
                       handleSettingChange={handleSettingChange}
@@ -170,11 +160,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 </div>
               </div>
             )}
-            <div className="w-full flex-shrink-0 xl:px-4" key={10000}>
-              <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden">
+            <div className="w-full flex-shrink-0 pb-8 xl:px-4" key={10000}>
+              <div className="w-full h-146 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl">
                 <div className="flex flex-col items-center">
                   <div className="text-center space-y-4">
-                    <h3 className="text-2xl font-semibold text-gray mb-1">
+                    <h3 className="text-2xl font-semibold text-gray">
                       문제집의 모든 문제를 풀었습니다!
                     </h3>
                     <Button isFullWidth>
@@ -182,7 +172,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     </Button>
                     <CustomLink
                       href="/workbook"
-                      className="flex items-center text-gray-600 hover:text-primary transition-colors">
+                      className="flex items-center justify-center py-2 bg-gray-300 rounded-xl text-gray-600 hover:text-primary transition-colors">
                       <ArrowLeftIcon />
                       종료하기
                     </CustomLink>

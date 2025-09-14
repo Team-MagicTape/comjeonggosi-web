@@ -4,6 +4,7 @@ import { Workbook } from "@/entities/workbook/types/workbook";
 import WorkbookSearch from "@/entities/workbook/ui/WorkbookSearch";
 import { useWorkbookSearch } from "@/entities/workbook/model/useWorkbookSearch";
 import { SearchIcon } from "lucide-react";
+import WorkbookItem from "./WorkbookItem";
 
 const WorkbookList = ({ workbooks }: { workbooks: Workbook[] }) => {
   const { filteredWorkbooks, setSearchQuery } = useWorkbookSearch(workbooks);

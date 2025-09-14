@@ -211,12 +211,6 @@ const WorkbookDetail = ({ workbook }: Props) => {
                     </p>
                   </div>
                 </div>
-
-                <CustomLink
-                  href={`/workbook/${workbook.id}/quizzes`}
-                  className="ml-4 text-primary hover:text-primary/80 font-medium text-sm transition-colors whitespace-nowrap">
-                  바로 풀기 →
-                </CustomLink>
               </div>
             ))}
           </div>

@@ -122,13 +122,13 @@ export const useQuizForm = (
   const handleKeyboard = (e: KeyboardEvent) => {
     if(!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      console.log(currentQuiz.options)
+      console.log(currentQuiz);
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         console.log(currentQuiz.options[Number(e.key) - 1]);
         console.log(Number(e.key) - 1);
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
-      if (e.key === " ") {
+      if (e.key === " " && selectedAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
@@ -137,7 +137,7 @@ export const useQuizForm = (
       } else if (e.key === "x" || e.key === "X") {
         handleAnswerSelect("X");
       }
-      if (e.key === " ") {
+      if (e.key === " " && selectedAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {

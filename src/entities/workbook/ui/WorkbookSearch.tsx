@@ -73,7 +73,7 @@ const WorkbookSearch = ({
 
       {searchQuery && (
         <div className="mt-2 text-sm text-gray-600 text-center">
-          "{searchQuery}"에 대한 검색 결과
+          &ldquo;{searchQuery}&rdquo;에 대한 검색 결과
         </div>
       )}
     </div>

@@ -100,7 +100,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
           {/* 시작 버튼 */}
           <div className="flex gap-4 pt-4">
             <CustomLink
-              href={`/workbook/${workbook.id}/solve`}
+              href={`/workbook/${workbook.id}/quizzes`}
               className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2">
               <TrophyIcon />
               문제 풀기 시작

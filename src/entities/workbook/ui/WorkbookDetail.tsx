@@ -12,6 +12,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
   const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
 
   console.log(workbook);
+  console.log(workbook.quizIds.length || "undefined");
 
   if (!workbook) {
     return (

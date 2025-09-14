@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
 import { ArrowRightIcon } from "lucide-react";

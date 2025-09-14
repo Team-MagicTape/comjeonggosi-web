@@ -34,6 +34,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
+    isEnd,
   } = useWorkbookQuizForm(data);
 
   return (
@@ -44,8 +45,29 @@ const WorkbookQuizForm = ({ data }: Props) => {
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
             {quizzes.length > 0 ? (
-              quizzes.map((quiz, quizIdx) =>
-                currentIdx < quizzes.length ? (
+              isEnd ? (
+                <div className="w-full xl:px-4" key={10000}>
+                  <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden">
+                    <div className="flex flex-col items-center">
+                      <div className="text-center space-y-4">
+                        <h3 className="text-2xl font-semibold text-gray mb-1">
+                          문제집의 모든 문제를 풀었습니다!
+                        </h3>
+                        <Button isFullWidth>
+                          <p>다시풀기</p>
+                        </Button>
+                        <CustomLink
+                          href="/workbook"
+                          className="flex items-center text-gray-600 hover:text-primary transition-colors">
+                          <ArrowLeftIcon />
+                          종료하기
+                        </CustomLink>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                quizzes.map((quiz, quizIdx) => (
                   <div
                     key={quizIdx}
                     className="w-full flex-shrink-0 xl:px-4 pb-8">
@@ -148,28 +170,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       />
                     </div>
                   </div>
-                ) : (
-                  <div className="w-full xl:px-4" key={10000}>
-                    <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden">
-                      <div className="flex flex-col items-center">
-                        <div className="text-center space-y-4">
-                          <h3 className="text-2xl font-semibold text-gray mb-1">
-                            문제집의 모든 문제를 풀었습니다!
-                          </h3>
-                          <Button isFullWidth>
-                            <p>다시풀기</p>
-                          </Button>
-                          <CustomLink
-                            href="/workbook"
-                            className="flex items-center text-gray-600 hover:text-primary transition-colors">
-                            <ArrowLeftIcon />
-                            종료하기
-                          </CustomLink>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
+                ))
               )
             ) : (
               <div className="w-full xl:px-4">

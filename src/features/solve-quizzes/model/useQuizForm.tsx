@@ -46,16 +46,6 @@ export const useQuizForm = (
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
 
-  const options = useMemo(() => {
-    if (!currentQuiz) return [];
-    const arr = [...currentQuiz.options, currentQuiz.answer];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }, [currentIdx]);
-
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
     return isCorrect;
@@ -131,9 +121,9 @@ export const useQuizForm = (
   const handleKeyboard = (e: KeyboardEvent) => {
     if(!currentQuiz) return;
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      console.log(options);
+      console.log(currentQuiz.options)
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
-        handleAnswerSelect(options[Number(e.key) - 1]);
+        handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       if (e.key === " ") {
         handleNext();
@@ -175,7 +165,6 @@ export const useQuizForm = (
     currentIdx,
     currentQuiz,
     quizzes,
-    options,
     selectedAnswer,
     showAnswer,
     isCorrect,

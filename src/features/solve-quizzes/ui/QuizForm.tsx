@@ -13,7 +13,6 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import Button from "@/shared/ui/Button";
-import { Loader2 } from "lucide-react";
 import OxOption from "./OxOption";
 import ShortAnswer from "./ShortAnswer";
 import { User } from "@/entities/user/types/user";
@@ -41,7 +40,6 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     handleSettingChange,
     categoryList,
     quizzes,
-    options,
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
@@ -102,7 +100,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       />
                     ) : (
                       <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">
-                        {options.map((option, optionIdx) => {
+                        {quiz.options.map((option, optionIdx) => {
                           const isCorrectAnswer = quiz.answer === option;
 
                           return (

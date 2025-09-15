@@ -40,13 +40,14 @@ const AdminWorkbookDetail = () => {
   return (
     <div className="w-full">
       <div>
-        <p>{workbook?.name}</p>
+        <p className="text-2xl">{workbook?.name}</p>
         <p>{workbook?.description}</p>
       </div>
+      <hr className="text-gray my-4" />
       <div className="w-full flex flex-row gap-2">
         {quizzes.map((item)=>(
-          <div key={item.id} className="w-full flex items-center">
-            <p>{item.content}</p>
+          <div key={item.id} className="w-full flex items-center border-b border-gray">
+            <p className="flex-1">{item.content}</p>
             <p className="text-red-500 cursor-pointer" onClick={() => deleteQuiz(item.id)}>삭제</p>
           </div>
         ))}

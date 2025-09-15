@@ -42,27 +42,90 @@ const WorkbookQuizForm = ({ data }: Props) => {
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
       {/* 진행도 표시 막대 */}
       {quizzes.length > 0 && currentIdx < quizzes.length && (
-        <div className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-2">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600">진행률</span>
-            <span className="text-sm font-semibold text-primary">
-              {currentIdx + 1} / {quizzes.length}
-            </span>
+        <div className="w-full space-y-3">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-600">진행률</span>
+              <span className="text-sm font-semibold text-primary">
+                {currentIdx + 1} / {quizzes.length}
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"
+                style={{
+                  width: `${((currentIdx + 1) / quizzes.length) * 100}%`,
+                }}
+              ></div>
+            </div>
+            <div className="flex justify-between mt-2 text-xs text-gray-500">
+              <span>시작</span>
+              <span>
+                {Math.round(((currentIdx + 1) / quizzes.length) * 100)}% 완료
+              </span>
+              <span>완료</span>
+            </div>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
-            <div
-              className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"
-              style={{
-                width: `${((currentIdx + 1) / quizzes.length) * 100}%`,
-              }}
-            ></div>
-          </div>
-          <div className="flex justify-between mt-2 text-xs text-gray-500">
-            <span>시작</span>
-            <span>
-              {Math.round(((currentIdx + 1) / quizzes.length) * 100)}% 완료
-            </span>
-            <span>완료</span>
+
+          {/* 키보드 단축키 힌트 */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="flex items-start gap-2">
+              <div className="text-blue-500 text-sm mt-0.5">💡</div>
+              <div className="flex-1">
+                <div className="text-xs text-blue-700 font-medium mb-1">
+                  빠른 답변 팁
+                </div>
+                <div className="text-xs text-blue-600 space-y-1">
+                  {quizzes[currentIdx]?.type === "OX" ? (
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      <span>
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          O
+                        </kbd>{" "}
+                        또는{" "}
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          1
+                        </kbd>{" "}
+                        : O 선택
+                      </span>
+                      <span>
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          X
+                        </kbd>{" "}
+                        또는{" "}
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          2
+                        </kbd>{" "}
+                        : X 선택
+                      </span>
+                    </div>
+                  ) : quizzes[currentIdx]?.type !== "SHORT_ANSWER" ? (
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                      {quizzes[currentIdx]?.options
+                        .slice(0, 4)
+                        .map((_, idx) => (
+                          <span key={idx}>
+                            <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                              {idx + 1}
+                            </kbd>{" "}
+                            : {idx + 1}번 선택
+                          </span>
+                        ))}
+                    </div>
+                  ) : (
+                    <span>답안을 입력하고 엔터를 눌러주세요</span>
+                  )}
+                  <div className="pt-1 border-t border-blue-200">
+                    <span>
+                      <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                        Space
+                      </kbd>{" "}
+                      : 답변 후 다음 문제로
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

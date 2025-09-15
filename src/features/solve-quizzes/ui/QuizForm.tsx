@@ -60,16 +60,83 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
         />
       </div>
 
+      {/* 키보드 단축키 힌트 */}
+      {quizzes.length > 0 && currentIdx < quizzes.length && (
+        <div className="w-full xl:px-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="flex items-start gap-2">
+              <div className="text-blue-500 text-sm mt-0.5">💡</div>
+              <div className="flex-1">
+                <div className="text-xs text-blue-700 font-medium mb-1">
+                  빠른 답변 팁
+                </div>
+                <div className="text-xs text-blue-600 space-y-1">
+                  {quizzes[currentIdx]?.type === "OX" ? (
+                    <div className="flex flex-wrap gap-x-4 gap-y-1">
+                      <span>
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          O
+                        </kbd>{" "}
+                        또는{" "}
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          1
+                        </kbd>{" "}
+                        : O 선택
+                      </span>
+                      <span>
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          X
+                        </kbd>{" "}
+                        또는{" "}
+                        <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                          2
+                        </kbd>{" "}
+                        : X 선택
+                      </span>
+                    </div>
+                  ) : quizzes[currentIdx]?.type !== "SHORT_ANSWER" ? (
+                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                      {quizzes[currentIdx]?.options
+                        .slice(0, 4)
+                        .map((_, idx) => (
+                          <span key={idx}>
+                            <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                              {idx + 1}
+                            </kbd>{" "}
+                            : {idx + 1}번 선택
+                          </span>
+                        ))}
+                    </div>
+                  ) : (
+                    <span>답안을 입력하고 엔터를 눌러주세요</span>
+                  )}
+                  <div className="pt-1 border-t border-blue-200">
+                    <span>
+                      <kbd className="px-1.5 py-0.5 bg-white border border-blue-300 rounded text-blue-700 font-mono">
+                        Space
+                      </kbd>{" "}
+                      : 답변 후 다음 문제로
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
+            style={{ transform: `translateX(-${currentIdx * 100}%)` }}
+          >
             {quizzes.length > 0 ? (
               quizzes.map((quiz, quizIdx) => (
                 <div
                   key={quizIdx}
-                  className="w-full flex-shrink-0 xl:px-4 pb-8">
+                  className="w-full flex-shrink-0 xl:px-4 pb-8"
+                >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -157,7 +224,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       <div className="w-full px-4 sm:px-8">
                         <CustomLink
                           className="w-full"
-                          href={`/articles/${quiz?.articleId}`}>
+                          href={`/articles/${quiz?.articleId}`}
+                        >
                           <Button isFullWidth>관련 아티클 읽으러 가기</Button>
                         </CustomLink>
                       </div>
@@ -182,10 +250,12 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}></div>
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}></div>
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                     </div>
                   </div>

@@ -2,15 +2,28 @@
 
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
+import {
+  ArrowLeftIcon,
+  FileSpreadsheetIcon,
+  TrophyIcon,
+  Plus,
+} from "lucide-react";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
-import { ArrowLeftIcon, FileSpreadsheetIcon, TrophyIcon } from "lucide-react";
+
 interface Props {
   workbook: Workbook;
 }
 
-const WorkbookDetail = ({ workbook }: Props) => {
-  const { quizzes, isLoadingQuizzes } = useLoadQuizzes(workbook);
+const ITEMS_PER_PAGE = 30;
 
+const WorkbookDetail = ({ workbook }: Props) => {
+  const {
+    quizzes,
+    isLoadingQuizzes,
+    isLoadingMore,
+    loadedCount,
+    loadMoreQuizzes,
+  } = useLoadQuizzes(workbook);
   if (!workbook) {
     return (
       <div className="w-full max-w-4xl mx-auto">
@@ -21,7 +34,8 @@ const WorkbookDetail = ({ workbook }: Props) => {
             <div className="flex items-center">
               <CustomLink
                 href="/workbook"
-                className="flex items-center text-gray-600 hover:text-primary transition-colors">
+                className="flex items-center text-gray-600 hover:text-primary transition-colors"
+              >
                 <ArrowLeftIcon />
                 문제집 목록으로 돌아가기
               </CustomLink>
@@ -47,9 +61,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
             찾을 수 없음
           </h1>
 
-          <p className="text-lg text-gray-600 leading-relaxed">
-            찾을 수 없음
-          </p>
+          <p className="text-lg text-gray-600 leading-relaxed">찾을 수 없음</p>
         </div>
       </div>
     );
@@ -64,7 +76,8 @@ const WorkbookDetail = ({ workbook }: Props) => {
           <div className="flex items-center">
             <CustomLink
               href="/workbook"
-              className="flex items-center text-gray-600 hover:text-primary transition-colors">
+              className="flex items-center text-gray-600 hover:text-primary transition-colors"
+            >
               <ArrowLeftIcon />
               문제집 목록으로 돌아가기
             </CustomLink>
@@ -96,12 +109,20 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
           {/* 시작 버튼 */}
           <div className="flex gap-4 pt-4">
-            <CustomLink
-              href={`/workbook/${workbook.id}/quizzes`}
-              className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2">
-              <TrophyIcon />
-              문제 풀기 시작
-            </CustomLink>
+            {workbook.quizIds.length > 0 ? (
+              <CustomLink
+                href={`/workbook/${workbook.id}/quizzes`}
+                className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2"
+              >
+                <TrophyIcon className="w-5 h-5" />
+                문제 풀기 시작
+              </CustomLink>
+            ) : (
+              <div className="bg-gray-300 text-gray-500 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 cursor-not-allowed">
+                <TrophyIcon className="w-5 h-5" />
+                문제가 없습니다
+              </div>
+            )}
 
             {/* <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2">
               <svg
@@ -143,7 +164,8 @@ const WorkbookDetail = ({ workbook }: Props) => {
             {Array.from({ length: workbook.quizIds.length }).map((_, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse">
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl animate-pulse"
+              >
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
                   <div>
@@ -166,51 +188,92 @@ const WorkbookDetail = ({ workbook }: Props) => {
             <p className="text-gray-500">곧 새로운 문제가 추가될 예정입니다</p>
           </div>
         ) : (
-          <div className="grid gap-4">
-            {quizzes.map((quiz, index) => (
-              <div
-                key={quiz.id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
-                    <span className="text-sm font-bold text-primary">
-                      {index + 1}
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span
-                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          quiz.type === "MULTIPLE_CHOICE"
-                            ? "bg-blue-100 text-blue-700"
-                            : quiz.type === "OX"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-purple-100 text-purple-700"
-                        }`}>
-                        {quiz.type === "MULTIPLE_CHOICE"
-                          ? "객관식"
-                          : quiz.type === "OX"
-                          ? "OX"
-                          : "단답형"}
-                      </span>
-                      <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
-                        {quiz.category.name}
-                      </span>
-                      <span className="px-2 py-1 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full">
-                        난이도 {quiz.difficulty}
+          <>
+            <div className="grid gap-4">
+              {quizzes.map((quiz, index) => (
+                <div
+                  key={quiz.id}
+                  className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-full">
+                      <span className="text-sm font-bold text-primary">
+                        {index + 1}
                       </span>
                     </div>
-                    <p className="font-medium text-gray-900 line-clamp-2 mb-1">
-                      {quiz.content}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      ID: {quiz.id}
-                    </p>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span
+                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                            quiz.type === "MULTIPLE_CHOICE"
+                              ? "bg-blue-100 text-blue-700"
+                              : quiz.type === "OX"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-purple-100 text-purple-700"
+                          }`}
+                        >
+                          {quiz.type === "MULTIPLE_CHOICE"
+                            ? "객관식"
+                            : quiz.type === "OX"
+                            ? "OX"
+                            : "단답형"}
+                        </span>
+                        <span className="px-2 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
+                          {quiz.category.name}
+                        </span>
+                        <span className="px-2 py-1 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full">
+                          난이도 {quiz.difficulty}
+                        </span>
+                      </div>
+                      <p className="font-medium text-gray-900 line-clamp-2 mb-1">
+                        {quiz.content}
+                      </p>
+                      <p className="text-sm text-gray-500">ID: {quiz.id}</p>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+
+            {/* 더보기 버튼 */}
+            {loadedCount < workbook.quizIds.length && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={loadMoreQuizzes}
+                  disabled={isLoadingMore}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-colors flex items-center gap-2 ${
+                    isLoadingMore
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                      로딩 중...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4" />
+                      더보기 (
+                      {Math.min(
+                        ITEMS_PER_PAGE,
+                        workbook.quizIds.length - loadedCount
+                      )}
+                      개 더)
+                    </>
+                  )}
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+
+            {/* 로드 상태 표시 */}
+            {quizzes.length > 0 && (
+              <div className="text-center text-sm text-gray-500 mt-4">
+                {quizzes.length} / {workbook.quizIds.length} 문제 표시됨
+              </div>
+            )}
+          </>
         )}
       </div>
 

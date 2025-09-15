@@ -61,9 +61,6 @@ const ArticleDetail = async ({ params }: PathParams) => {
           <Markdown content={article.content} />
         </div>
       </div>
-      <div className="block mt-4 xl:hidden">
-        <ArticleSidebar data={articles} />
-      </div>
     </div>
   );
 };

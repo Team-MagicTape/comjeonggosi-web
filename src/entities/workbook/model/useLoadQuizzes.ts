@@ -2,9 +2,8 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { useState, useEffect } from "react";
 import { Workbook } from "../types/workbook";
 import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
-import { fetchQuizById } from "../api/fetch-quiz-by-id";
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 15;
 
 export const useLoadQuizzes = (workbook: Workbook) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -14,15 +13,18 @@ export const useLoadQuizzes = (workbook: Workbook) => {
     workbook ? workbook.quizIds.length > 0 : false
   );
 
-  const loadInitialQuizzes = async () => {
-    if (workbook.quizIds.length === 0) return;
+    const loadInitialQuizzes = async () => {
+    if (workbook.quizIds.length === 0) {
+      setIsLoadingQuizzes(false);
+      return;
+    }
 
     setIsLoadingQuizzes(true);
     try {
-      const initialQuizIds = workbook.quizIds[0];
-      const initialQuizzes = await fetchQuizById(initialQuizIds);
-      setQuizzes([initialQuizzes!]);
-      setLoadedCount(ITEMS_PER_PAGE);
+      const initialQuizIds = workbook.quizIds.slice(0, ITEMS_PER_PAGE);
+      const initialQuizzes = await fetchWorkbookQuizzes(initialQuizIds);
+      setQuizzes(initialQuizzes);
+      setLoadedCount(initialQuizzes.length);
     } catch (error) {
       console.error("초기 퀴즈 로드 실패:", error);
     } finally {

@@ -3,6 +3,7 @@ import { getSubscription } from "@/features/mail-apply/api/get-subscription";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { Metadata } from "next";
+import HelpText from "@/shared/ui/HelpText";
 
 export const metadata: Metadata = {
   title: "메일 신청 | 컴정고시",
@@ -21,8 +22,8 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const MailApply = async () => {
@@ -39,6 +40,7 @@ const MailApply = async () => {
         categories={categories}
         user={user}
       />
+      <HelpText text="TIP. 메일을 신청하면 매일 질문을 보내드려요" />
     </div>
   );
 };

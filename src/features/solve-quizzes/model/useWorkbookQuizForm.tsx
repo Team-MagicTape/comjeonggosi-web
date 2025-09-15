@@ -28,7 +28,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     if (showAnswer) return;
     setSelectedAnswer(answer);
     setShowAnswer(true);
-    submit(answer).then((isCorrect) => { if(isCorrect) setCorrected(prev => prev+1) });
+    submit(answer).then((isCorrect) => {
+      if (isCorrect) setCorrected((prev) => prev + 1);
+    });
   };
 
   const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
@@ -37,7 +39,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     setSelectedAnswer(null);
     setShowAnswer(false);
 
-    if(currentIdx >= quizzes.length) return;
+    if (currentIdx >= quizzes.length) return;
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
   };
 
@@ -80,14 +82,14 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const restart = () => {
     setCurrentIdx(0);
     setCorrected(0);
-  }
+  };
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyboard);
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, []);
+  }, [currentQuiz, showAnswer, shortAnswer]);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
@@ -112,6 +114,6 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     settings,
     handleSettingChange,
     corrected,
-    restart
+    restart,
   };
 };

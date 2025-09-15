@@ -140,7 +140,7 @@ export const useQuizForm = (
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, []);
+  }, [currentQuiz, showAnswer, shortAnswer]);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;

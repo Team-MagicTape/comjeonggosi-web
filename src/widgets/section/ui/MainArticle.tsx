@@ -6,6 +6,7 @@ import { Category } from "@/entities/category/types/category";
 import { Article } from "@/entities/article/types/article";
 import { useGetArticles } from "@/entities/article/model/useGetArticles";
 import { useArticleCategory } from "../model/useArticleCategory";
+import HelpText from "@/shared/ui/HelpText";
 
 interface Props {
   categories: Category[];
@@ -37,6 +38,7 @@ const MainArticle = ({ categories, initialData }: Props) => {
               <ArticleItem data={item} key={item.id} isLoading={isLoading} />
             ))}
       </div>
+      <HelpText text="TIP. 원하는 카테고리를 선택후 아티클을 읽어보세요." />
     </div>
   );
 };

@@ -18,6 +18,7 @@ import ShortAnswer from "./ShortAnswer";
 import { User } from "@/entities/user/types/user";
 import QuizMode from "./QuizMode";
 import QuizDifficulty from "./QuizDifficulty";
+import HelpText from "@/shared/ui/HelpText";
 
 interface Props {
   categories: Category[];
@@ -215,7 +216,6 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         })}
                       </div>
                     )}
-
                     {quizIdx === currentIdx && showAnswer && (
                       <AnswerFeedback
                         isCorrect={isCorrect}
@@ -248,6 +248,9 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       settings={settings}
                       handleSettingChange={handleSettingChange}
                     />
+                    <div className="flex items-center justify-center mb-3">
+                      <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있고 스페이스바를 누르면 다음 문제로 넘어갑니다." />
+                    </div>
                   </div>
                 </div>
               ))

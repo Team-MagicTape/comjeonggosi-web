@@ -6,6 +6,8 @@ import Select from "@/shared/ui/Select";
 import { useCreateArticle } from "../model/useCreateArticle";
 import { Category } from "@/entities/category/types/category";
 import dynamic from "next/dynamic";
+import "katex/dist/katex.min.css";
+import Markdown from "@/shared/ui/Markdown";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -34,12 +36,19 @@ const CrateArticleForm = ({ categories }: Props) => {
       />
 
       {isMounted && (
-        <div data-color-mode="light">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4" data-color-mode="light">
           <MDEditor
             value={content}
             onChange={(val) => setContent(val || "")}
             height={400}
+            preview="edit"
           />
+
+          <div className="p-4 border border-gray-300 rounded bg-white overflow-y-auto h-full">
+            <Markdown
+              content={content}
+            />
+          </div>
         </div>
       )}
 

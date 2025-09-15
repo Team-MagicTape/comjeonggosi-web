@@ -44,7 +44,7 @@ const AdminWorkbookDetail = () => {
         <p>{workbook?.description}</p>
       </div>
       <hr className="text-gray my-4" />
-      <div className="w-full flex flex-row gap-2">
+      <div className="w-full flex flex-col gap-2">
         {quizzes.map((item)=>(
           <div key={item.id} className="w-full flex items-center border-b border-gray">
             <p className="flex-1">{item.content}</p>

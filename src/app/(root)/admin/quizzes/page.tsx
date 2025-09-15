@@ -311,7 +311,7 @@ const CreateQuizzes = () => {
 
         <div>
           <label
-            htmlFor="categoryId"
+            htmlFor="difficulty"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             난이도
@@ -332,7 +332,7 @@ const CreateQuizzes = () => {
 
         <div>
           <label
-            htmlFor="categoryId"
+            htmlFor="articleId"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             아티클 ID

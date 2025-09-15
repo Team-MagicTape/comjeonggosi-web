@@ -68,6 +68,7 @@ export const useQuizForm = (
   const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
 
   const handleNext = () => {
+    if (!selectedAnswer || !showAnswer) return;
     setSelectedAnswer(null);
     setShowAnswer(false);
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);

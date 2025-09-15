@@ -36,6 +36,8 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
 
   const handleNext = () => {
+    if (!selectedAnswer || !showAnswer) return;
+
     setSelectedAnswer(null);
     setShowAnswer(false);
 

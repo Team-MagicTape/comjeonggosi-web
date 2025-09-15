@@ -44,9 +44,6 @@ const ArticleDetail = async ({ params }: PathParams) => {
 
   return (
     <div className="xl:gap-8 xl:flex">
-      <div className="block mb-4 xl:hidden">
-        <ArticleSidebar data={articles} title="읽기 전 읽으면 좋은 글" />
-      </div>
       <div className="hidden xl:block">
         <ArticleSidebar data={articles} title="관련글" />
       </div>

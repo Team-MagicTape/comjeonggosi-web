@@ -138,12 +138,6 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         })}
                       </div>
                     )}
-                    
-                    <div className="flex">
-                      <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있습니다." />
-                      <HelpText text="TIP2. 스페이스바 누르면 다음문제로 넘어갑니다." />
-                    </div>
-
                     {quizIdx === currentIdx && showAnswer && (
                       <AnswerFeedback
                         isCorrect={isCorrect}
@@ -176,6 +170,10 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       settings={settings}
                       handleSettingChange={handleSettingChange}
                     />
+                  </div>
+                  <div className="flex">
+                    <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있습니다." />
+                    <HelpText text="TIP2. 스페이스바 누르면 다음문제로 넘어갑니다." />
                   </div>
                 </div>
               ))

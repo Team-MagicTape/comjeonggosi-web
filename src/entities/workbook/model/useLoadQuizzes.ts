@@ -54,6 +54,7 @@ export const useLoadQuizzes = (workbook: Workbook) => {
   }, [workbook.quizIds]);
 
   return {
+    ITEMS_PER_PAGE,
     quizzes,
     isLoadingQuizzes,
     isLoadingMore,

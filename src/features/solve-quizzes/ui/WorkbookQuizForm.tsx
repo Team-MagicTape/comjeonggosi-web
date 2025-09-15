@@ -35,21 +35,50 @@ const WorkbookQuizForm = ({ data }: Props) => {
     shortAnswer,
     setShortAnswer,
     corrected,
-    restart
+    restart,
   } = useWorkbookQuizForm(data);
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
+      {/* 진행도 표시 막대 */}
+      {quizzes.length > 0 && currentIdx < quizzes.length && (
+        <div className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-2">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-600">진행률</span>
+            <span className="text-sm font-semibold text-primary">
+              {currentIdx + 1} / {quizzes.length}
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"
+              style={{
+                width: `${((currentIdx + 1) / quizzes.length) * 100}%`,
+              }}
+            ></div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs text-gray-500">
+            <span>시작</span>
+            <span>
+              {Math.round(((currentIdx + 1) / quizzes.length) * 100)}% 완료
+            </span>
+            <span>완료</span>
+          </div>
+        </div>
+      )}
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
+            style={{ transform: `translateX(-${currentIdx * 100}%)` }}
+          >
             {quizzes.length > 0 ? (
               quizzes.map((quiz, quizIdx) => (
                 <div
                   key={quizIdx}
-                  className="w-full flex-shrink-0 xl:px-4 pb-8">
+                  className="w-full flex-shrink-0 xl:px-4 pb-8"
+                >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -152,10 +181,12 @@ const WorkbookQuizForm = ({ data }: Props) => {
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}></div>
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}></div>
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -169,13 +200,17 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     <h3 className="text-2xl font-semibold mb-4">
                       문제집의 모든 문제를 풀었습니다!
                     </h3>
-                    <p className="text-3xl font-bold text-gray mb-8"><span className="text-green-500">{corrected}</span>/{quizzes.length}</p>
+                    <p className="text-3xl font-bold text-gray mb-8">
+                      <span className="text-green-500">{corrected}</span>/
+                      {quizzes.length}
+                    </p>
                     <Button isFullWidth onClick={restart}>
                       <p>다시풀기</p>
                     </Button>
                     <CustomLink
                       href="/workbook"
-                      className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors">
+                      className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
+                    >
                       <ArrowLeftIcon />
                       종료하기
                     </CustomLink>

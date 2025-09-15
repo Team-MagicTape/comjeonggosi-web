@@ -14,10 +14,10 @@ interface Props {
   workbook: Workbook;
 }
 
-const ITEMS_PER_PAGE = 30;
 
 const WorkbookDetail = ({ workbook }: Props) => {
   const {
+    ITEMS_PER_PAGE,
     quizzes,
     isLoadingQuizzes,
     isLoadingMore,

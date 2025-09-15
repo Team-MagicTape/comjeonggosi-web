@@ -44,7 +44,7 @@ const AdminPage = () => {
       title: "아티클 삭제",
       description: "현재 존재하는 학습 아티클 확인 및 삭제",
       icon: FileText,
-      href: "/admin/articles/create",
+      href: "/admin/articles/delete",
       color: "bg-purple-500",
     },
     {
@@ -124,7 +124,7 @@ const AdminPage = () => {
             );
           })}
         </div>
-        
+
       </div>
     </div>
   );

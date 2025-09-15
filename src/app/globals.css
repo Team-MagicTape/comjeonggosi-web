@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @keyframes modal-animation {
   0% {
     transform: translateY(100vh) scale(0.5);
@@ -8,6 +17,19 @@
     transform: translateY(0) scale(1);
   }
 }
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 
 @keyframes modal-animation-out {
   0% {

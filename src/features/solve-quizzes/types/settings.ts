@@ -1,6 +1,5 @@
 export interface Settings {
-  hide7Days: boolean;
-  hideForever: boolean;
+  hideSolved: boolean;
   autoNext: boolean;
   noDelay: boolean
 }

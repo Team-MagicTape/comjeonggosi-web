@@ -42,7 +42,6 @@ const DeleteQuizzes = () => {
       await queryClient.invalidateQueries({ queryKey: ["quizzes", `${category?.value}`] });
       alert("삭제 완료");
     }catch(e){
-      console.log(e);
       alert("삭제 실패");
     }
   };

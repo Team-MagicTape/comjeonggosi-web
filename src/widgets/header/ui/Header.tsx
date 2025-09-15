@@ -25,11 +25,25 @@ const Header = async () => {
           <NavigationLink href="/" name="홈" />
           <NavigationLink href="/articles" name="아티클" />
           <NavigationLink href="/quizzes" name="퀴즈" />
-          <NavigationLink href="/questions" name="오늘의 질문" />
+          <NavigationLink href="/workbook" name="문제집" />
+          <NavigationLink href="/questions" name="오늘의 질문" isNotLogined />
           <NavigationLink href="/mail" name="메일 신청" />
         </div>
         {!!user ? (
-          <NavigationLink href="/my-page" name="마이페이지" />
+          <>
+            <div className="hidden xl:inline">
+              <NavigationLink href="/my-page" name="마이페이지" />
+            </div>
+            <CustomLink className="" href="/my-page">
+              <img
+                src={user.profileImageUrl}
+                alt="Profile Image"
+                width={40}
+                height={40}
+                className="rounded-full xl:hidden"
+              />
+            </CustomLink>
+          </>
         ) : (
           <LoginButton />
         )}

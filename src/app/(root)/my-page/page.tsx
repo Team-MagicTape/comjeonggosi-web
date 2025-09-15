@@ -9,7 +9,9 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MyPageContentCards from "@/widgets/section/ui/MyPageContentCard";
+
 import { Metadata } from "next";
+import LogoutButton from "@/features/logout/ui/LogoutButton";
 
 export const metadata: Metadata = {
   title: "마이페이지 | 컴정고시",
@@ -59,6 +61,7 @@ const MyPage = async () => {
             </p>
           </div>
           <Spacer />
+          <LogoutButton />
         </div>
       </div>
       <MyPageContentCards

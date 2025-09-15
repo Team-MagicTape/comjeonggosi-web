@@ -5,22 +5,31 @@ import { useToggleAnswer } from "../model/useToggleAnswer";
 import Button from "@/shared/ui/Button";
 import { MailDetail } from "../types/mail-detail";
 import { Category } from "@/entities/category/types/category";
+import MailTemplateSkeleton from "./MailTemplateSkeleton";
 
 interface Props {
   data: MailDetail;
   category: Category;
+  isLoading: boolean;
 }
 
-const MailTemplate = ({ data, category }: Props) => {
+const MailTemplate = ({ data, category, isLoading }: Props) => {
   const ref = useScrollToMail();
   const { open, openAnswer } = useToggleAnswer();
+
+  if (isLoading) {
+    return <MailTemplateSkeleton />;
+  }
 
   return (
     <div
       className="w-full mx-auto bg-white rounded-2xl overflow-hidden"
-      ref={ref}>
+      ref={ref}
+    >
       <div className="bg-primary px-4 xl:px-8 pt-4 xl:pt-8 pb-4 text-white">
-        <h1 className="xl:text-2xl font-bold mb-2 xl:mb-6 break-keep">{data.title}</h1>
+        <h1 className="xl:text-2xl font-bold mb-2 xl:mb-6 break-keep">
+          {data.title}
+        </h1>
         <div className="w-full flex justify-between items-end">
           <span className="inline-block px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider bg-white/20">
             {category.name}
@@ -38,8 +47,6 @@ const MailTemplate = ({ data, category }: Props) => {
           {data.content}
         </div>
 
-    
-
         {open ? (
           <div className="w-full text-sm xl:text-lg font-semibold text-green-800 leading-relaxed bg-green-50 p-5 border border-green-300 rounded-item break-keep scale-up-center">
             <span className="text-green-600 text-xs">모범 답안</span>
@@ -53,7 +60,8 @@ const MailTemplate = ({ data, category }: Props) => {
       <div className="bg-gray-50 p-4 pb-5 text-center border border-border flex flex-col gap-4 rounded-b-2xl">
         <a
           href="#"
-          className="text-lightgray hover:text-gray transition-colors">
+          className="text-lightgray hover:text-gray transition-colors"
+        >
           구독 해지
         </a>
       </div>

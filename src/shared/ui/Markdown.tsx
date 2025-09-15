@@ -1,6 +1,9 @@
 "use client";
 
 import ReactMarkdownPreview from "@uiw/react-markdown-preview";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 const Markdown = ({ content }: { content: string }) => {
   return (
@@ -31,7 +34,11 @@ const Markdown = ({ content }: { content: string }) => {
         xl:[&_ol]:text-base
       "
     >
-      <ReactMarkdownPreview source={content} />
+      <ReactMarkdownPreview
+        source={content}
+        remarkPlugins={[remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+      />
     </div>
   );
 };

@@ -37,12 +37,15 @@ const MySubmissions = ({ submissions }: Props) => {
             </p>
             <CustomLink
               className="w-full flex justify-center mt-4"
-              href="/quizzes">
+              href="/quizzes"
+            >
               <Button>퀴즈 바로가기</Button>
             </CustomLink>
           </div>
         ) : (
-          data?.map((item, idx) => <MySubmissionItem data={item} key={idx} />)
+          data?.map((item, idx) => (
+            <MySubmissionItem data={item} key={idx} isLoading={isLoading} />
+          ))
         )}
       </div>
       {submissions.length > 5 && (

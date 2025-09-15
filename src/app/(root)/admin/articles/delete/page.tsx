@@ -42,7 +42,6 @@ const DeleteArticles = () => {
       await queryClient.invalidateQueries({ queryKey: ["articles", `${category?.value}`] });
       alert("삭제 완료");
     }catch(e){
-      console.log(e);
       alert("삭제 실패");
     }
   };

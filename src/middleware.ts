@@ -1,8 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isTokenExpired } from "./shared/utils/is-token-expired";
-import { ACCESSTOKEN_COOKIE_OPTION, REFRESHTOKEN_COOKIE_OPTION } from "./shared/constants/cookie-option";
+import {
+  ACCESSTOKEN_COOKIE_OPTION,
+  REFRESHTOKEN_COOKIE_OPTION,
+} from "./shared/constants/cookie-option";
 
 const middleware = async (req: NextRequest) => {
+  const isVisited = !!req.cookies.get("visited")?.value;
+
+  if (!isVisited && req.nextUrl.pathname === "/") {
+    const url = req.nextUrl.clone();
+    url.pathname = "/quizzes";
+
+    const res = NextResponse.redirect(url);
+    res.cookies.set("visited", "true", {
+      path: "/",
+      httpOnly: false,
+    });
+
+    return res;
+  }
   try {
     const { pathname } = req.nextUrl;
 
@@ -17,15 +34,14 @@ const middleware = async (req: NextRequest) => {
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;
 
-    if (!accessToken) {
+    if (!accessToken && !refreshToken) {
       return NextResponse.next();
     }
 
-    if (isTokenExpired(accessToken)) {
-      if (!refreshToken) {
-        return NextResponse.redirect(new URL("/login", req.url));
-      }
-
+    if (
+      (accessToken && isTokenExpired(accessToken)) ||
+      (!accessToken && refreshToken)
+    ) {
       const refreshResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
         {
@@ -35,8 +51,9 @@ const middleware = async (req: NextRequest) => {
         }
       );
 
+
       if (!refreshResponse.ok) {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.next();
       }
 
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
@@ -45,14 +62,18 @@ const middleware = async (req: NextRequest) => {
       const res = NextResponse.next();
 
       res.cookies.set("accessToken", newAccessToken, ACCESSTOKEN_COOKIE_OPTION);
-      res.cookies.set("refreshToken", newRefreshToken, REFRESHTOKEN_COOKIE_OPTION);
+      res.cookies.set(
+        "refreshToken",
+        newRefreshToken,
+        REFRESHTOKEN_COOKIE_OPTION
+      );
 
       return res;
     }
 
     return NextResponse.next();
   } catch {
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.next();
   }
 };
 

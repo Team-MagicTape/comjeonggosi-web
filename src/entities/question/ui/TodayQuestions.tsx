@@ -12,7 +12,7 @@ interface Props {
 }
 
 const TodayQuestions = ({ categories, questions }: Props) => {
-  const { data, category, categoryList, setCategory } = useGetMails(
+  const { data, category, categoryList, setCategory, isLoading } = useGetMails(
     categories,
     questions
   );
@@ -26,16 +26,23 @@ const TodayQuestions = ({ categories, questions }: Props) => {
         </div>
       </div>
       <div className="w-full mx-auto bg-white py-2 px-4 sm:py-3 sm:px-6 rounded-xl sm:rounded-2xl border border-gray-200 mb-4">
-        <Tabs tabs={categoryList} selected={category} setSelected={setCategory} />
+        <Tabs
+          tabs={categoryList}
+          selected={category}
+          setSelected={setCategory}
+        />
       </div>
       <div className="gap-6 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((item) => (
+        {data ? data.map((item) => (
           <TodayQuestionItem
             data={item}
             category={categories.find((c) => c.id === item.id) || null}
             key={item.id}
+            isLoading={isLoading}
           />
-        ))}
+        )) : (
+          <p className="text-gray">데이터를 불러올 수 없습니다.</p>
+        )}
       </div>
     </div>
   );

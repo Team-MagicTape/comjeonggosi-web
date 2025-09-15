@@ -4,7 +4,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 import { ChangeEvent, useState } from "react";
 
 const CreateQuizzes = () => {
-  const [data, setData] = useState({ content: "", answer: "", categoryId: "", articleId: "", type: "MULTIPLE_CHOICE" });
+  const [data, setData] = useState({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "3", type: "MULTIPLE_CHOICE" });
   const [options, setOptions] = useState<string[]>([""]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -85,7 +85,7 @@ const CreateQuizzes = () => {
       
       await apiClient.post("/api/admin/quizzes", submitData);
       alert("퀴즈 등록 성공");
-      setData({ content: "", answer: "", categoryId: "", articleId: "", type: "MULTIPLE_CHOICE" });
+      setData({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "", type: "MULTIPLE_CHOICE" });
       setOptions([""]);
     } catch {
       alert("퀴즈 등록 실패");
@@ -246,6 +246,24 @@ const CreateQuizzes = () => {
             placeholder="카테고리 ID를 입력하세요"
             name="categoryId"
             value={data.categoryId}
+            onChange={handleData}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            disabled={isLoading}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+            난이도
+          </label>
+          <input
+            id="difficulty"
+            type="number"
+            placeholder="난이도를 입력하세요"
+            name="difficulty"
+            min={1}
+            max={5}
+            value={data.difficulty}
             onChange={handleData}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             disabled={isLoading}

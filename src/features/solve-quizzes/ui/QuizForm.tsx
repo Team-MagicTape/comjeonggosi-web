@@ -13,10 +13,11 @@ import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import CustomLink from "@/shared/ui/CustomLink";
 import Button from "@/shared/ui/Button";
-import { Loader2 } from "lucide-react";
 import OxOption from "./OxOption";
 import ShortAnswer from "./ShortAnswer";
 import { User } from "@/entities/user/types/user";
+import QuizMode from "./QuizMode";
+import QuizDifficulty from "./QuizDifficulty";
 
 interface Props {
   categories: Category[];
@@ -39,26 +40,33 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     handleSettingChange,
     categoryList,
     quizzes,
-    options,
     handleShortAnswerSubmit,
     shortAnswer,
     setShortAnswer,
+    modeList,
+    setMode,
+    mode,
+    difficulty,
+    setDifficulty,
   } = useQuizForm(categories, initialQuiz, user);
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center overflow-hidden">
-      <QuizHeader
-        tabs={categoryList}
-        category={category}
-        setCategory={setCategory}
-      />
+      <div className="w-full xl:px-4">
+        <QuizHeader
+          tabs={categoryList}
+          category={category}
+          setCategory={setCategory}
+        />
+      </div>
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
-            {quizzes.map((quiz, quizIdx) =>
-              quiz ? (
+            {quizzes.length > 0 ? (
+              quizzes.map((quiz, quizIdx) => (
                 <div
                   key={quizIdx}
                   className="w-full flex-shrink-0 xl:px-4 pb-8">
@@ -92,7 +100,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       />
                     ) : (
                       <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">
-                        {options.map((option, optionIdx) => {
+                        {quiz.options.map((option, optionIdx) => {
                           const isCorrectAnswer = quiz.answer === option;
 
                           return (
@@ -161,16 +169,36 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                     />
                   </div>
                 </div>
-              ) : (
-                <div
-                  className="w-full h-154 mx-auto bg-white rounded-2xl flex items-center justify-center sm:rounded-3xl shadow-xl overflow-hidden"
-                  key={quizIdx}>
-                  <Loader2 className="text-lightgray animate-spin" />
+              ))
+            ) : (
+              <div className="w-full xl:px-4">
+                <div className="w-full h-154 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden">
+                  <div className="flex flex-col items-center">
+                    <div className="text-center space-y-4">
+                      <h3 className="text-2xl font-semibold text-gray mb-1">
+                        퀴즈를 준비중입니다!
+                      </h3>
+                      <div className="flex items-center justify-center space-x-1">
+                        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                        <div
+                          className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}></div>
+                        <div
+                          className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              )
+              </div>
             )}
           </div>
         </div>
+      </div>
+
+      <div className="w-full xl:px-4 space-y-4">
+        <QuizMode tabs={modeList} category={mode} setCategory={setMode} />
+        <QuizDifficulty difficulty={difficulty} setDifficulty={setDifficulty} />
       </div>
     </div>
   );

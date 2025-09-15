@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
@@ -7,6 +7,7 @@ import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
 import { User } from "@/entities/user/types/user";
+import { shuffleArray } from "../utils/shuffle-array";
 
 export const useQuizForm = (
   categories: Category[],
@@ -17,8 +18,16 @@ export const useQuizForm = (
     name: item.name,
     value: String(item.id),
   }));
+  const modeList = [
+    { name: "랜덤퀴즈", value: "RANDOM" },
+    { name: "추천퀴즈", value: "RECOMMEND" },
+    { name: "복습퀴즈", value: "REVIEW" },
+    { name: "약점보강퀴즈", value: "WEAKNESS" },
+  ];
 
   const [category, setCategory] = useState<Tab>(categoryList[0]);
+  const [mode, setMode] = useState<Tab>(modeList[0]);
+  const [difficulty, setDifficulty] = useState(3);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -29,8 +38,7 @@ export const useQuizForm = (
   const isInitialRender = useRef(true);
 
   const [settings, setSettings] = useState<Settings>({
-    hide7Days: false,
-    hideForever: false,
+    hideSolved: false,
     autoNext: false,
     noDelay: false,
   });
@@ -38,32 +46,18 @@ export const useQuizForm = (
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
 
-  const options = useMemo(() => {
-    if (!currentQuiz) return [];
-    const arr = [...currentQuiz.options, currentQuiz.answer];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }, [currentQuiz]);
-
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
     return isCorrect;
   };
 
-  const getQuizzes = async () => {
+  const getQuizzes = useCallback(async () => {
     if (!category) return;
-    const hideMode = settings.hide7Days
-      ? "7days"
-      : settings.hideForever
-      ? "forever"
-      : undefined;
-
-    const quiz = await fetchQuiz(category.value, hideMode);
-    if (quiz) setQuizzes((prev) => [...prev, quiz]);
-  };
+    const quiz = await fetchQuiz(category.value, mode.value, `${difficulty}`, settings.hideSolved);
+    if (quiz) {
+      setQuizzes((prev) => [...prev, quiz]);
+    }
+  }, [category, mode, difficulty]);
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer) return;
@@ -92,27 +86,19 @@ export const useQuizForm = (
       login.open();
       return;
     }
-    if (setting === "hide7Days" && settings.hideForever) {
-      return setSettings((prev) => ({
-        ...prev,
-        hide7Days: !prev.hide7Days,
-        hideForever: false,
-      }));
-    }
-    if (setting === "hideForever" && settings.hide7Days) {
-      return setSettings((prev) => ({
-        ...prev,
-        hide7Days: false,
-        hideForever: !prev.hideForever,
-      }));
-    }
     setSettings((prev) => ({ ...prev, [setting]: !prev[setting] }));
   };
 
   useEffect(() => {
-    getQuizzes();
+    if (currentIdx !== 0) getQuizzes();
     setShortAnswer("");
   }, [currentIdx, category]);
+
+  useEffect(() => {
+    if (quizzes.length === 0 && currentIdx === 0) {
+      getQuizzes();
+    }
+  }, [currentIdx, quizzes.length, getQuizzes]);
 
   useEffect(() => {
     if (!isInitialRender.current) {
@@ -125,11 +111,37 @@ export const useQuizForm = (
     isInitialRender.current = false;
   }, []);
 
-  useEffect(() => {
-    if (quizzes.length === 1) {
-      getQuizzes();
+  const handleKeyboard = (e: KeyboardEvent) => {
+    if (!currentQuiz) return;
+    if (currentQuiz.type === "MULTIPLE_CHOICE") {
+      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
+        handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
+      }
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "OX") {
+      if (e.key === "o" || e.key === "O") {
+        handleAnswerSelect("O");
+      } else if (e.key === "x" || e.key === "X") {
+        handleAnswerSelect("X");
+      }
+      if (e.key === " ") {
+        handleNext();
+      }
+    } else if (currentQuiz.type === "SHORT_ANSWER") {
+      if (e.key === "Enter" && !e.isComposing) {
+        handleShortAnswerSubmit().then(() => handleNext());
+      }
     }
-  }, [quizzes]);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyboard);
+    return () => {
+      document.removeEventListener("keydown", handleKeyboard);
+    };
+  }, []);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
@@ -145,7 +157,6 @@ export const useQuizForm = (
     currentIdx,
     currentQuiz,
     quizzes,
-    options,
     selectedAnswer,
     showAnswer,
     isCorrect,
@@ -157,5 +168,10 @@ export const useQuizForm = (
     handlePrev,
     settings,
     handleSettingChange,
+    modeList,
+    mode,
+    setMode,
+    difficulty,
+    setDifficulty,
   };
 };

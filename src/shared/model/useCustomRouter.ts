@@ -8,28 +8,33 @@ export const useCustomRouter = () => {
   const pathname = usePathname();
   const { setIsLoading } = useLoadingStore();
 
-	const push = (href: string) => {
-		if (pathname !== href) {
-			setIsLoading(true);
-			setTimeout(() => router.push(href), 200);
-		}
-	};
+  const push = (href: string) => {
+    if (pathname !== href) {
+      setIsLoading(true);
+      setTimeout(() => router.push(href), 200);
+    }
+  };
 
-    const replace = (href: string) => {
-			if (pathname !== href) {
-				setIsLoading(true);
-				setTimeout(() => router.replace(href), 200);
-			}
-    };
+  const replace = (href: string) => {
+    if (pathname !== href) {
+      setIsLoading(true);
+      setTimeout(() => router.replace(href), 200);
+    }
+  };
 
-    const back = () => {
-			setIsLoading(true);
-			setTimeout(() => router.back(), 200);
-    };
+  const back = () => {
+    setIsLoading(true);
+    setTimeout(() => router.back(), 200);
+  };
 
-    return {
-			push,
-			replace,
-			back,
-    };
+  const refresh = () => {
+    router.refresh();
+  };
+
+  return {
+    push,
+    replace,
+    back,
+		refresh
+  };
 };

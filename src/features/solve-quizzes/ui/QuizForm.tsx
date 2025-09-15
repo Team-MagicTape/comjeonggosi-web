@@ -48,6 +48,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     mode,
     difficulty,
     setDifficulty,
+    isCurrentQuizAnswered,
   } = useQuizForm(categories, initialQuiz, user);
 
   return (
@@ -138,7 +139,13 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                   className="w-full flex-shrink-0 xl:px-4 pb-8"
                 >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
-                    <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
+                    <div
+                      className={`mb-2 px-6 py-8 text-white flex flex-col gap-3 items-start ${
+                        quizIdx === currentIdx && isCurrentQuizAnswered
+                          ? "bg-gray-500"
+                          : "bg-primary"
+                      }`}
+                    >
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}
                       </h2>
@@ -152,6 +159,9 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         quizIdx={quizIdx}
                         selectedAnswer={selectedAnswer}
                         showAnswer={showAnswer}
+                        isAnswered={
+                          quizIdx === currentIdx && isCurrentQuizAnswered
+                        }
                       />
                     ) : quiz.type === "SHORT_ANSWER" ? (
                       <ShortAnswer
@@ -164,6 +174,9 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         setShortAnswer={setShortAnswer}
                         shortAnswer={shortAnswer}
                         showAnswer={showAnswer}
+                        isAnswered={
+                          quizIdx === currentIdx && isCurrentQuizAnswered
+                        }
                       />
                     ) : (
                       <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">

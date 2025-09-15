@@ -13,6 +13,7 @@ interface Props {
   selectedAnswer: string | null;
   handleShortAnswerSubmit: () => void;
   quiz: Quiz;
+  isAnswered?: boolean;
 }
 
 const ShortAnswer = ({
@@ -25,6 +26,7 @@ const ShortAnswer = ({
   selectedAnswer,
   handleShortAnswerSubmit,
   quiz,
+  isAnswered = false,
 }: Props) => {
   return (
     <div className="px-4 pt-4 sm:px-8 mb-6 sm:mb-8">
@@ -34,7 +36,7 @@ const ShortAnswer = ({
             type="text"
             value={shortAnswer}
             onChange={(e) => setShortAnswer(e.target.value)}
-            disabled={showAnswer || quizIdx !== currentIdx}
+            disabled={showAnswer || quizIdx !== currentIdx || isAnswered}
             placeholder="정답을 입력하세요..."
             className={`
               w-full px-4 py-4 sm:px-6 sm:py-5 text-lg rounded-xl border-2 
@@ -62,7 +64,7 @@ const ShortAnswer = ({
           )}
         </div>
 
-        {!showAnswer && quizIdx === currentIdx && (
+        {!showAnswer && quizIdx === currentIdx && !isAnswered && (
           <button
             onClick={handleShortAnswerSubmit}
             disabled={!shortAnswer.trim()}
@@ -73,7 +75,8 @@ const ShortAnswer = ({
                   ? "bg-primary text-white hover:bg-primary/90 active:scale-[0.98]"
                   : "bg-gray-200 text-gray-400 cursor-not-allowed"
               }
-            `}>
+            `}
+          >
             정답 제출
           </button>
         )}

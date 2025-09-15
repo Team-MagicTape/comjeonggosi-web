@@ -40,6 +40,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     setSelectedAnswer(null);
     setShowAnswer(false);
+    setShortAnswer("");
 
     if (currentIdx >= quizzes.length) return;
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
@@ -77,6 +78,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     } else if (currentQuiz.type === "SHORT_ANSWER") {
       if (e.key === "Enter" && !e.isComposing) {
         handleShortAnswerSubmit().then(() => handleNext());
+      }
+      if (e.key === " ") {
+        handleNext();
       }
     }
   };

@@ -78,6 +78,7 @@ export const useQuizForm = (
     if (currentIdx === 0) return;
     setSelectedAnswer(null);
     setShowAnswer(false);
+    setShortAnswer("");
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
@@ -132,6 +133,9 @@ export const useQuizForm = (
     } else if (currentQuiz.type === "SHORT_ANSWER") {
       if (e.key === "Enter" && !e.isComposing) {
         handleShortAnswerSubmit().then(() => handleNext());
+      }
+      if (e.key === " ") {
+        handleNext();
       }
     }
   };

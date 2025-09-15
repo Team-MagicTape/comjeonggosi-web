@@ -18,6 +18,7 @@ import ShortAnswer from "./ShortAnswer";
 import { User } from "@/entities/user/types/user";
 import QuizMode from "./QuizMode";
 import QuizDifficulty from "./QuizDifficulty";
+import HelpText from "@/shared/ui/HelpText";
 
 interface Props {
   categories: Category[];
@@ -64,12 +65,14 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
             className="flex-1 h-full flex transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${currentIdx * 100}%)` }}>
+            style={{ transform: `translateX(-${currentIdx * 100}%)` }}
+          >
             {quizzes.length > 0 ? (
               quizzes.map((quiz, quizIdx) => (
                 <div
                   key={quizIdx}
-                  className="w-full flex-shrink-0 xl:px-4 pb-8">
+                  className="w-full flex-shrink-0 xl:px-4 pb-8"
+                >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div className="mb-2 bg-primary px-6 py-8 text-white flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -135,7 +138,6 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         })}
                       </div>
                     )}
-
                     {quizIdx === currentIdx && showAnswer && (
                       <AnswerFeedback
                         isCorrect={isCorrect}
@@ -157,7 +159,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       <div className="w-full px-4 sm:px-8">
                         <CustomLink
                           className="w-full"
-                          href={`/articles/${quiz?.articleId}`}>
+                          href={`/articles/${quiz?.articleId}`}
+                        >
                           <Button isFullWidth>관련 아티클 읽으러 가기</Button>
                         </CustomLink>
                       </div>
@@ -167,6 +170,9 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       settings={settings}
                       handleSettingChange={handleSettingChange}
                     />
+                    <div className="flex items-center justify-center mb-3">
+                      <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있고 스페이스바를 누르면 다음 문제로 넘어갑니다." />
+                    </div>
                   </div>
                 </div>
               ))
@@ -182,10 +188,12 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}></div>
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
                         <div
                           className="w-2 h-2 bg-primary rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}></div>
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                     </div>
                   </div>

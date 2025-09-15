@@ -14,6 +14,7 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { ArrowLeftIcon } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
+import HelpText from "@/shared/ui/HelpText";
 
 interface Props {
   data: Quiz[];
@@ -137,6 +138,10 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       settings={settings}
                       handleSettingChange={handleSettingChange}
                     />
+                  </div>
+                  <div className="flex">
+                    <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있습니다." />
+                    <HelpText text="TIP2. 스페이스바 누르면 다음문제로 넘어갑니다." />
                   </div>
                 </div>
               ))

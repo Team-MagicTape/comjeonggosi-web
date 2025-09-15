@@ -2,12 +2,16 @@
 
 import { apiClient } from "@/shared/libs/custom-axios";
 import { ChangeEvent, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import CustomLink from "@/shared/ui/CustomLink";
 
 const CreateCategory = () => {
   const [data, setData] = useState({ name: "", description: "" });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleData = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleData = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { value, name } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
@@ -32,6 +36,17 @@ const CreateCategory = () => {
 
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+      {/* 뒤로가기 버튼 */}
+      <div className="mb-6">
+        <CustomLink
+          href="/admin"
+          className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          관리자 대시보드로 돌아가기
+        </CustomLink>
+      </div>
+
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">카테고리 생성</h2>
         <p className="text-gray-600 text-sm">새로운 카테고리를 추가해보세요</p>
@@ -39,7 +54,10 @@ const CreateCategory = () => {
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             카테고리 이름 <span className="text-red-500">*</span>
           </label>
           <input
@@ -55,7 +73,10 @@ const CreateCategory = () => {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             설명
           </label>
           <textarea
@@ -90,9 +111,7 @@ const CreateCategory = () => {
         )}
       </button>
 
-      <p className="text-xs text-gray-500 mt-3 text-center">
-        * 필수 입력 항목
-      </p>
+      <p className="text-xs text-gray-500 mt-3 text-center">* 필수 입력 항목</p>
     </div>
   );
 };

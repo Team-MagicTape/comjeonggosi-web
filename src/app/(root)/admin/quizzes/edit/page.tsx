@@ -71,6 +71,7 @@ const EditQuizzes = () => {
             className="flex items-center justify-between p-4 bg-white border shadow-sm cursor-pointer rounded-2xl"
           >
             <div>
+              <p className="font-semibold">{quiz.id}</p>
               <p className="font-semibold">{quiz.content}</p>
               <p className="text-sm text-gray-500">{quiz.category.name}</p>
             </div>

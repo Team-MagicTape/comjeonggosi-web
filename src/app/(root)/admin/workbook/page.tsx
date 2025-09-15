@@ -3,7 +3,8 @@
 import { apiClient } from "@/shared/libs/custom-axios";
 import { Workbook } from "@/entities/workbook/types/workbook";
 import { useState, useEffect, ChangeEvent } from "react";
-import { BookOpen, Plus, Search, Loader2 } from "lucide-react";
+import { BookOpen, Plus, Search, Loader2, ArrowLeft } from "lucide-react";
+import CustomLink from "@/shared/ui/CustomLink";
 
 const WorkbookAdmin = () => {
   // 워크북 리스트 상태
@@ -116,6 +117,17 @@ const WorkbookAdmin = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-8 p-6 space-y-8">
+      {/* 뒤로가기 버튼 */}
+      <div className="mb-6">
+        <CustomLink
+          href="/admin"
+          className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          관리자 대시보드로 돌아가기
+        </CustomLink>
+      </div>
+
       {/* 헤더 */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">워크북 관리</h1>
@@ -209,7 +221,9 @@ const WorkbookAdmin = () => {
                 id="select-workbook"
                 value={selectedWorkbookId || ""}
                 onChange={(e) =>
-                  setSelectedWorkbookId(e.target.value ? Number(e.target.value) : null)
+                  setSelectedWorkbookId(
+                    e.target.value ? Number(e.target.value) : null
+                  )
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                 disabled={isAddingQuiz || isLoadingWorkbooks}

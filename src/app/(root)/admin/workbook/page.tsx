@@ -4,6 +4,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 import { Workbook } from "@/entities/workbook/types/workbook";
 import { useState, useEffect, ChangeEvent } from "react";
 import { BookOpen, Plus, Search, Loader2 } from "lucide-react";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 const WorkbookAdmin = () => {
   // 워크북 리스트 상태
@@ -11,6 +12,8 @@ const WorkbookAdmin = () => {
   const [filteredWorkbooks, setFilteredWorkbooks] = useState<Workbook[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingWorkbooks, setIsLoadingWorkbooks] = useState(true);
+  
+  const router = useCustomRouter();
 
   // 워크북 생성 상태
   const [newWorkbook, setNewWorkbook] = useState({
@@ -324,6 +327,7 @@ const WorkbookAdmin = () => {
                 <div
                   key={workbook.id}
                   className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  onClick={() => router.push(`/admin/workbook/${workbook.id}`)}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-semibold text-gray-800 text-lg truncate">

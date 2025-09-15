@@ -17,7 +17,7 @@ const NavigationLink = ({ href, name, isNotLogined }: Props) => {
   if (href === "/questions" && isNotLogined) {
     return (
       <div
-        className={`p-2 xl:px-4 xl:py-1 rounded xl:rounded-full text-xs xl:text-base flex-1 xl:flex-none flex flex-col items-center ${
+        className={`p-2 xl:px-4 xl:py-1 rounded xl:rounded-full text-xs xl:text-base flex-1 xl:flex-none flex flex-col items-center cursor-pointer ${
           isActive ? "text-white bg-primary" : "text-black bg-white"
         }`}
         onClick={login.open}>

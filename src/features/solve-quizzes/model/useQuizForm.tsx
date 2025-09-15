@@ -7,7 +7,6 @@ import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
 import { User } from "@/entities/user/types/user";
-import { shuffleArray } from "../utils/shuffle-array";
 
 export const useQuizForm = (
   categories: Category[],

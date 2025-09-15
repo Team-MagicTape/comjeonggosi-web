@@ -122,9 +122,9 @@ export const useQuizForm = (
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
-      if (e.key === "o" || e.key === "O") {
+      if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
-      } else if (e.key === "x" || e.key === "X") {
+      } else if (e.key === "x" || e.key === "X" || e.key === "2") {
         handleAnswerSelect("X");
       }
       if (e.key === " ") {

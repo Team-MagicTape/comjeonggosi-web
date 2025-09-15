@@ -4,6 +4,7 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import QuizForm from "@/features/solve-quizzes/ui/QuizForm";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import HelpText from "@/shared/ui/HelpText";
 
 export const metadata: Metadata = {
   title: "퀴즈 | 컴정고시",
@@ -22,8 +23,8 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const Quizzes = async () => {
@@ -36,6 +37,10 @@ const Quizzes = async () => {
   return (
     <Suspense>
       <QuizForm categories={categories} initialQuiz={quiz} user={user} />
+      <div>
+        <HelpText text="TIP1. 1,2,3,4 입력하여 답을 선택할 수 있습니다." />
+        <HelpText text="TIP2. 스페이스바 누르면 다음문제로 넘어갑니다." />
+      </div>
     </Suspense>
   );
 };

@@ -12,11 +12,15 @@ const Main = async () => {
   
 
   return (
-    <div className="flex flex-col lg:flex-row items-start justify-start gap-4 py-2 lg:py-4">
-      <MainArticle categories={categories} initialData={initialArticles} />
-      <div className="w-full lg:w-auto flex-1 flex flex-col gap-4">
-        <MainQuiz />
-        <MainMailApply />
+    <div className="w-full py-4 lg:py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+        <div className="lg:col-span-2">
+          <MainArticle categories={categories} initialData={initialArticles} />
+        </div>
+        <div className="lg:col-span-1 flex flex-col gap-4">
+          <MainQuiz />
+          <MainMailApply />
+        </div>
       </div>
     </div>
   );

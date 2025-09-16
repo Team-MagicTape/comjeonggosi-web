@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useMemo } from "react";
 import { subscribeMail } from "../api/subscribe-mail";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
@@ -6,6 +6,7 @@ import { EMAIL_REGEX } from "../constants/regex";
 import { SubscribeMail } from "../types/get-mail";
 import { User } from "@/entities/user/types/user";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
+import { mailApplySchema } from "../types/validation";
 
 export const useMailApplyForm = (initialData: SubscribeMail | null, user: User | null) => {
   const [time, setTime] = useState(
@@ -58,6 +59,20 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
       setTime(String(hour).padStart(2, "0"));
     }
   };
+
+  // Form validation
+  const isFormValid = useMemo(() => {
+    try {
+      mailApplySchema.parse({
+        email,
+        selectedCategoryIds,
+        time: Number(time),
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }, [email, selectedCategoryIds, time]);
 
   const handleClick = async () => {
     if(!user) {
@@ -120,5 +135,6 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
     email,
     handleTimeChange,
     handleTimeBlur,
+    isFormValid,
   };
 };

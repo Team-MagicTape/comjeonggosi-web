@@ -10,71 +10,7 @@ export const useGetArticles = (categoryId: string, initialData: Article[]) => {
   });
 
   return {
-    data: [{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    },{
-      id: 1,
-      title: "test",
-      content: "test",
-      category: {
-        id: 1,
-        name: "test",
-      },
-    }],
+    data,
     isLoading,
   };
 };

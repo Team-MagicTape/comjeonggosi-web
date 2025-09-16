@@ -53,19 +53,19 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
   const handleClockMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.buttons !== 1) return;
     const newHour = calculateHourFromPosition(e.clientX, e.clientY, e.currentTarget);
-    handleTimeChange({ target: { value: String(newHour) } } as any);
+    handleTimeChange({ target: { value: String(newHour) } } as never);
   };
 
   const handleClockMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const newHour = calculateHourFromPosition(e.clientX, e.clientY, e.currentTarget);
-    handleTimeChange({ target: { value: String(newHour) } } as any);
+    handleTimeChange({ target: { value: String(newHour) } } as never);
   };
 
   const handleClockTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     if (e.touches.length === 1) {
       const touch = e.touches[0];
       const newHour = calculateHourFromPosition(touch.clientX, touch.clientY, e.currentTarget);
-      handleTimeChange({ target: { value: String(newHour) } } as any);
+      handleTimeChange({ target: { value: String(newHour) } } as never);
     }
   };
 
@@ -73,7 +73,7 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
     if (e.touches.length === 1) {
       const touch = e.touches[0];
       const newHour = calculateHourFromPosition(touch.clientX, touch.clientY, e.currentTarget);
-      handleTimeChange({ target: { value: String(newHour) } } as any);
+      handleTimeChange({ target: { value: String(newHour) } } as never);
     }
   };
 

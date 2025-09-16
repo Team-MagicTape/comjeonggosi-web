@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface SurveyStore {
+interface SurveyState {
   isVisible: boolean;
   setIsVisible: (isVisible: boolean) => void;
 }
 
-export const useSurveyStore = create<SurveyStore>()(
+export const useSurveyStore = create<SurveyState>()(
   persist(
     (set) => ({
       isVisible: true,

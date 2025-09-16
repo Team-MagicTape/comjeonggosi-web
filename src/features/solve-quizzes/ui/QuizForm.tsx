@@ -49,7 +49,6 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
     difficulty,
     setDifficulty,
     isCurrentQuizAnswered,
-    answeredQuizzes,
   } = useQuizForm(categories, initialQuiz, user);
 
   return (
@@ -61,35 +60,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
           setCategory={setCategory}
         />
       </div>
-      {/* 진행도 표시 막대 */}
-      {quizzes.length > 0 && answeredQuizzes.size <= quizzes.length && (
-        <div className="w-full space-y-3 xl:px-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">진행률</span>
-              <span className="text-sm font-semibold text-primary">
-                {answeredQuizzes.size} / {quizzes.length}
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-primary h-2.5 rounded-full transition-all duration-300 ease-out"
-                style={{
-                  width: `${(answeredQuizzes.size / quizzes.length) * 100}%`,
-                }}
-              ></div>
-            </div>
-            <div className="flex justify-between mt-2 text-xs text-gray-500">
-              <span>시작</span>
-              <span>
-                {Math.round((answeredQuizzes.size / quizzes.length) * 100)}%
-                완료
-              </span>
-              <span>완료</span>
-            </div>
-          </div>
-        </div>
-      )}
+      
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div

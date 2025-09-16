@@ -5,10 +5,14 @@ import Survey from "@/widgets/survey/ui/Survey";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="w-full min-h-screen pt-24 xl:pt-36 bg-bg">
-      <Survey/>
-      <Header />
-      <main className="xl:px-13 px-2 w-full max-w-360 mx-auto pb-24 xl:pb-8">{children}</main>
+    <div className="w-full min-h-screen bg-bg">
+      <div className="sticky top-0 w-full z-10">
+        <Survey/>
+        <Header />
+      </div>
+      <main className="w-full max-w-7xl mx-auto px-6 py-8 pb-20 xl:pb-8">
+        {children}
+      </main>
       <Tabbar />
     </div>
   );

@@ -47,7 +47,7 @@ export const useQuizForm = (
 
   const normalizeAnswer = (answer: string) => {
     if (!answer) return '';
-    return answer.replace(/\s+/g, '').toLowerCase().trim();
+    return answer.replace(/\s+/g, '').toLowerCase();
   };
 
   const currentQuiz = quizzes[currentIdx];

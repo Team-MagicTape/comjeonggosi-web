@@ -85,25 +85,24 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   };
 
   const handleKeyboard = (e: KeyboardEvent) => {
-    if (!currentQuiz || isCurrentQuizAnswered) return; // 이미 답변한 문제는 키보드 입력 무시
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
+      if ((e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") && (!currentQuiz || isCurrentQuizAnswered)) {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
-      if (e.key === "o" || e.key === "O" || e.key === "1") {
+      if ((e.key === "o" || e.key === "O" || e.key === "1") && (!currentQuiz || isCurrentQuizAnswered)) {
         handleAnswerSelect("O");
-      } else if (e.key === "x" || e.key === "X" || e.key === "2") {
+      } else if ((e.key === "x" || e.key === "X" || e.key === "2") && (!currentQuiz || isCurrentQuizAnswered)) {
         handleAnswerSelect("X");
       }
       if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {
-      if (e.key === "Enter" && !e.isComposing) {
+      if ((e.key === "Enter" && !e.isComposing) && (!currentQuiz || isCurrentQuizAnswered)) {
         handleShortAnswerSubmit();
       }
       if (e.key === " " && showAnswer) {

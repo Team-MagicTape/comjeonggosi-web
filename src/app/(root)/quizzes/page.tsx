@@ -4,6 +4,7 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import QuizForm from "@/features/solve-quizzes/ui/QuizForm";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import HelpText from "@/shared/ui/HelpText";
 
 export const metadata: Metadata = {
   title: "퀴즈 | 컴정고시",
@@ -22,8 +23,8 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const Quizzes = async () => {

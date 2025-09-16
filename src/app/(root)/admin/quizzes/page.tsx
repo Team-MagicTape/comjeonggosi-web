@@ -2,31 +2,45 @@
 
 import { apiClient } from "@/shared/libs/custom-axios";
 import { ChangeEvent, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import CustomLink from "@/shared/ui/CustomLink";
 
 const CreateQuizzes = () => {
-  const [data, setData] = useState({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "3", type: "MULTIPLE_CHOICE" });
+  const [data, setData] = useState({
+    content: "",
+    answer: "",
+    categoryId: "",
+    articleId: "",
+    difficulty: "3",
+    type: "MULTIPLE_CHOICE",
+  });
   const [options, setOptions] = useState<string[]>([""]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleData = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleData = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { value, name } = e.target;
-    
+
     if (name === "type") {
-      setData((prev) => ({ 
-        ...prev, 
+      setData((prev) => ({
+        ...prev,
         [name]: value,
-        answer: value === "OX" ? "O" : ""
+        answer: value === "OX" ? "O" : "",
       }));
-      
+
       if (value === "MULTIPLE_CHOICE") {
         setOptions([""]);
       } else {
         setOptions([]);
       }
     } else {
-      setData((prev) => ({ 
-        ...prev, 
-        [name]: name === "categoryId" || name === "articleId" ? Number(value) || value : value 
+      setData((prev) => ({
+        ...prev,
+        [name]:
+          name === "categoryId" || name === "articleId"
+            ? Number(value) || value
+            : value,
       }));
     }
   };
@@ -62,9 +76,9 @@ const CreateQuizzes = () => {
     }
 
     let submitOptions: string[] = [];
-    
+
     if (data.type === "MULTIPLE_CHOICE") {
-      const filteredOptions = options.filter(option => option.trim() !== "");
+      const filteredOptions = options.filter((option) => option.trim() !== "");
       if (filteredOptions.length !== 3) {
         alert("객관식 문제는 정답 외에 3개의 오답 선택지를 입력해주세요.");
         return;
@@ -78,14 +92,21 @@ const CreateQuizzes = () => {
 
     setIsLoading(true);
     try {
-      const submitData = { 
-        ...data, 
-        options: submitOptions
+      const submitData = {
+        ...data,
+        options: submitOptions,
       };
-      
+
       await apiClient.post("/api/admin/quizzes", submitData);
       alert("퀴즈 등록 성공");
-      setData({ content: "", answer: "", categoryId: "", articleId: "", difficulty: "", type: "MULTIPLE_CHOICE" });
+      setData({
+        content: "",
+        answer: "",
+        categoryId: "",
+        articleId: "",
+        difficulty: "",
+        type: "MULTIPLE_CHOICE",
+      });
       setOptions([""]);
     } catch {
       alert("퀴즈 등록 실패");
@@ -96,6 +117,17 @@ const CreateQuizzes = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+      {/* 뒤로가기 버튼 */}
+      <div className="mb-6">
+        <CustomLink
+          href="/admin"
+          className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          관리자 대시보드로 돌아가기
+        </CustomLink>
+      </div>
+
       {/* 헤더 */}
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-2">퀴즈 생성</h2>
@@ -104,7 +136,10 @@ const CreateQuizzes = () => {
 
       <div className="space-y-6">
         <div>
-          <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="type"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             퀴즈 타입 <span className="text-red-500">*</span>
           </label>
           <select
@@ -120,14 +155,18 @@ const CreateQuizzes = () => {
             <option value="SHORT_ANSWER">단답형 (Short Answer)</option>
           </select>
           <p className="text-xs text-gray-500 mt-1">
-            {data.type === "MULTIPLE_CHOICE" && "여러 선택지 중 하나를 고르는 문제"}
+            {data.type === "MULTIPLE_CHOICE" &&
+              "여러 선택지 중 하나를 고르는 문제"}
             {data.type === "OX" && "O 또는 X로 답하는 문제"}
             {data.type === "SHORT_ANSWER" && "짧은 답을 직접 입력하는 문제"}
           </p>
         </div>
 
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             문제 <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -143,7 +182,10 @@ const CreateQuizzes = () => {
         </div>
 
         <div>
-          <label htmlFor="answer" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="answer"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             정답 <span className="text-red-500">*</span>
           </label>
           {data.type === "OX" ? (
@@ -158,7 +200,9 @@ const CreateQuizzes = () => {
                   className="mr-2 text-blue-600 focus:ring-blue-500"
                   disabled={isLoading}
                 />
-                <span className="text-lg font-medium text-green-600">O (참)</span>
+                <span className="text-lg font-medium text-green-600">
+                  O (참)
+                </span>
               </label>
               <label className="flex items-center">
                 <input
@@ -170,14 +214,20 @@ const CreateQuizzes = () => {
                   className="mr-2 text-blue-600 focus:ring-blue-500"
                   disabled={isLoading}
                 />
-                <span className="text-lg font-medium text-red-600">X (거짓)</span>
+                <span className="text-lg font-medium text-red-600">
+                  X (거짓)
+                </span>
               </label>
             </div>
           ) : (
             <input
               id="answer"
               type="text"
-              placeholder={data.type === "MULTIPLE_CHOICE" ? "정답을 입력하세요 (선택지와는 별도)" : "정답을 입력하세요"}
+              placeholder={
+                data.type === "MULTIPLE_CHOICE"
+                  ? "정답을 입력하세요 (선택지와는 별도)"
+                  : "정답을 입력하세요"
+              }
               name="answer"
               value={data.answer}
               onChange={handleData}
@@ -186,7 +236,9 @@ const CreateQuizzes = () => {
             />
           )}
           {data.type === "MULTIPLE_CHOICE" && (
-            <p className="text-xs text-gray-500 mt-1">정답은 선택지에 포함되지 않고 별도로 관리됩니다</p>
+            <p className="text-xs text-gray-500 mt-1">
+              정답은 선택지에 포함되지 않고 별도로 관리됩니다
+            </p>
           )}
         </div>
 
@@ -208,7 +260,9 @@ const CreateQuizzes = () => {
             <div className="space-y-2">
               {options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500 w-6">{index + 1}.</span>
+                  <span className="text-sm text-gray-500 w-6">
+                    {index + 1}.
+                  </span>
                   <input
                     type="text"
                     placeholder={`오답 선택지 ${index + 1}`}
@@ -237,7 +291,10 @@ const CreateQuizzes = () => {
         )}
 
         <div>
-          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="categoryId"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             카테고리 ID <span className="text-red-500">*</span>
           </label>
           <input
@@ -253,7 +310,10 @@ const CreateQuizzes = () => {
         </div>
 
         <div>
-          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="difficulty"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             난이도
           </label>
           <input
@@ -271,7 +331,10 @@ const CreateQuizzes = () => {
         </div>
 
         <div>
-          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="articleId"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             아티클 ID
           </label>
           <input
@@ -290,18 +353,20 @@ const CreateQuizzes = () => {
       <button
         onClick={submit}
         disabled={
-          isLoading || 
-          !data.content.trim() || 
-          !data.answer.trim() || 
+          isLoading ||
+          !data.content.trim() ||
+          !data.answer.trim() ||
           !data.categoryId ||
-          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+          (data.type === "MULTIPLE_CHOICE" &&
+            options.filter((opt) => opt.trim()).length < 3)
         }
         className={`w-full mt-6 py-3 px-4 rounded-lg font-medium transition-all duration-200 ${
-          isLoading || 
-          !data.content.trim() || 
-          !data.answer.trim() || 
+          isLoading ||
+          !data.content.trim() ||
+          !data.answer.trim() ||
           !data.categoryId ||
-          (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+          (data.type === "MULTIPLE_CHOICE" &&
+            options.filter((opt) => opt.trim()).length < 3)
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg"
         }`}
@@ -316,9 +381,7 @@ const CreateQuizzes = () => {
         )}
       </button>
 
-      <p className="text-xs text-gray-500 mt-3 text-center">
-        * 필수 입력 항목
-      </p>
+      <p className="text-xs text-gray-500 mt-3 text-center">* 필수 입력 항목</p>
     </div>
   );
 };

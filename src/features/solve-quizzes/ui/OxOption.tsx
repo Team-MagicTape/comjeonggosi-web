@@ -12,6 +12,7 @@ interface Props {
   currentIdx: number;
   showAnswer: boolean;
   handleAnswerSelect: (answer: string) => void;
+  isAnswered?: boolean;
 }
 
 const OxOption = ({
@@ -21,6 +22,7 @@ const OxOption = ({
   currentIdx,
   showAnswer,
   handleAnswerSelect,
+  isAnswered = false,
 }: Props) => {
   return (
     <div className="grid grid-cols-2 gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">
@@ -34,9 +36,10 @@ const OxOption = ({
             onClick={() =>
               quizIdx === currentIdx &&
               !showAnswer &&
+              !isAnswered &&
               handleAnswerSelect(oxOption)
             }
-            disabled={showAnswer || quizIdx !== currentIdx}
+            disabled={showAnswer || quizIdx !== currentIdx || isAnswered}
             className={`
               relative p-6 sm:p-8 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 
               flex flex-col items-center justify-center gap-3 min-h-[120px] sm:min-h-[140px]
@@ -46,7 +49,8 @@ const OxOption = ({
                 isCorrectAnswer,
                 showAnswer
               )}
-            `}>
+            `}
+          >
             <div
               className={`
                 w-16 h-16 sm:w-20 sm:h-20 rounded-full border-3 flex items-center justify-center
@@ -57,7 +61,8 @@ const OxOption = ({
                   isCorrectAnswer,
                   showAnswer
                 )}
-              `}>
+              `}
+            >
               {showAnswer && isCorrectAnswer ? (
                 <Check className="w-8 h-8 sm:w-10 sm:h-10" />
               ) : showAnswer && isSelected && !isCorrectAnswer ? (

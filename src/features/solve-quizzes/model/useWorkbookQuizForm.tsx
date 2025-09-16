@@ -9,6 +9,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [shortAnswer, setShortAnswer] = useState("");
   const [corrected, setCorrected] = useState(0);
+  const [answeredQuizzes, setAnsweredQuizzes] = useState<
+    Map<number, { answer: string; isCorrect: boolean }>
+  >(new Map());
 
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
@@ -18,6 +21,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
+  const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
@@ -25,9 +29,13 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   };
 
   const handleAnswerSelect = async (answer: string) => {
-    if (showAnswer) return;
+    if (showAnswer || isCurrentQuizAnswered) return;
+    const correct = currentQuiz?.answer === answer;
     setSelectedAnswer(answer);
     setShowAnswer(true);
+    setAnsweredQuizzes((prev) =>
+      new Map(prev).set(currentIdx, { answer, isCorrect: correct })
+    );
     submit(answer).then((isCorrect) => {
       if (isCorrect) setCorrected((prev) => prev + 1);
     });
@@ -38,8 +46,17 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const handleNext = () => {
     if (!selectedAnswer || !showAnswer) return;
 
-    setSelectedAnswer(null);
-    setShowAnswer(false);
+    const nextQuizAnswer = answeredQuizzes.get(currentIdx + 1);
+    if (nextQuizAnswer) {
+      // 다음 문제가 답변되어 있다면 해당 답변으로 설정
+      setSelectedAnswer(nextQuizAnswer.answer);
+      setShowAnswer(true);
+    } else {
+      // 답변되지 않은 문제라면 초기화
+      setSelectedAnswer(null);
+      setShowAnswer(false);
+    }
+
     setShortAnswer("");
 
     if (currentIdx >= quizzes.length) return;
@@ -48,8 +65,18 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const handlePrev = () => {
     if (currentIdx === 0) return;
-    setSelectedAnswer(null);
-    setShowAnswer(false);
+
+    const prevQuizAnswer = answeredQuizzes.get(currentIdx - 1);
+    if (prevQuizAnswer) {
+      // 이전 문제가 답변되어 있다면 해당 답변으로 설정
+      setSelectedAnswer(prevQuizAnswer.answer);
+      setShowAnswer(true);
+    } else {
+      // 답변되지 않은 문제라면 초기화
+      setSelectedAnswer(null);
+      setShowAnswer(false);
+    }
+
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
@@ -58,12 +85,12 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   };
 
   const handleKeyboard = (e: KeyboardEvent) => {
-    if (!currentQuiz) return;
+    if (!currentQuiz || isCurrentQuizAnswered) return; // 이미 답변한 문제는 키보드 입력 무시
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
       if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
-      if (e.key === " ") {
+      if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
@@ -72,14 +99,14 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       } else if (e.key === "x" || e.key === "X" || e.key === "2") {
         handleAnswerSelect("X");
       }
-      if (e.key === " ") {
+      if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {
       if (e.key === "Enter" && !e.isComposing) {
-        handleShortAnswerSubmit().then(() => handleNext());
+        handleShortAnswerSubmit();
       }
-      if (e.key === " ") {
+      if (e.key === " " && showAnswer) {
         handleNext();
       }
     }
@@ -88,6 +115,10 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const restart = () => {
     setCurrentIdx(0);
     setCorrected(0);
+    setAnsweredQuizzes(new Map()); // 답변 상태 초기화
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+    setShortAnswer("");
   };
 
   useEffect(() => {
@@ -95,7 +126,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, [currentQuiz, showAnswer, shortAnswer]);
+  }, [currentQuiz, showAnswer, shortAnswer, isCurrentQuizAnswered]);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;
@@ -121,5 +152,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     handleSettingChange,
     corrected,
     restart,
+    isCurrentQuizAnswered,
+    answeredQuizzes,
   };
 };

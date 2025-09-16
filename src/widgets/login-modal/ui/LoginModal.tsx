@@ -18,11 +18,16 @@ const LoginModal = () => {
   if (!visible && !isClosing) return null;
 
   return createPortal(
-    <div className="w-screen h-screen flex items-center justify-center backdrop-blur-xs fixed top-0 left-0 z-[100000] px-2">
+    <div
+      className="w-screen h-screen flex items-center justify-center backdrop-blur-xs fixed top-0 left-0 z-[100000] px-2"
+      onClick={() => login.close()}
+    >
       <div
         className={`w-full max-w-140 p-5 bg-bg flex flex-col gap-1 items-center border border-gray-200 ${
           isClosing ? "modal-animation-out" : "modal-animation-in"
-        } shadow-xl`}>
+        } shadow-xl`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <p className="xl:text-2xl font-bold my-6">
           로그인하고 더 많은 기능을 사용해 보세요!
         </p>
@@ -58,7 +63,8 @@ const LoginModal = () => {
         </Suspense>
         <button
           className="border-b border-gray-500 text-gray-500 mt-4 cursor-pointer"
-          onClick={() => login.close()}>
+          onClick={() => login.close()}
+        >
           나중에 할래요
         </button>
       </div>

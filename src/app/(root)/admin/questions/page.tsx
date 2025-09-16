@@ -1,6 +1,8 @@
 "use client";
 
 import { apiClient } from "@/shared/libs/custom-axios";
+import CustomLink from "@/shared/ui/CustomLink";
+import { ArrowLeft } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
 const CreateQuestion = () => {
@@ -53,6 +55,17 @@ const CreateQuestion = () => {
 
   return (
     <div className="w-full space-y-6">
+      {/* 뒤로가기 버튼 */}
+      <div className="mb-6">
+        <CustomLink
+          href="/admin"
+          className="inline-flex items-center text-gray-600 hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          관리자 대시보드로 돌아가기
+        </CustomLink>
+      </div>
+
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">
           새 질문 만들기
@@ -62,7 +75,8 @@ const CreateQuestion = () => {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700 mb-2">
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               제목 *
             </label>
             <input
@@ -79,7 +93,8 @@ const CreateQuestion = () => {
           <div>
             <label
               htmlFor="content"
-              className="block text-sm font-medium text-gray-700 mb-2">
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               질문 내용 *
             </label>
             <textarea
@@ -96,7 +111,8 @@ const CreateQuestion = () => {
           <div>
             <label
               htmlFor="answer"
-              className="block text-sm font-medium text-gray-700 mb-2">
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               답변 *
             </label>
             <textarea
@@ -114,8 +130,9 @@ const CreateQuestion = () => {
             <div>
               <label
                 htmlFor="day"
-                className="block text-sm font-medium text-gray-700 mb-2">
-                출제일차 *
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                출제일자 *
               </label>
               <input
                 type="number"
@@ -124,7 +141,7 @@ const CreateQuestion = () => {
                 value={question.day}
                 onChange={handleQuestion}
                 min={1}
-                placeholder="출제일차를 입력하세요"
+                placeholder="출제일자를 입력하세요"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none outline-none"
               />
             </div>
@@ -132,7 +149,8 @@ const CreateQuestion = () => {
             <div>
               <label
                 htmlFor="categoryId"
-                className="block text-sm font-medium text-gray-700 mb-2">
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 카테고리 ID *
               </label>
               <input
@@ -154,13 +172,13 @@ const CreateQuestion = () => {
               disabled={loading}
               className={`w-full px-4 py-2 text-white font-medium rounded-md transition-colors ${
                 loading ? "bg-gray-400 cursor-not-allowed" : "bg-primary"
-              }`}>
+              }`}
+            >
               {loading ? "생성 중..." : "질문 생성"}
             </button>
           </div>
         </div>
       </div>
-      
     </div>
   );
 };

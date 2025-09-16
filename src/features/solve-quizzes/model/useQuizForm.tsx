@@ -149,23 +149,23 @@ export const useQuizForm = (
 
   const handleKeyboard = (e: KeyboardEvent) => {
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      if ((e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") && (!currentQuiz || isCurrentQuizAnswered)) {
+      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "OX") {
-      if ((e.key === "o" || e.key === "O" || e.key === "1") && (!currentQuiz || isCurrentQuizAnswered)) {
+      if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
-      } else if ((e.key === "x" || e.key === "X" || e.key === "2") && (!currentQuiz || isCurrentQuizAnswered)) {
+      } else if (e.key === "x" || e.key === "X" || e.key === "2") {
         handleAnswerSelect("X");
       }
       if (e.key === " " && showAnswer) {
         handleNext();
       }
     } else if (currentQuiz.type === "SHORT_ANSWER") {
-      if ((e.key === "Enter" && !e.isComposing) && (!currentQuiz || isCurrentQuizAnswered)) {
+      if (e.key === "Enter" && !e.isComposing) {
         handleShortAnswerSubmit();
       }
       if (e.key === " " && showAnswer) {

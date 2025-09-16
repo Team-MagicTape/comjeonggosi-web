@@ -140,6 +140,7 @@ export const useQuizForm = (
       setQuizzes([]);
       setCurrentIdx(0);
       setAnsweredQuizzes(new Map());
+      setSelectedAnswer(null);
     }
   }, [category]);
 

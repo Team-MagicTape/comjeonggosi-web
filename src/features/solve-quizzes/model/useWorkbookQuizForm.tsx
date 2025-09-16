@@ -9,7 +9,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [shortAnswer, setShortAnswer] = useState("");
   const [corrected, setCorrected] = useState(0);
-  const [answeredQuizzes, setAnsweredQuizzes] = useState<Map<number, { answer: string; isCorrect: boolean }>>(new Map());
+  const [answeredQuizzes, setAnsweredQuizzes] = useState<
+    Map<number, { answer: string; isCorrect: boolean }>
+  >(new Map());
 
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
@@ -31,7 +33,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     const correct = currentQuiz?.answer === answer;
     setSelectedAnswer(answer);
     setShowAnswer(true);
-    setAnsweredQuizzes(prev => new Map(prev).set(currentIdx, { answer, isCorrect: correct }));
+    setAnsweredQuizzes((prev) =>
+      new Map(prev).set(currentIdx, { answer, isCorrect: correct })
+    );
     submit(answer).then((isCorrect) => {
       if (isCorrect) setCorrected((prev) => prev + 1);
     });
@@ -52,7 +56,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       setSelectedAnswer(null);
       setShowAnswer(false);
     }
-    
+
     setShortAnswer("");
 
     if (currentIdx >= quizzes.length) return;
@@ -61,7 +65,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const handlePrev = () => {
     if (currentIdx === 0) return;
-    
+
     const prevQuizAnswer = answeredQuizzes.get(currentIdx - 1);
     if (prevQuizAnswer) {
       // 이전 문제가 답변되어 있다면 해당 답변으로 설정
@@ -72,7 +76,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       setSelectedAnswer(null);
       setShowAnswer(false);
     }
-    
+
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
@@ -149,5 +153,6 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     corrected,
     restart,
     isCurrentQuizAnswered,
+    answeredQuizzes,
   };
 };

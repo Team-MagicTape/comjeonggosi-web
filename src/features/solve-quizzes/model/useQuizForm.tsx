@@ -213,5 +213,6 @@ export const useQuizForm = (
     difficulty,
     setDifficulty,
     isCurrentQuizAnswered,
+    answeredQuizzes,
   };
 };

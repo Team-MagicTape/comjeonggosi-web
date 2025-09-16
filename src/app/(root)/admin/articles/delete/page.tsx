@@ -34,17 +34,13 @@ const DeleteArticles = () => {
   const { data: articles } = useQuery({
     queryKey: ["articles", `${category?.value}`],
     queryFn: async () => {
-      try {
-        const { data } = await apiClient.get<Article[]>(
-          `/api/admin/articles?categoryId=${category?.value || 1}`
-        );
-        if (typeof data === "string") {
-          throw new Error("로그인이 필요합니다");
-        }
-        return data;
-      } catch (e) {
-        alert(e);
+      const { data } = await apiClient.get<Article[]>(
+        `/api/admin/articles?categoryId=${category?.value || 1}`
+      );
+      if (typeof data === "string") {
+        throw new Error("로그인이 필요합니다");
       }
+      return data;
     },
   });
 

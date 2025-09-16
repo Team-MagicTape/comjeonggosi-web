@@ -1,40 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
-import { Tab } from "@/widgets/tabs/types/tab";
-import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
-import { fetchQuiz } from "@/entities/quiz/api/fetch-quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
-import { login } from "@/widgets/login-modal/libs/modal-controller";
-import { User } from "@/entities/user/types/user";
 
-export const useQuizForm = (
-  categories: Category[],
-  initialQuiz: Quiz | null,
-  user: User | null
-) => {
-  const categoryList: Tab[] = categories.map((item) => ({
-    name: item.name,
-    value: String(item.id),
-  }));
-  const modeList = [
-    { name: "랜덤퀴즈", value: "RANDOM" },
-    { name: "추천퀴즈", value: "RECOMMEND" },
-    { name: "복습퀴즈", value: "REVIEW" },
-    { name: "약점보강퀴즈", value: "WEAKNESS" },
-  ];
-
-  const [category, setCategory] = useState<Tab>(categoryList[0]);
-  const [mode, setMode] = useState<Tab>(modeList[0]);
-  const [difficulty, setDifficulty] = useState(3);
+export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [quizzes, setQuizzes] = useState<Quiz[]>(
-    initialQuiz ? [initialQuiz] : []
-  );
   const [shortAnswer, setShortAnswer] = useState("");
-  const isInitialRender = useRef(true);
+  const [corrected, setCorrected] = useState(0);
   const [answeredQuizzes, setAnsweredQuizzes] = useState<
     Map<number, { answer: string; isCorrect: boolean }>
   >(new Map());
@@ -51,32 +25,20 @@ export const useQuizForm = (
 
   const submit = async (answer: string) => {
     const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    return isCorrect;
+    return isCorrect as boolean;
   };
-
-  const getQuizzes = useCallback(async () => {
-    if (!category) return;
-    const quiz = await fetchQuiz(
-      category.value,
-      mode.value,
-      `${difficulty}`,
-      settings.hideSolved
-    );
-    if (quiz) {
-      setQuizzes((prev) => [...prev, quiz]);
-    }
-  }, [category, mode, difficulty]);
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
     const correct = currentQuiz?.answer === answer;
     setSelectedAnswer(answer);
     setShowAnswer(true);
-    // 답변 상태를 저장
     setAnsweredQuizzes((prev) =>
       new Map(prev).set(currentIdx, { answer, isCorrect: correct })
     );
-    submit(answer);
+    submit(answer).then((isCorrect) => {
+      if (isCorrect) setCorrected((prev) => prev + 1);
+    });
   };
 
   const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
@@ -95,6 +57,9 @@ export const useQuizForm = (
       setShowAnswer(false);
     }
 
+    setShortAnswer("");
+
+    if (currentIdx >= quizzes.length) return;
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
   };
 
@@ -112,66 +77,65 @@ export const useQuizForm = (
       setShowAnswer(false);
     }
 
-    setShortAnswer("");
     setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
   };
 
   const handleSettingChange = (setting: keyof Settings) => {
-    if (!user) {
-      login.open();
-      return;
-    }
     setSettings((prev) => ({ ...prev, [setting]: !prev[setting] }));
   };
 
-  useEffect(() => {
-    if (currentIdx !== 0) getQuizzes();
-    setShortAnswer("");
-  }, [currentIdx, category]);
-
-  useEffect(() => {
-    if (quizzes.length === 0 && currentIdx === 0) {
-      getQuizzes();
-    }
-  }, [currentIdx, quizzes.length, getQuizzes]);
-
-  useEffect(() => {
-    if (!isInitialRender.current) {
-      setQuizzes([]);
-      setCurrentIdx(0);
-      setAnsweredQuizzes(new Map());
-    }
-  }, [category]);
-
-  useEffect(() => {
-    isInitialRender.current = false;
-  }, []);
-
   const handleKeyboard = (e: KeyboardEvent) => {
+    if (!currentQuiz) return;
+
+    const target = e.target as HTMLElement | null;
+    const isTyping =
+      !!target &&
+      (target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable);
+
+    // 스페이스/스페이스바로 다음으로 (단, 입력 중이 아닐 때만)
+    if (
+      (e.code === "Space" ||
+        e.key === " " ||
+        e.key === "Spacebar" ||
+        e.key === "Enter") &&
+      showAnswer &&
+      !isTyping
+    ) {
+      e.preventDefault(); // 스페이스로 페이지가 스크롤되는 것을 막음
+      handleNext();
+      return;
+    }
+
+    // 이후에는 답안 선택만 막고 싶으면 그대로 막음
+    if (isCurrentQuizAnswered) return;
+
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      if (e.key === "1" || e.key === "2" || e.key === "3" || e.key === "4") {
+      if (["1", "2", "3", "4"].includes(e.key)) {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
-      if (e.key === " " && showAnswer) {
-        handleNext();
-      }
+      // (스페이스는 위에서 처리)
     } else if (currentQuiz.type === "OX") {
       if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
       } else if (e.key === "x" || e.key === "X" || e.key === "2") {
         handleAnswerSelect("X");
       }
-      if (e.key === " " && showAnswer) {
-        handleNext();
-      }
     } else if (currentQuiz.type === "SHORT_ANSWER") {
       if (e.key === "Enter" && !e.isComposing) {
         handleShortAnswerSubmit();
       }
-      if (e.key === " " && showAnswer) {
-        handleNext();
-      }
     }
+  };
+
+  const restart = () => {
+    setCurrentIdx(0);
+    setCorrected(0);
+    setAnsweredQuizzes(new Map()); // 답변 상태 초기화
+    setSelectedAnswer(null);
+    setShowAnswer(false);
+    setShortAnswer("");
   };
 
   useEffect(() => {
@@ -189,9 +153,6 @@ export const useQuizForm = (
   }, [showAnswer, settings.autoNext, settings.noDelay]);
 
   return {
-    category,
-    setCategory,
-    categoryList,
     currentIdx,
     currentQuiz,
     quizzes,
@@ -206,11 +167,9 @@ export const useQuizForm = (
     handlePrev,
     settings,
     handleSettingChange,
-    modeList,
-    mode,
-    setMode,
-    difficulty,
-    setDifficulty,
+    corrected,
+    restart,
     isCurrentQuizAnswered,
+    answeredQuizzes,
   };
 };

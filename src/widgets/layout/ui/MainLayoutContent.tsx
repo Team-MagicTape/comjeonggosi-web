@@ -19,7 +19,7 @@ export default function MainLayoutContent({ children, user }: Props) {
         <Header user={user} />
       </div>
       <main className={`max-w-7xl mx-auto px-4 lg:px-6 pb-20 xl:pb-8 min-h-screen ${
-        isVisible ? "pt-[104px] xl:pt-[112px]" : "pt-[72px] xl:pt-[80px]"
+        isVisible ? "pt-[88px] xl:pt-[96px]" : "pt-[56px] xl:pt-[64px]"
       }`}>
         {children}
       </main>

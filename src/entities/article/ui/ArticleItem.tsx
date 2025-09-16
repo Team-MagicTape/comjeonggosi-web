@@ -21,9 +21,16 @@ const ArticleItem = ({ data, isLoading }: Props) => {
   )
 
   return (
-    <CustomLink href={`/articles/${data.id}`} className="w-full p-3 rounded-lg border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all space-y-1 group">
-      <p className="text-base xl:text-lg font-medium text-gray-900 text-nowrap text-ellipsis overflow-hidden">{data.title}</p>
-      <p className="text-sm text-gray-600 text-nowrap text-ellipsis overflow-hidden">{data.content.length > 32 ? data.content.slice(0, 30) + "..." : data.content}</p>
+    <CustomLink 
+      href={`/articles/${data.id}`} 
+      className="block p-3 rounded-md bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer group"
+    >
+      <h3 className="font-medium text-gray-900 mb-1 line-clamp-1">
+        {data.title}
+      </h3>
+      <p className="text-sm text-gray-600 line-clamp-2">
+        {data.content}
+      </p>
     </CustomLink>
   )
 }

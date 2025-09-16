@@ -43,20 +43,20 @@ const ArticleDetail = async ({ params }: PathParams) => {
   }
 
   return (
-    <div className="xl:gap-8 xl:flex">
-      <div className="hidden xl:block">
-        <ArticleSidebar data={articles} title="관련글" />
-      </div>
-      <div className="w-full bg-white border border-border rounded-2xl p-8 flex flex-col gap-6">
-        <span className="flex items-center justify-between w-full">
-          <h1 className="font-extrabold xl:text-3xl text-2xl">
+    <div className="py-4 lg:py-6">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+        <aside className="hidden lg:block lg:w-64 xl:w-80">
+          <ArticleSidebar data={articles} title="관련글" />
+        </aside>
+        <main className="flex-1 bg-white border border-gray-100 rounded-lg p-4 lg:p-6 xl:p-8">
+          <h1 className="text-2xl lg:text-3xl font-bold mb-4">
             {article.title}
           </h1>
-        </span>
-        <hr className="border border-gray-200 w-full" />
-        <div className="font-medium">
-          <Markdown content={article.content} />
-        </div>
+          <hr className="border-gray-100 mb-6" />
+          <div className="prose prose-gray max-w-none">
+            <Markdown content={article.content} />
+          </div>
+        </main>
       </div>
     </div>
   );

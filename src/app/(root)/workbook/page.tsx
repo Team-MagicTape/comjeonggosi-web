@@ -38,11 +38,10 @@ const Workbooks = async () => {
     );
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      {/* 헤더 섹션 */}
-      <div className="mb-8">
-        <h1 className="font-extrabold text-4xl mb-2">문제집</h1>
-        <p className="text-[16px] font-bold text-[#b7b7b7]">
+    <div className="w-full py-4 lg:py-6">
+      <div className="mb-6">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-2">문제집</h1>
+        <p className="text-sm lg:text-base text-gray-600">
           주제별로 정리된 문제집으로 체계적인 학습을 시작해보세요
         </p>
       </div>

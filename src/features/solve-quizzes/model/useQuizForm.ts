@@ -70,7 +70,7 @@ export const useQuizForm = (
     if (quiz) {
       setQuizzes((prev) => [...prev, quiz]);
     }
-  }, [category, mode, difficulty, settings.autoNext]);
+  }, [category, mode, difficulty, settings.hideSolved]);
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;

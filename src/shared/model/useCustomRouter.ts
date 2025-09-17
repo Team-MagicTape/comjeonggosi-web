@@ -11,20 +11,20 @@ export const useCustomRouter = () => {
   const push = (href: string) => {
     if (pathname !== href) {
       setIsLoading(true);
-      setTimeout(() => router.push(href), 200);
+      router.push(href);
     }
   };
 
   const replace = (href: string) => {
     if (pathname !== href) {
       setIsLoading(true);
-      setTimeout(() => router.replace(href), 200);
+      router.replace(href);
     }
   };
 
   const back = () => {
     setIsLoading(true);
-    setTimeout(() => router.back(), 200);
+    router.back();
   };
 
   const refresh = () => {

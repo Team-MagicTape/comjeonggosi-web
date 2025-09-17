@@ -14,8 +14,6 @@ interface Props {
 const MailApplyForm = ({ initialData, categories, user }: Props) => {
   const {
     time,
-    handleTimeDown,
-    handleTimeUp,
     isSubscribed,
     handleClick,
     handleCategoryChange,
@@ -23,7 +21,6 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
     handleEmail,
     email,
     handleTimeChange,
-    handleTimeBlur,
     isFormValid,
   } = useMailApplyForm(initialData, user);
 

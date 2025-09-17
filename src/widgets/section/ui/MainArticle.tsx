@@ -7,7 +7,6 @@ import { Article } from "@/entities/article/types/article";
 import { useGetArticles } from "@/entities/article/model/useGetArticles";
 import { useArticleCategory } from "../model/useArticleCategory";
 import CustomLink from "@/shared/ui/CustomLink";
-import { ArrowRight } from "lucide-react";
 
 interface Props {
   categories: Category[];

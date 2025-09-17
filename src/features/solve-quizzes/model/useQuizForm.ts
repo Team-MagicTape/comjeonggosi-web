@@ -51,7 +51,7 @@ export const useQuizForm = (
   }, []);
 
   const currentQuiz = quizzes[currentIdx];
-  const isCorrect = normalizeAnswer(selectedAnswer || '') === normalizeAnswer(currentQuiz?.answer || '');
+  const isCorrect = normalizeAnswer(selectedAnswer) === normalizeAnswer(currentQuiz?.answer);
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {

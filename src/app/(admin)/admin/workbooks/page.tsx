@@ -1,14 +1,14 @@
 import { fetchWorkbooks } from "@/entities/workbook/api/fetch-workbooks";
-import AdminPageHeader from "@/widgets/admin/ui/AdminPageHeader";
+import AdminHeader from "@/widgets/admin/ui/AdminHeader";
 import WorkbookManagement from "@/features/workbook-management/ui/WorkbookManagement";
 import { Plus } from "lucide-react";
 
-const WorkbooksAdminPage = async () => {
+const WorkbooksAdmin = async () => {
   const workbooks = await fetchWorkbooks();
 
   return (
     <div>
-      <AdminPageHeader
+      <AdminHeader
         title="문제집 관리"
         description={`전체 ${workbooks?.length || 0}개의 문제집`}
         action={
@@ -24,4 +24,4 @@ const WorkbooksAdminPage = async () => {
   );
 };
 
-export default WorkbooksAdminPage;
+export default WorkbooksAdmin;

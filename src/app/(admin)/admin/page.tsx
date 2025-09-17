@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import CustomLink from "@/shared/ui/CustomLink";
 
-const AdminPage = async () => {
+const Admin = async () => {
   const stats = [
     {
       label: "전체 아티클",
@@ -152,4 +152,4 @@ const AdminPage = async () => {
   );
 };
 
-export default AdminPage;
+export default Admin;

@@ -1,15 +1,15 @@
 import { fetchArticles } from "@/entities/article/api/fetch-articles";
-import AdminPageHeader from "@/widgets/admin/ui/AdminPageHeader";
+import AdminHeader from "@/widgets/admin/ui/AdminHeader";
 import ArticleManagement from "@/features/article-management/ui/ArticleManagement";
 import CustomLink from "@/shared/ui/CustomLink";
 import { Plus } from "lucide-react";
 
-const AdminArticlesPage = async () => {
+const AdminArticles = async () => {
   const articles = await fetchArticles("0");
 
   return (
     <div>
-      <AdminPageHeader
+      <AdminHeader
         title="아티클 관리"
         description={`전체 ${articles.length}개의 아티클`}
         action={
@@ -28,4 +28,4 @@ const AdminArticlesPage = async () => {
   );
 };
 
-export default AdminArticlesPage;
+export default AdminArticles;

@@ -1,13 +1,13 @@
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
-import AdminPageHeader from "@/widgets/admin/ui/AdminPageHeader";
+import AdminHeader from "@/widgets/admin/ui/AdminHeader";
 import CategoryManagement from "@/features/category-management/ui/CategoryManagement";
 
-const CategoriesAdminPage = async () => {
+const CategoriesAdmin = async () => {
   const categories = await fetchCategories();
 
   return (
     <div>
-      <AdminPageHeader
+      <AdminHeader
         title="카테고리 관리"
         description={`전체 ${categories.length}개의 카테고리`}
       />
@@ -17,4 +17,4 @@ const CategoriesAdminPage = async () => {
   );
 };
 
-export default CategoriesAdminPage;
+export default CategoriesAdmin;

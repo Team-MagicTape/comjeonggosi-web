@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "문제집 | 컴정고시",
     description: "CS 공부는 컴정고시!",
-    url: "https://comgo.dev/workbook",
+    url: "https://comgo.dev/workbooks",
     siteName: "컴정고시",
     images: [
       {

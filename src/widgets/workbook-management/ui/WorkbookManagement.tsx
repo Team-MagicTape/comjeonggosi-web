@@ -136,7 +136,7 @@ const WorkbookManagement = ({ initialWorkbooks }: Props) => {
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          onClick={() => router.push(`/workbook/${workbook.id}`)}
+                          onClick={() => router.push(`/workbooks/${workbook.id}`)}
                           className="p-1.5 text-gray-600 hover:bg-gray-100 rounded transition-colors"
                         >
                           <Eye className="w-4 h-4" />

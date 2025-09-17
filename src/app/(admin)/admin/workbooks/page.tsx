@@ -1,6 +1,6 @@
 import { fetchWorkbooks } from "@/entities/workbook/api/fetch-workbooks";
 import AdminHeader from "@/widgets/admin/ui/AdminHeader";
-import WorkbookManagement from "@/features/workbook-management/ui/WorkbookManagement";
+import WorkbookManagement from "@/widgets/workbook-management/ui/WorkbookManagement";
 import { Plus } from "lucide-react";
 
 const WorkbooksAdmin = async () => {

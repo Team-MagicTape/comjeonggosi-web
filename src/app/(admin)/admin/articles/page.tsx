@@ -1,6 +1,6 @@
 import { fetchArticles } from "@/entities/article/api/fetch-articles";
 import AdminHeader from "@/widgets/admin/ui/AdminHeader";
-import ArticleManagement from "@/features/article-management/ui/ArticleManagement";
+import ArticleManagement from "@/widgets/article-management/ui/ArticleManagement";
 import CustomLink from "@/shared/ui/CustomLink";
 import { Plus } from "lucide-react";
 

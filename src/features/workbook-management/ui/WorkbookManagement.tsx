@@ -29,7 +29,7 @@ const WorkbookManagement = ({ initialWorkbooks }: Props) => {
       const filtered = workbooks.filter(
         (workbook) =>
           workbook.name.toLowerCase().includes(query) ||
-          workbook.description?.toLowerCase().includes(query)
+          (workbook.description || "").toLowerCase().includes(query)
       );
       setFilteredWorkbooks(filtered);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Article } from "@/entities/article/types/article";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import AdminEmptyState from "@/widgets/admin/ui/AdminEmptyState";
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const ArticleManagement = ({ articles }: Props) => {
+  const router = useRouter();
   const [filteredArticles, setFilteredArticles] = useState(articles);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -45,7 +47,7 @@ const ArticleManagement = ({ articles }: Props) => {
 
     try {
       await apiClient.delete(`/api/articles/${id}`);
-      window.location.reload();
+      router.refresh();
     } catch {
       alert("아티클 삭제에 실패했습니다.");
     }

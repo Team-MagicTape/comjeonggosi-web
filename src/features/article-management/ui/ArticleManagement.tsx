@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 import { Article } from "@/entities/article/types/article";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import AdminEmptyState from "@/widgets/admin/ui/AdminEmptyState";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const ArticleManagement = ({ articles }: Props) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const [filteredArticles, setFilteredArticles] = useState(articles);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");

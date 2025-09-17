@@ -6,7 +6,7 @@ import AdminCard from "@/widgets/admin/ui/AdminCard";
 import AdminEmptyState from "@/widgets/admin/ui/AdminEmptyState";
 import { BookOpen, Search, Plus, Edit2, Trash2, Eye, Loader2 } from "lucide-react";
 import { apiClient } from "@/shared/libs/custom-axios";
-import { useRouter } from "next/navigation";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 interface Props {
   initialWorkbooks: Workbook[];
@@ -19,7 +19,7 @@ const WorkbookManagement = ({ initialWorkbooks }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [newWorkbook, setNewWorkbook] = useState({ name: "", description: "" });
-  const router = useRouter();
+  const router = useCustomRouter();
 
   useEffect(() => {
     if (!searchQuery.trim()) {

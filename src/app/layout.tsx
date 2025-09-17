@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
 import ToastContainer from "@/shared/providers/ToastProvider";
 import LoadingProvider from "@/shared/providers/LoadingProvider";
 import LoginModal from "@/widgets/login-modal/ui/LoginModal";
 import QueryProvider from "@/shared/providers/QueryProvider";
-import '@uiw/react-markdown-preview/markdown.css';
+import "@uiw/react-markdown-preview/markdown.css";
 
 export const metadata: Metadata = {
   title: "컴정고시",
   description: "CS 공부는 컴정고시!",
+  icons: "https://comgo.dev/favicon.ico",
   openGraph: {
     title: "컴정고시",
     description: "CS 공부는 컴정고시!",
@@ -24,8 +26,8 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const pretendard = localFont({
@@ -43,8 +45,28 @@ const RootLayout = ({
   return (
     <html lang="ko">
       <head>
-        <meta name="naver-site-verification" content="20f87f30312aa779521bfee11fdd46a4d4cdf3c9" />
-        <meta name="google-site-verification" content="PhsLSvkuuE4o7QCk2GvBMuI-Mqvbpf3bfIeDBMhgm0M" />
+        <meta
+          name="naver-site-verification"
+          content="20f87f30312aa779521bfee11fdd46a4d4cdf3c9"
+        />
+        <meta
+          name="google-site-verification"
+          content="PhsLSvkuuE4o7QCk2GvBMuI-Mqvbpf3bfIeDBMhgm0M"
+        />
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZPY0C72F9Y"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-ZPY0C72F9Y', {
+                page_path: window.location.pathname,
+              });
+          `}
+        </Script>
       </head>
       <body className={`${pretendard.variable} antialiased`}>
         <ToastContainer />

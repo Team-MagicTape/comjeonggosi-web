@@ -45,8 +45,13 @@ export const useQuizForm = (
     noDelay: false,
   });
 
+  const normalizeAnswer = useCallback((answer: string | null | undefined) => {
+    if (!answer) return '';
+    return answer.replace(/\s+/g, '').toLowerCase();
+  }, []);
+
   const currentQuiz = quizzes[currentIdx];
-  const isCorrect = currentQuiz?.answer === selectedAnswer;
+  const isCorrect = normalizeAnswer(selectedAnswer) === normalizeAnswer(currentQuiz?.answer);
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
@@ -69,7 +74,7 @@ export const useQuizForm = (
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
-    const correct = currentQuiz?.answer === answer;
+    const correct = normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer);
     setSelectedAnswer(answer);
     setShowAnswer(true);
     // 답변 상태를 저장
@@ -140,6 +145,7 @@ export const useQuizForm = (
       setQuizzes([]);
       setCurrentIdx(0);
       setAnsweredQuizzes(new Map());
+      setSelectedAnswer(null);
     }
   }, [category]);
 

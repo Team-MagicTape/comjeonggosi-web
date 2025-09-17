@@ -1,7 +1,6 @@
 "use client";
 
 import CustomLink from "@/shared/ui/CustomLink";
-import { ArrowRight } from "lucide-react";
 
 const MainQuiz = () => {
   return (

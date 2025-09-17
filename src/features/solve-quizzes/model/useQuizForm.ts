@@ -146,6 +146,7 @@ export const useQuizForm = (
       setCurrentIdx(0);
       setAnsweredQuizzes(new Map());
       setSelectedAnswer(null);
+      setShowAnswer(false);
     }
   }, [category, mode, difficulty]);
 

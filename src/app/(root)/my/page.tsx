@@ -8,7 +8,7 @@ import { fetchInitialMails } from "@/entities/mail/api/fetch-initial-mails";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
-import MyPageContentCards from "@/widgets/section/ui/MyPageContentCard";
+import MyContentCards from "@/widgets/section/ui/MyContentCard";
 
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "마이페이지 | 컴정고시",
     description: "CS 공부는 컴정고시!",
-    url: "https://comgo.dev/my-page",
+    url: "https://comgo.dev/my",
     siteName: "컴정고시",
     images: [
       {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   }
 };
 
-const MyPage = async () => {
+const My = async () => {
   const [user, categories, submissions, mails] = await Promise.all([
     fetchUser(),
     fetchCategories(),
@@ -64,7 +64,7 @@ const MyPage = async () => {
           <LogoutButton />
         </div>
       </div>
-      <MyPageContentCards
+      <MyContentCards
         items={[
           {
             child: <MySubmissions submissions={submissions} />,
@@ -80,4 +80,4 @@ const MyPage = async () => {
   );
 };
 
-export default MyPage;
+export default My;

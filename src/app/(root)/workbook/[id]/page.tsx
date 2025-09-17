@@ -2,7 +2,7 @@ import { fetchWorkbook } from "@/entities/workbook/api/fetch-workbook";
 import { notFound } from "next/navigation";
 import { PathParams } from "@/shared/types/path-params";
 import { Metadata } from "next";
-import WorkbookDetail from "@/entities/workbook/ui/WorkbookDetail";
+import WorkbookDetailContent from "@/entities/workbook/ui/WorkbookDetail";
 
 export async function generateMetadata({
   params,
@@ -32,7 +32,7 @@ export async function generateMetadata({
   };
 }
 
-const WorkbookDetailPage = async ({ params }: PathParams) => {
+const WorkbookDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const workbook = await fetchWorkbook(Number(id));
 
@@ -40,7 +40,7 @@ const WorkbookDetailPage = async ({ params }: PathParams) => {
     notFound();
   }
 
-  return <WorkbookDetail workbook={workbook} />;
+  return <WorkbookDetailContent workbook={workbook} />;
 };
 
-export default WorkbookDetailPage;
+export default WorkbookDetail;

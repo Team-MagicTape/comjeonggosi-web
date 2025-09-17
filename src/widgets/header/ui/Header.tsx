@@ -68,7 +68,7 @@ const Header = ({ user }: Props) => {
         
         <div className="flex items-center gap-4">
           {user ? (
-            <CustomLink href="/my-page" className="block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+            <CustomLink href="/my" className="block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
               <img
                 src={user.profileImageUrl}
                 alt="Profile"

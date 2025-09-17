@@ -2,7 +2,7 @@ import EditArticleForm from "@/features/edit-article/ui/EditArticleForm";
 import { PathParams } from "@/shared/types/path-params";
 import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 
-const EditArticlePage = async ({ params }: PathParams) => {
+const EditArticle = async ({ params }: PathParams) => {
   const { id } = await params;
   const articleId = Number(id);
   const article = await getArticleDetail(articleId);
@@ -18,4 +18,4 @@ const EditArticlePage = async ({ params }: PathParams) => {
   );
 };
 
-export default EditArticlePage;
+export default EditArticle;

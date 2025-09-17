@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
 import ToastContainer from "@/shared/providers/ToastProvider";
@@ -52,23 +53,20 @@ const RootLayout = ({
           name="google-site-verification"
           content="PhsLSvkuuE4o7QCk2GvBMuI-Mqvbpf3bfIeDBMhgm0M"
         />
-        <script
-          async
+        <Script
+          strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-ZPY0C72F9Y"
         />
-        <script
-          id="google-analytics"
-          dangerouslySetInnerHTML={{
-            __html: `
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
               gtag('config', 'G-ZPY0C72F9Y', {
                 page_path: window.location.pathname,
               });
-            `,
-          }}
-        />
+          `}
+        </Script>
       </head>
       <body className={`${pretendard.variable} antialiased`}>
         <ToastContainer />

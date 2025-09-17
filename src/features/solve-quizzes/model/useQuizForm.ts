@@ -45,10 +45,10 @@ export const useQuizForm = (
     noDelay: false,
   });
 
-  const normalizeAnswer = (answer: string) => {
+  const normalizeAnswer = useCallback((answer: string | null | undefined) => {
     if (!answer) return '';
     return answer.replace(/\s+/g, '').toLowerCase();
-  };
+  }, []);
 
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = normalizeAnswer(selectedAnswer || '') === normalizeAnswer(currentQuiz?.answer || '');

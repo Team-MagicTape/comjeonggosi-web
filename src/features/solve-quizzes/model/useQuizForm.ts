@@ -74,7 +74,7 @@ export const useQuizForm = (
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
-    const correct = normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer || '')
+    const correct = normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer);
     setSelectedAnswer(answer);
     setShowAnswer(true);
     // 답변 상태를 저장

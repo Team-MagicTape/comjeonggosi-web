@@ -16,7 +16,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${workbook?.name || "문제집"} | 컴정고시`,
       description: `${workbook?.description || "CS 공부는 컴정고시!"}`,
-      url: `https://comgo.dev/workbook/${id}`,
+      url: `https://comgo.dev/workbooks/${id}`,
       siteName: "컴정고시",
       images: [
         {

@@ -10,7 +10,7 @@ interface Props {
 const WorkbookElement = ({ workbook }: Props) => {
   return (
     <CustomLink
-      href={`/workbook/${workbook.id}`}
+      href={`/workbooks/${workbook.id}`}
       className="w-full h-full bg-white rounded-lg border border-gray-100 p-4 lg:p-5 hover:border-gray-200 transition-colors group cursor-pointer"
     >
       <div className="flex flex-col h-full">

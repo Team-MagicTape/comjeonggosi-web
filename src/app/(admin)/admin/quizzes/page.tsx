@@ -1,6 +1,6 @@
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import AdminHeader from "@/widgets/admin/ui/AdminHeader";
-import QuizCreator from "@/features/quiz-creator/ui/QuizCreator";
+import QuizCreator from "@/widgets/quiz-creator/ui/QuizCreator";
 
 const QuizzesAdmin = async () => {
   const categories = await fetchCategories();

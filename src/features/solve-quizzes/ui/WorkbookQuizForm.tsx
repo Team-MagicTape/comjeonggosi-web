@@ -302,7 +302,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       <p>다시풀기</p>
                     </Button>
                     <CustomLink
-                      href="/workbook"
+                      href="/workbooks"
                       className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
                     >
                       <ArrowLeftIcon />

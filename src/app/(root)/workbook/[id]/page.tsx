@@ -35,7 +35,6 @@ export async function generateMetadata({
 const WorkbookDetailPage = async ({ params }: PathParams) => {
   const { id } = await params;
   const workbook = await fetchWorkbook(Number(id));
-  console.log(workbook);
 
   if (!workbook) {
     notFound();

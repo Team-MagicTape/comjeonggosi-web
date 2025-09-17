@@ -3,7 +3,6 @@ import { getSubscription } from "@/features/mail-apply/api/get-subscription";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { Metadata } from "next";
-import HelpText from "@/shared/ui/HelpText";
 
 export const metadata: Metadata = {
   title: "메일 신청 | 컴정고시",
@@ -34,13 +33,12 @@ const MailApply = async () => {
   ]);
 
   return (
-    <div>
+    <div className="w-full py-4 lg:py-6">
       <MailApplyForm
         initialData={subscription}
         categories={categories}
         user={user}
       />
-      <HelpText text="TIP. 메일을 신청하면 매일 질문을 보내드려요" />
     </div>
   );
 };

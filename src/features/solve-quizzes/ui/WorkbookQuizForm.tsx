@@ -91,8 +91,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
                           : "bg-primary"
                       }`}
                     >
+                      <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-sm font-medium text-white">{quizIdx + 1}</span>
+                      </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
-                        {quizIdx + 1}.{quiz?.content}
+                        {quiz?.content}
                       </h2>
                     </div>
 

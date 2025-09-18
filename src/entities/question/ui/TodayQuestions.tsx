@@ -19,7 +19,7 @@ const TodayQuestions = ({ categories, questions }: Props) => {
 
   return (
     <div>
-      <div className="flex flex-col gap-2 left-0">
+      <div className="flex flex-col gap-2 left-0 py-4 lg:py-6">
         <div className="font-extrabold text-4xl">오늘의 질문</div>
         <div className="text-[16px] font-bold mb-[40px] text-[#b7b7b7]">
           매일 새로운 질문으로 생각의 깊이를 더해보세요

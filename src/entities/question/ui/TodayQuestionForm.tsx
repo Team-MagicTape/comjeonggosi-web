@@ -14,7 +14,7 @@ interface Props {
 
 const TodayQuestionForm = ({ question, category }: Props) => {
   return (
-    <div className="w-full flex flex-col justify-center z-20 gap-8">
+    <div className="w-full flex flex-col justify-center z-20 gap-8 py-4 lg:py-6">
       <div className="w-full bg-white flex flex-col rounded-2xl pl-15 pr-15 pb-6 mb-5">
         <div className="flex gap-2 mt-10">
           <div className="h-8 bg-[#ff723a] inline-flex items-center justify-center rounded-4xl pl-2 pr-2">

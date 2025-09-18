@@ -300,7 +300,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                   {/* 축하 아이콘 */}
                   <div className="relative mb-6">
                     <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg animate-ping">
-                      <CheckCircle2 className="w-10 h-10 text-white" />
+                      <CheckCircle2 className="w-10 h-10 text-white animate-none" />
                     </div>
                     <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25"></div>
                   </div>

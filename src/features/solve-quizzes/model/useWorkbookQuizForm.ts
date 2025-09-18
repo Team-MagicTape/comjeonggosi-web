@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
+import { shuffleArray } from "../utils/shuffle-array";
 
 export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
+  quizzes = shuffleArray(quizzes);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -12,13 +14,11 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const [answeredQuizzes, setAnsweredQuizzes] = useState<
     Map<number, { answer: string; isCorrect: boolean }>
   >(new Map());
-
   const [settings, setSettings] = useState<Settings>({
     hideSolved: false,
     autoNext: false,
     noDelay: false,
   });
-
   const currentQuiz = quizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);

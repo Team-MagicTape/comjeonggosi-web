@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { Check, X } from "lucide-react";
+import { useShortAnswer } from "../model/useShortAnswer";
 
 interface Props {
   shortAnswer: string;
@@ -29,15 +29,7 @@ const ShortAnswer = ({
   quiz,
   isAnswered = false,
 }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  // Focus input when active
-  useEffect(() => {
-    if (!showAnswer && quizIdx === currentIdx && !isAnswered) {
-      inputRef.current?.focus();
-    }
-  }, [showAnswer, quizIdx, currentIdx, isAnswered]);
-
+  const {inputRef} = useShortAnswer(showAnswer, quizIdx, currentIdx, isAnswered)
   return (
     <div className="px-4 pt-4 sm:px-8 mb-6 sm:mb-8">
       <div className="space-y-4">

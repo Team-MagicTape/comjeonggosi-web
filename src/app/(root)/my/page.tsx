@@ -47,7 +47,7 @@ const My = async () => {
   }
 
   return (
-    <div className="w-full flex items-start gap-4 flex-col">
+    <div className="w-full flex items-start gap-4 flex-col py-4 lg:py-6">
       <div className="w-full p-4 border border-border bg-white rounded-2xl flex flex-col gap-4">
         <div className="w-full flex xl:items-center gap-4 flex-col xl:flex-row">
           <UserAvatar user={user} size={80} />

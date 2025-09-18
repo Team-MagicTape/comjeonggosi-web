@@ -92,7 +92,9 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       }`}
                     >
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-medium text-white">{quizIdx + 1}</span>
+                        <span className="text-sm font-medium text-white">
+                          {quizIdx + 1}
+                        </span>
                       </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}
@@ -187,81 +189,83 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     />
 
                     {/* 키보드 단축키 힌트 */}
-                    {quizzes.length > 0 && currentIdx < quizzes.length && !selectedAnswer && (
-                      <div className="px-4 pb-4 cursor-help">
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                          <div className="flex items-start gap-2">
-                            <div className="flex-1">
-                              <div className="flex justify-between items-center">
-                                <div className="text-xs text-yellow-700 font-medium mb-1">
-                                  빠른 답변 Tip
+                    {quizzes.length > 0 &&
+                      currentIdx < quizzes.length &&
+                      !selectedAnswer && (
+                        <div className="px-4 pb-4 cursor-help">
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                            <div className="flex items-start gap-2">
+                              <div className="flex-1">
+                                <div className="flex justify-between items-center">
+                                  <div className="text-xs text-yellow-700 font-medium mb-1">
+                                    빠른 답변 Tip
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="text-xs text-yellow-600 space-y-1">
-                                {quizzes[currentIdx]?.type === "OX" ? (
-                                  <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                <div className="text-xs text-yellow-600 space-y-1">
+                                  {quizzes[currentIdx]?.type === "OX" ? (
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          O
+                                        </kbd>{" "}
+                                        또는{" "}
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          1
+                                        </kbd>{" "}
+                                        : O 선택
+                                      </span>
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          X
+                                        </kbd>{" "}
+                                        또는{" "}
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          2
+                                        </kbd>{" "}
+                                        : X 선택
+                                      </span>
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          Space
+                                        </kbd>{" "}
+                                        : 답변 후 다음 문제로
+                                      </span>
+                                    </div>
+                                  ) : quizzes[currentIdx]?.type !==
+                                    "SHORT_ANSWER" ? (
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                      {quizzes[currentIdx]?.options
+                                        .slice(0, 4)
+                                        .map((_, idx) => (
+                                          <span key={idx}>
+                                            <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                              {idx + 1}
+                                            </kbd>{" "}
+                                            : {idx + 1}번 선택
+                                          </span>
+                                        ))}
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          Space
+                                        </kbd>{" "}
+                                        : 답변 후 다음 문제로
+                                      </span>
+                                    </div>
+                                  ) : (
                                     <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        O
-                                      </kbd>{" "}
-                                      또는{" "}
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        1
-                                      </kbd>{" "}
-                                      : O 선택
-                                    </span>
-                                    <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        X
-                                      </kbd>{" "}
-                                      또는{" "}
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        2
-                                      </kbd>{" "}
-                                      : X 선택
-                                    </span>
-                                    <span>
+                                      답안을 입력하고 엔터를 눌러주세요.{" "}
                                       <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
                                         Space
                                       </kbd>{" "}
                                       : 답변 후 다음 문제로
                                     </span>
-                                  </div>
-                                ) : quizzes[currentIdx]?.type !==
-                                  "SHORT_ANSWER" ? (
-                                  <div className="flex flex-wrap gap-x-3 gap-y-1">
-                                    {quizzes[currentIdx]?.options
-                                      .slice(0, 4)
-                                      .map((_, idx) => (
-                                        <span key={idx}>
-                                          <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                            {idx + 1}
-                                          </kbd>{" "}
-                                          : {idx + 1}번 선택
-                                        </span>
-                                      ))}
-                                    <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        Space
-                                      </kbd>{" "}
-                                      : 답변 후 다음 문제로
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <span>
-                                    답안을 입력하고 엔터를 눌러주세요.{" "}
-                                    <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                      Space
-                                    </kbd>{" "}
-                                    : 답변 후 다음 문제로
-                                  </span>
-                                )}
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 </div>
               ))
@@ -291,26 +295,84 @@ const WorkbookQuizForm = ({ data }: Props) => {
             )}
 
             <div className="w-full flex-shrink-0 pb-8 xl:px-4" key={10000}>
-              <div className="w-full h-146 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl">
-                <div className="flex flex-col items-center">
-                  <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-semibold mb-4">
-                      문제집의 모든 문제를 풀었습니다!
+              <div className="w-full h-146 mx-auto bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl border border-emerald-100">
+                <div className="flex flex-col items-center px-8 py-12">
+                  {/* 축하 아이콘 */}
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                      <svg
+                        className="w-10 h-10 text-white animate-pulse"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    {/* 배경 원 애니메이션 */}
+                    <div className="absolute inset-0 bg-emerald-200 rounded-full animate-ping opacity-25"></div>
+                  </div>
+
+                  <div className="text-center space-y-4">
+                    <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                      🎉 수고하셨습니다!
                     </h3>
-                    <p className="text-3xl font-bold text-gray mb-8">
-                      <span className="text-green-500">{corrected}</span>/
-                      {quizzes.length}
+                    <p className="text-lg text-gray-600 mb-6">
+                      문제집의 모든 문제를 완료했습니다
                     </p>
-                    <Button isFullWidth onClick={restart}>
-                      <p>다시풀기</p>
-                    </Button>
-                    <CustomLink
-                      href="/workbooks"
-                      className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary cursor-pointer"
-                    >
-                      <ArrowLeftIcon />
-                      종료하기
-                    </CustomLink>
+
+                    {/* 점수 표시 */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                      <div className="text-sm text-gray-500 mb-2">
+                        최종 점수
+                      </div>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-4xl font-bold text-emerald-500">
+                          {corrected}
+                        </span>
+                        <span className="text-2xl text-gray-400">/</span>
+                        <span className="text-4xl font-bold text-gray-700">
+                          {quizzes.length}
+                        </span>
+                      </div>
+                      <div className="mt-3">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-emerald-400 to-emerald-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                            style={{
+                              width: `${(corrected / quizzes.length) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <div className="text-sm text-gray-500 mt-2">
+                          정답률:{" "}
+                          {Math.round((corrected / quizzes.length) * 100)}%
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 버튼들 */}
+                    <div className="space-y-3 w-full max-w-sm">
+                      <Button
+                        isFullWidth
+                        onClick={restart}
+                        className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        🔄 다시 풀기
+                      </Button>
+                      <CustomLink
+                        href="/workbooks"
+                        className="flex items-center justify-center gap-2 py-3 px-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 cursor-pointer"
+                      >
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        문제집 목록으로
+                      </CustomLink>
+                    </div>
                   </div>
                 </div>
               </div>

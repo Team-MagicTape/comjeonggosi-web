@@ -306,7 +306,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     </Button>
                     <CustomLink
                       href="/workbooks"
-                      className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
+                      className="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary cursor-pointer"
                     >
                       <ArrowLeftIcon />
                       종료하기

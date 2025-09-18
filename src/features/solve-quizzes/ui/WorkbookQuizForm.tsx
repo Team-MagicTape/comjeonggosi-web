@@ -12,7 +12,7 @@ import { useWorkbookQuizForm } from "../model/useWorkbookQuizForm";
 import { getButtonStyle } from "../utils/get-button-style";
 import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, CheckCircle2 } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
 
 interface Props {
@@ -299,28 +299,15 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 <div className="flex flex-col items-center px-8 py-12">
                   {/* 축하 아이콘 */}
                   <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
-                      <svg
-                        className="w-10 h-10 text-white animate-pulse"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg animate-ping">
+                      <CheckCircle2 className="w-10 h-10 text-white" />
                     </div>
-                    {/* 배경 원 애니메이션 */}
-                    <div className="absolute inset-0 bg-emerald-200 rounded-full animate-ping opacity-25"></div>
+                    <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25"></div>
                   </div>
 
                   <div className="text-center space-y-4">
                     <h3 className="text-3xl font-bold text-gray-800 mb-2">
-                      🎉 수고하셨습니다!
+                      수고하셨습니다!
                     </h3>
                     <p className="text-lg text-gray-600 mb-6">
                       문제집의 모든 문제를 완료했습니다
@@ -367,7 +354,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       </Button>
                       <CustomLink
                         href="/workbooks"
-                        className="flex items-center justify-center gap-2 py-3 px-6 bg-white border-2 border-gray-200 rounded-xl shadow-sm text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 cursor-pointer"
+                        className="flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         문제집 목록으로

@@ -85,14 +85,14 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
                     <div
-                      className={`mb-2 px-6 py-8 text-white flex flex-col gap-3 items-start ${
+                      className={`mb-2 px-6 py-8 text-white flex gap-3 items-start ${
                         quizIdx === currentIdx && isCurrentQuizAnswered
                           ? "bg-gray-500"
                           : "bg-primary"
                       }`}
                     >
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
-                        {quiz?.content}
+                        {quizIdx + 1}.{quiz?.content}
                       </h2>
                     </div>
 

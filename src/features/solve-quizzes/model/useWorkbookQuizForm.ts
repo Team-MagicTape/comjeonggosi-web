@@ -98,8 +98,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     if (
       (e.code === "Space" ||
         e.key === " " ||
-        e.key === "Spacebar" ||
-        e.key === "Enter") &&
+        e.key === "Spacebar") &&
       showAnswer &&
       !isTyping
     ) {

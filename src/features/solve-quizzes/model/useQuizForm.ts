@@ -46,12 +46,13 @@ export const useQuizForm = (
   });
 
   const normalizeAnswer = useCallback((answer: string | null | undefined) => {
-    if (!answer) return '';
-    return answer.replace(/\s+/g, '').toLowerCase();
+    if (!answer) return "";
+    return answer.replace(/\s+/g, "").toLowerCase();
   }, []);
 
   const currentQuiz = quizzes[currentIdx];
-  const isCorrect = normalizeAnswer(selectedAnswer) === normalizeAnswer(currentQuiz?.answer);
+  const isCorrect =
+    normalizeAnswer(selectedAnswer) === normalizeAnswer(currentQuiz?.answer);
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
@@ -74,7 +75,8 @@ export const useQuizForm = (
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
-    const correct = normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer);
+    const correct =
+      normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer);
     setSelectedAnswer(answer);
     setShowAnswer(true);
     // 답변 상태를 저장
@@ -84,7 +86,10 @@ export const useQuizForm = (
     submit(answer);
   };
 
-  const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
+  const handleShortAnswerSubmit = () => {
+    if (shortAnswer.trim().length <= 0) return;
+    handleAnswerSelect(shortAnswer);
+  };
 
   const handleNext = () => {
     if (!selectedAnswer || !showAnswer) return;

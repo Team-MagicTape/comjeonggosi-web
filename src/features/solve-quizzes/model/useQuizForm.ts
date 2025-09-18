@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Tab } from "@/widgets/tabs/types/tab";
 import { Category } from "@/entities/category/types/category";
@@ -166,7 +166,7 @@ export const useQuizForm = (
 
     // 스페이스/스페이스바로 다음으로 (단, 입력 중이 아닐 때만)
     if (
-      (e.code === "Space" || e.key === " " || e.key === "Spacebar" || e.key === "Enter") &&
+      (e.code === "Space" || e.key === " " || e.key === "Spacebar") &&
       showAnswer &&
       !isTyping
     ) {

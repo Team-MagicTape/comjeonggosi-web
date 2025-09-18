@@ -41,10 +41,12 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     });
   };
 
-  const handleShortAnswerSubmit = () => handleAnswerSelect(shortAnswer);
+  const handleShortAnswerSubmit = () => {
+    handleAnswerSelect(shortAnswer);
+  };
 
   const handleNext = () => {
-    if (!selectedAnswer || !showAnswer) return;
+    if (!showAnswer) return;
 
     const nextQuizAnswer = answeredQuizzes.get(currentIdx + 1);
     if (nextQuizAnswer) {
@@ -96,9 +98,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     // 스페이스/스페이스바로 다음으로 (단, 입력 중이 아닐 때만)
     if (
-      (e.code === "Space" ||
-        e.key === " " ||
-        e.key === "Spacebar") &&
+      (e.code === "Space" || e.key === " " || e.key === "Spacebar") &&
       showAnswer &&
       !isTyping
     ) {

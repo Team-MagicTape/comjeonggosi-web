@@ -31,14 +31,13 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
     const correct = currentQuiz?.answer === answer;
+    setCorrected(prev => correct ? prev + 1 : prev);
     setSelectedAnswer(answer);
     setShowAnswer(true);
     setAnsweredQuizzes((prev) =>
       new Map(prev).set(currentIdx, { answer, isCorrect: correct })
     );
-    submit(answer).then((isCorrect) => {
-      if (isCorrect) setCorrected((prev) => prev + 1);
-    });
+    submit(answer)
   };
 
   const handleShortAnswerSubmit = () => {

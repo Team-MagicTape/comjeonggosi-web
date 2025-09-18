@@ -87,12 +87,11 @@ export const useQuizForm = (
   };
 
   const handleShortAnswerSubmit = () => {
-    if (shortAnswer.trim().length <= 0) return;
     handleAnswerSelect(shortAnswer);
   };
 
   const handleNext = () => {
-    if (!selectedAnswer || !showAnswer) return;
+    if (!showAnswer) return;
 
     const nextQuizAnswer = answeredQuizzes.get(currentIdx + 1);
     if (nextQuizAnswer) {

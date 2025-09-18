@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Settings } from "@/features/solve-quizzes/types/settings";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { solveQuizzes } from "../api/solve-quizzes";
 import { shuffleArray } from "../utils/shuffle-array";
 
 export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
-  quizzes = shuffleArray(quizzes);
+  const shuffledQuizzes = useMemo(() => shuffleArray(quizzes), [quizzes]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -19,7 +19,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     autoNext: false,
     noDelay: false,
   });
-  const currentQuiz = quizzes[currentIdx];
+  const currentQuiz = shuffledQuizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
@@ -61,7 +61,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     setShortAnswer("");
 
-    if (currentIdx >= quizzes.length) return;
+    if (currentIdx >= shuffledQuizzes.length) return;
     setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
   };
 
@@ -154,7 +154,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   return {
     currentIdx,
     currentQuiz,
-    quizzes,
+    quizzes: shuffledQuizzes,
     selectedAnswer,
     showAnswer,
     isCorrect,

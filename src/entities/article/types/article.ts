@@ -5,4 +5,16 @@ export interface Article {
   title: string;
   content: string;
   category: Category;
+  beforeArticles?: [
+    {
+      id: number;
+      title: string;
+    }
+  ];
+  afterArticles?: [
+    {
+      id: number;
+      title: string;
+    }
+  ];
 }

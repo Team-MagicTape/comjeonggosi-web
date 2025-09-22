@@ -14,12 +14,50 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { ArrowLeftIcon } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useMemo, useCallback } from "react";
 
 interface Props {
   data: Quiz[];
 }
 
 const WorkbookQuizForm = ({ data }: Props) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const sectionParam = searchParams?.get("section");
+
+  const getWorkbookId = useCallback(() => {
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      const match = path.match(/\/workbooks\/(\d+)/);
+      return match ? match[1] : null;
+    }
+    return null;
+  }, []);
+
+  const goToWorkbookDetail = useCallback(() => {
+    const workbookId = getWorkbookId();
+    if (workbookId) {
+      router.push(`/workbooks/${workbookId}`);
+    } else {
+      router.push("/workbooks");
+    }
+  }, [router, getWorkbookId]);
+
+  const sectionInfo = useMemo(() => {
+    if (sectionParam !== null) {
+      const sectionIndex = parseInt(sectionParam);
+      if (!isNaN(sectionIndex)) {
+        return {
+          sectionIndex,
+          sectionNumber: sectionIndex + 1,
+          isSection: true,
+        };
+      }
+    }
+    return { isSection: false };
+  }, [sectionParam]);
+
   const {
     currentIdx,
     selectedAnswer,
@@ -47,7 +85,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
         <div className="w-full space-y-3 xl:px-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">진행률</span>
+              <span className="text-sm font-medium text-gray-600">
+                {sectionInfo.isSection
+                  ? `${sectionInfo.sectionNumber}구간 진행률`
+                  : "진행률"}
+              </span>
               <span className="text-sm font-semibold text-primary">
                 {answeredQuizzes.size} / {quizzes.length}
               </span>
@@ -71,6 +113,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
           </div>
         </div>
       )}
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
@@ -92,7 +135,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       }`}
                     >
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-medium text-white">{quizIdx + 1}</span>
+                        <span className="text-sm font-medium text-white">
+                          <span className="text-sm font-medium text-white">
+                            {quizIdx + 1}
+                          </span>
+                        </span>
                       </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}
@@ -187,81 +234,83 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     />
 
                     {/* 키보드 단축키 힌트 */}
-                    {quizzes.length > 0 && currentIdx < quizzes.length && !selectedAnswer && (
-                      <div className="px-4 pb-4 cursor-help">
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                          <div className="flex items-start gap-2">
-                            <div className="flex-1">
-                              <div className="flex justify-between items-center">
-                                <div className="text-xs text-yellow-700 font-medium mb-1">
-                                  빠른 답변 Tip
+                    {quizzes.length > 0 &&
+                      currentIdx < quizzes.length &&
+                      !selectedAnswer && (
+                        <div className="px-4 pb-4 cursor-help">
+                          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                            <div className="flex items-start gap-2">
+                              <div className="flex-1">
+                                <div className="flex justify-between items-center">
+                                  <div className="text-xs text-yellow-700 font-medium mb-1">
+                                    빠른 답변 Tip
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="text-xs text-yellow-600 space-y-1">
-                                {quizzes[currentIdx]?.type === "OX" ? (
-                                  <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                <div className="text-xs text-yellow-600 space-y-1">
+                                  {quizzes[currentIdx]?.type === "OX" ? (
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          O
+                                        </kbd>{" "}
+                                        또는{" "}
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          1
+                                        </kbd>{" "}
+                                        : O 선택
+                                      </span>
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          X
+                                        </kbd>{" "}
+                                        또는{" "}
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          2
+                                        </kbd>{" "}
+                                        : X 선택
+                                      </span>
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          Space
+                                        </kbd>{" "}
+                                        : 답변 후 다음 문제로
+                                      </span>
+                                    </div>
+                                  ) : quizzes[currentIdx]?.type !==
+                                    "SHORT_ANSWER" ? (
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
+                                      {quizzes[currentIdx]?.options
+                                        .slice(0, 4)
+                                        .map((_, idx) => (
+                                          <span key={idx}>
+                                            <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                              {idx + 1}
+                                            </kbd>{" "}
+                                            : {idx + 1}번 선택
+                                          </span>
+                                        ))}
+                                      <span>
+                                        <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
+                                          Space
+                                        </kbd>{" "}
+                                        : 답변 후 다음 문제로
+                                      </span>
+                                    </div>
+                                  ) : (
                                     <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        O
-                                      </kbd>{" "}
-                                      또는{" "}
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        1
-                                      </kbd>{" "}
-                                      : O 선택
-                                    </span>
-                                    <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        X
-                                      </kbd>{" "}
-                                      또는{" "}
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        2
-                                      </kbd>{" "}
-                                      : X 선택
-                                    </span>
-                                    <span>
+                                      답안을 입력하고 엔터를 눌러주세요.{" "}
                                       <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
                                         Space
                                       </kbd>{" "}
                                       : 답변 후 다음 문제로
                                     </span>
-                                  </div>
-                                ) : quizzes[currentIdx]?.type !==
-                                  "SHORT_ANSWER" ? (
-                                  <div className="flex flex-wrap gap-x-3 gap-y-1">
-                                    {quizzes[currentIdx]?.options
-                                      .slice(0, 4)
-                                      .map((_, idx) => (
-                                        <span key={idx}>
-                                          <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                            {idx + 1}
-                                          </kbd>{" "}
-                                          : {idx + 1}번 선택
-                                        </span>
-                                      ))}
-                                    <span>
-                                      <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                        Space
-                                      </kbd>{" "}
-                                      : 답변 후 다음 문제로
-                                    </span>
-                                  </div>
-                                ) : (
-                                  <span>
-                                    답안을 입력하고 엔터를 눌러주세요.{" "}
-                                    <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
-                                      Space
-                                    </kbd>{" "}
-                                    : 답변 후 다음 문제로
-                                  </span>
-                                )}
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
                   </div>
                 </div>
               ))
@@ -295,22 +344,32 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 <div className="flex flex-col items-center">
                   <div className="text-center space-y-2">
                     <h3 className="text-2xl font-semibold mb-4">
-                      문제집의 모든 문제를 풀었습니다!
+                      {sectionInfo.isSection
+                        ? `${sectionInfo.sectionNumber}구간의 모든 문제를 풀었습니다!`
+                        : "문제집의 모든 문제를 풀었습니다!"}
                     </h3>
                     <p className="text-3xl font-bold text-gray mb-8">
                       <span className="text-green-500">{corrected}</span>/
                       {quizzes.length}
                     </p>
-                    <Button isFullWidth onClick={restart}>
-                      <p>다시풀기</p>
-                    </Button>
-                    <CustomLink
-                      href="/workbooks"
-                      className="flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
-                    >
-                      <ArrowLeftIcon />
-                      종료하기
-                    </CustomLink>
+                    <div className="space-y-3">
+                      <Button isFullWidth onClick={restart}>
+                        <p>다시풀기</p>
+                      </Button>
+                      <button
+                        onClick={goToWorkbookDetail}
+                        className="w-full flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
+                      >
+                        <ArrowLeftIcon />
+                        문제집으로 돌아가기
+                      </button>
+                      <CustomLink
+                        href="/workbooks"
+                        className="flex items-center justify-center py-2 bg-gray-100 rounded-md text-gray-500 hover:text-primary transition-colors text-sm"
+                      >
+                        문제집 목록으로
+                      </CustomLink>
+                    </div>
                   </div>
                 </div>
               </div>

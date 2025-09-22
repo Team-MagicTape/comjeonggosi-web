@@ -4,6 +4,7 @@ import WorkbookQuizForm from "@/features/solve-quizzes/ui/WorkbookQuizForm";
 import { PathParams } from "@/shared/types/path-params";
 
 interface Props extends PathParams {
+  params: { id: string };
   searchParams?: {
     section?: string;
   }

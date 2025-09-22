@@ -1,19 +1,16 @@
 import { fetchWorkbook } from "@/entities/workbook/api/fetch-workbook";
 import { fetchInitialWorkbookQuizzes } from "@/entities/workbook/api/fetch-initial-workbook-quizzes";
 import WorkbookQuizForm from "@/features/solve-quizzes/ui/WorkbookQuizForm";
-import { PathParams } from "@/shared/types/path-params";
 
 interface Props {
-  params: { id: string };
-  searchParams?: {
-    section?: string;
-  }
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ section?: string; }>;
 }
 
 const WorkbookQuizzes = async ({ params, searchParams }: Props) => {
-  const { id } = params;
-  const sectionParam = searchParams?.section;
-  
+  const { id } = await params; 
+  const resolvedSearchParams = await searchParams;
+  const sectionParam = resolvedSearchParams?.section;
   const workbook = await fetchWorkbook(Number(id));
   
   if (!workbook) {

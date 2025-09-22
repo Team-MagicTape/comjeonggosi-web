@@ -1,3 +1,5 @@
+'use client';
+
 import { Article } from "../types/article";
 import { useSidebar } from "../model/useSidebar";
 

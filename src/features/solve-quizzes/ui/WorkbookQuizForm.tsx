@@ -348,7 +348,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       <Button
                         isFullWidth
                         onClick={restart}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center"
+                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center gap-2"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         다시 풀기

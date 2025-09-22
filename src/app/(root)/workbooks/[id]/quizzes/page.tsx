@@ -12,7 +12,6 @@ const WorkbookQuizzes = async ({ params, searchParams }: Props) => {
   const resolvedSearchParams = await searchParams;
   const sectionParam = resolvedSearchParams?.section;
   const workbook = await fetchWorkbook(Number(id));
-  
   if (!workbook) {
     return <div>문제집을 찾을 수 없습니다.</div>;
   }

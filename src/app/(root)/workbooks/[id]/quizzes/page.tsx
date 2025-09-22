@@ -4,13 +4,13 @@ import WorkbookQuizForm from "@/features/solve-quizzes/ui/WorkbookQuizForm";
 import { PathParams } from "@/shared/types/path-params";
 
 interface Props extends PathParams {
-  searchParams: {
+  searchParams?: {
     section?: string;
   }
 }
 
 const WorkbookQuizzes = async ({ params, searchParams }: Props) => {
-  const { id } = await params;
+  const { id } = params;
   const sectionParam = searchParams?.section;
   
   const workbook = await fetchWorkbook(Number(id));

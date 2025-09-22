@@ -1,3 +1,3 @@
 export interface PathParams {
-  params: Promise<{ [key: string]: string | string[] | undefined }>
+  params: { [key: string]: string | string[] | undefined };
 }

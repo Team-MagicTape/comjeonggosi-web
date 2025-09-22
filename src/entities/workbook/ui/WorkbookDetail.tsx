@@ -2,9 +2,8 @@
 
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
-import { Icon } from "@iconify/react";
 import { useState } from "react";
-import { ArrowLeft, FileText, BookOpen } from "lucide-react";
+import { ArrowLeft, FileText, BookOpen, ChevronDown } from "lucide-react";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
 
 interface Props {
@@ -179,8 +178,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
                         <span>{sectionQuizCount}문제</span>
 
-                        <Icon
-                          icon="ep:arrow-down-bold"
+                        <ChevronDown
                           className={`w-5 h-5 transition-transform ${
                             isExpanded ? "rotate-180" : ""
                           }`}

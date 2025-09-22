@@ -299,10 +299,10 @@ const WorkbookQuizForm = ({ data }: Props) => {
                 <div className="flex flex-col items-center px-8 py-12">
                   {/* 축하 아이콘 */}
                   <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg animate-ping">
-                      <CheckCircle2 className="w-10 h-10 text-white animate-none" />
+                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                      <CheckCircle2 className="w-10 h-10 text-white" />
                     </div>
-                    <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25"></div>
+                    <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25 animate-ping"></div>
                   </div>
 
                   <div className="text-center space-y-4">
@@ -350,7 +350,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
                         onClick={restart}
                         className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                       >
-                        🔄 다시 풀기
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        다시 풀기
                       </Button>
                       <CustomLink
                         href="/workbooks"

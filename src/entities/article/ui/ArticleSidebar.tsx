@@ -1,8 +1,5 @@
-'use client';
-
 import { Article } from "../types/article";
 import { useSidebar } from "../model/useSidebar";
-import { useEffect } from "react";
 
 interface Props {
   data: Article[];
@@ -12,9 +9,7 @@ interface Props {
 
 const ArticleSidebar = ({ data, title, id }: Props) => {
   const { before, after, setTo } = useSidebar();
-  useEffect(() => {
-    setTo(id);
-  }, [id]);
+  setTo(id);
 
   return (
     <div className="xl:w-72 w-full h-fit bg-white border border-border rounded-2xl p-6 flex flex-col gap-4 xl:sticky xl:top-32">
@@ -38,7 +33,10 @@ const ArticleSidebar = ({ data, title, id }: Props) => {
       <ul>
         {before.map((article) => (
           <li key={article.id}>
-            <a href={`/articles/${article.id}`} className="text-sm hover:underline">
+            <a
+              href={`/articles/${article.id}`}
+              className="text-sm hover:underline"
+            >
               {article.title}
             </a>
           </li>
@@ -49,7 +47,10 @@ const ArticleSidebar = ({ data, title, id }: Props) => {
       <ul>
         {after.map((article) => (
           <li key={article.id}>
-            <a href={`/articles/${article.id}`} className="text-sm hover:underline">
+            <a
+              href={`/articles/${article.id}`}
+              className="text-sm hover:underline"
+            >
               {article.title}
             </a>
           </li>

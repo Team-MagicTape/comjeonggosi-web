@@ -30,24 +30,28 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
     
-    const correct = currentQuiz?.answer === answer;
-    
     setSelectedAnswer(answer);
     setShowAnswer(true);
-
+  
     setAnsweredQuizzes((prev) =>
-      new Map(prev).set(currentIdx, { answer, isCorrect: correct })
+      new Map(prev).set(currentIdx, { answer, isCorrect: false }) // 임시로 false
     );
     
-    if (correct) {
-      setCorrected((prev) => prev + 1);
-    }
-    
-    submit(answer).catch((error) => {
+    // 서버 결과를 기다려서 점수 업데이트
+    try {
+      const isCorrect = await submit(answer);
+      
+      setAnsweredQuizzes((prev) =>
+        new Map(prev).set(currentIdx, { answer, isCorrect })
+      );
+      
+      if (isCorrect) {
+        setCorrected((prev) => prev + 1);
+      }
+    } catch (error) {
       console.error('API 제출 실패:', error);
-    });
+    }
   };
-
   const handleShortAnswerSubmit = () => {
     handleAnswerSelect(shortAnswer);
   };

@@ -12,51 +12,17 @@ import { useWorkbookQuizForm } from "../model/useWorkbookQuizForm";
 import { getButtonStyle } from "../utils/get-button-style";
 import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, CheckCircle2 } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useMemo, useCallback } from "react";
+import { useWorkbookNavigation } from "../model/useWorkbookNavigation";
+
 
 interface Props {
   data: Quiz[];
 }
 
 const WorkbookQuizForm = ({ data }: Props) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const sectionParam = searchParams?.get("section");
-
-  const getWorkbookId = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const path = window.location.pathname;
-      const match = path.match(/\/workbooks\/(\d+)/);
-      return match ? match[1] : null;
-    }
-    return null;
-  }, []);
-
-  const goToWorkbookDetail = useCallback(() => {
-    const workbookId = getWorkbookId();
-    if (workbookId) {
-      router.push(`/workbooks/${workbookId}`);
-    } else {
-      router.push("/workbooks");
-    }
-  }, [router, getWorkbookId]);
-
-  const sectionInfo = useMemo(() => {
-    if (sectionParam !== null) {
-      const sectionIndex = parseInt(sectionParam);
-      if (!isNaN(sectionIndex)) {
-        return {
-          sectionIndex,
-          sectionNumber: sectionIndex + 1,
-          isSection: true,
-        };
-      }
-    }
-    return { isSection: false };
-  }, [sectionParam]);
+  const { sectionInfo, goToWorkbookDetail } = useWorkbookNavigation();
 
   const {
     currentIdx,
@@ -136,9 +102,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     >
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-medium text-white">
-                          <span className="text-sm font-medium text-white">
-                            {quizIdx + 1}
-                          </span>
+                          {quizIdx + 1}
                         </span>
                       </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -340,35 +304,80 @@ const WorkbookQuizForm = ({ data }: Props) => {
             )}
 
             <div className="w-full flex-shrink-0 pb-8 xl:px-4" key={10000}>
-              <div className="w-full h-146 mx-auto bg-white rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl">
-                <div className="flex flex-col items-center">
-                  <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-semibold mb-4">
-                      {sectionInfo.isSection
-                        ? `${sectionInfo.sectionNumber}구간의 모든 문제를 풀었습니다!`
-                        : "문제집의 모든 문제를 풀었습니다!"}
+              <div className="w-full h-146 mx-auto bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl border border-emerald-100">
+                <div className="flex flex-col items-center px-8 py-12">
+                  {/* 축하 아이콘 */}
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                      <CheckCircle2 className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25 animate-ping"></div>
+                  </div>
+
+                  <div className="text-center space-y-4">
+                    <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                      수고하셨습니다!
                     </h3>
-                    <p className="text-3xl font-bold text-gray mb-8">
-                      <span className="text-green-500">{corrected}</span>/
-                      {quizzes.length}
+                    <p className="text-lg text-gray-600 mb-6">
+                      {sectionInfo.isSection
+                        ? `${sectionInfo.sectionNumber}구간의 모든 문제를 완료했습니다`
+                        : "문제집의 모든 문제를 완료했습니다"}
                     </p>
-                    <div className="space-y-3">
-                      <Button isFullWidth onClick={restart}>
-                        <p>다시풀기</p>
+
+                    {/* 점수 표시 */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
+                      <div className="text-sm text-gray-500 mb-2">
+                        최종 점수
+                      </div>
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-4xl font-bold text-emerald-500">
+                          {corrected}
+                        </span>
+                        <span className="text-2xl text-gray-400">/</span>
+                        <span className="text-4xl font-bold text-gray-700">
+                          {quizzes.length}
+                        </span>
+                      </div>
+                      <div className="mt-3">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-emerald-400 to-emerald-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                            style={{
+                              width: `${(corrected / quizzes.length) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <div className="text-sm text-gray-500 mt-2">
+                          정답률:{" "}
+                          {Math.round((corrected / quizzes.length) * 100)}%
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 버튼들 */}
+                    <div className="space-y-3 w-full max-w-sm">
+                      <Button
+                        isFullWidth
+                        onClick={restart}
+                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center gap-2"
+                      >
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        다시 풀기
                       </Button>
                       <button
                         onClick={goToWorkbookDetail}
-                        className="w-full flex items-center justify-center py-2 bg-gray-200 rounded-md text-gray-600 hover:text-primary transition-colors"
+                        className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                       >
-                        <ArrowLeftIcon />
+                        <ArrowLeftIcon className="w-4 h-4" />
                         문제집으로 돌아가기
                       </button>
-                      <CustomLink
-                        href="/workbooks"
-                        className="flex items-center justify-center py-2 bg-gray-100 rounded-md text-gray-500 hover:text-primary transition-colors text-sm"
+                      <button
+                        onClick={goToWorkbookDetail}
+                        className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
                       >
-                        문제집 목록으로
-                      </CustomLink>
+                        <ArrowLeftIcon className="w-4 h-4" />
+                        문제집으로 돌아가기
+                      </button>
                     </div>
                   </div>
                 </div>

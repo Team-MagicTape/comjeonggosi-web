@@ -1,5 +1,5 @@
-import { customFetch } from "@/shared/libs/custom-fetch";
 import { Article } from "../types/article";
+import axios from "axios";
 
 export const fetchAfterArticles = async (
   articleId: number
@@ -23,7 +23,7 @@ export const fetchAfterArticles = async (
     params.set("query", query);
     params.set("variables", JSON.stringify({ id: articleId }));
 
-    const { data } = await customFetch.get<{
+    const { data } = await axios.get<{
       data: { getArticle: { afterArticles: Article[] } };
     }>(`/graphql?${params.toString()}`);
 

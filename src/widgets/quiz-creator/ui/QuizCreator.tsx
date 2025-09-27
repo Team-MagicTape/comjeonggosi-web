@@ -4,7 +4,15 @@ import { useState, ChangeEvent } from "react";
 import { Category } from "@/entities/category/types/category";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import { apiClient } from "@/shared/libs/custom-axios";
-import { Plus, Minus, Loader2, CircleHelp, Hash } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  Loader2,
+  CircleHelp,
+  Hash,
+  Upload,
+  X,
+} from "lucide-react";
 
 interface Props {
   categories: Category[];
@@ -20,6 +28,7 @@ interface QuizData {
   difficulty: string;
   type: QuizType;
   explanation?: string;
+  imageUrl: string;
 }
 
 const QuizCreator = ({ categories }: Props) => {
@@ -31,9 +40,12 @@ const QuizCreator = ({ categories }: Props) => {
     difficulty: "3",
     type: "MULTIPLE_CHOICE",
     explanation: "",
+    imageUrl: "",
   });
   const [options, setOptions] = useState<string[]>(["", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleData = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -41,7 +53,7 @@ const QuizCreator = ({ categories }: Props) => {
     const { value, name } = e.target;
 
     if (name === "type") {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
         [name]: value as QuizType,
         answer: value === "OX" ? "O" : "",
@@ -53,9 +65,12 @@ const QuizCreator = ({ categories }: Props) => {
         setOptions([]);
       }
     } else {
-      setData(prev => ({
+      setData((prev) => ({
         ...prev,
-        [name]: name === "categoryId" || name === "articleId" ? Number(value) || value : value,
+        [name]:
+          name === "categoryId" || name === "articleId"
+            ? Number(value) || value
+            : value,
       }));
     }
   };
@@ -78,13 +93,48 @@ const QuizCreator = ({ categories }: Props) => {
     }
   };
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB 제한
+        alert("이미지 파일 크기는 5MB 이하여야 합니다.");
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        return;
+      }
+
+      setImageFile(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const previewUrl = reader.result as string;
+        setImagePreview(previewUrl);
+        // imageUrl에도 설정
+        setData((prev) => ({ ...prev, imageUrl: previewUrl }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setData((prev) => ({ ...prev, imageUrl: "" }));
+  };
+
   const submit = async () => {
     setIsLoading(true);
     try {
       let submitOptions: string[] = [];
 
       if (data.type === "MULTIPLE_CHOICE") {
-        const filteredOptions = options.filter(option => option.trim() !== "");
+        const filteredOptions = options.filter(
+          (option) => option.trim() !== ""
+        );
         submitOptions = filteredOptions;
       } else if (data.type === "OX") {
         submitOptions = [data.answer === "O" ? "X" : "O"];
@@ -94,10 +144,11 @@ const QuizCreator = ({ categories }: Props) => {
         ...data,
         options: submitOptions,
         difficulty: Number(data.difficulty),
+        imageUrl: data.imageUrl,
       };
 
       await apiClient.post("/api/admin/quizzes", submitData);
-      
+
       setData({
         content: "",
         answer: "",
@@ -106,12 +157,17 @@ const QuizCreator = ({ categories }: Props) => {
         difficulty: "3",
         type: data.type,
         explanation: "",
+        imageUrl: "",
       });
-      
+
       if (data.type === "MULTIPLE_CHOICE") {
         setOptions(["", "", ""]);
       }
-      
+
+      // 이미지 관련 상태 초기화
+      setImageFile(null);
+      setImagePreview(null);
+
       alert("퀴즈가 성공적으로 생성되었습니다!");
     } catch {
       alert("퀴즈 생성에 실패했습니다.");
@@ -195,7 +251,11 @@ const QuizCreator = ({ categories }: Props) => {
                   name="answer"
                   value={data.answer}
                   onChange={handleData}
-                  placeholder={data.type === "MULTIPLE_CHOICE" ? "정답 텍스트를 입력하세요" : "정답을 입력하세요"}
+                  placeholder={
+                    data.type === "MULTIPLE_CHOICE"
+                      ? "정답 텍스트를 입력하세요"
+                      : "정답을 입력하세요"
+                  }
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                 />
               )}
@@ -225,7 +285,9 @@ const QuizCreator = ({ categories }: Props) => {
                       <input
                         type="text"
                         value={option}
-                        onChange={(e) => handleOptionChange(index, e.target.value)}
+                        onChange={(e) =>
+                          handleOptionChange(index, e.target.value)
+                        }
                         placeholder="선택지를 입력하세요"
                         className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                       />
@@ -260,6 +322,49 @@ const QuizCreator = ({ categories }: Props) => {
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                이미지 첨부
+              </label>
+              {!imagePreview ? (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer">
+                    <div className="flex flex-col items-center gap-2">
+                      <Upload className="w-8 h-8 text-gray-400" />
+                      <p className="text-sm text-gray-600">
+                        이미지를 선택하거나 여기에 드래그하세요
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        PNG, JPG, GIF (최대 5MB)
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              ) : (
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </AdminCard>
       </div>
@@ -283,7 +388,7 @@ const QuizCreator = ({ categories }: Props) => {
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
               >
                 <option value="">카테고리 선택</option>
-                {categories.map(category => (
+                {categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
@@ -340,14 +445,16 @@ const QuizCreator = ({ categories }: Props) => {
               !data.content.trim() ||
               !data.answer.trim() ||
               !data.categoryId ||
-              (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+              (data.type === "MULTIPLE_CHOICE" &&
+                options.filter((opt) => opt.trim()).length < 3)
             }
             className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
               isLoading ||
               !data.content.trim() ||
               !data.answer.trim() ||
               !data.categoryId ||
-              (data.type === "MULTIPLE_CHOICE" && options.filter(opt => opt.trim()).length < 3)
+              (data.type === "MULTIPLE_CHOICE" &&
+                options.filter((opt) => opt.trim()).length < 3)
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                 : "bg-primary text-white hover:bg-primary/90"
             }`}

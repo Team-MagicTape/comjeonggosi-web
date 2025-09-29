@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PathParams } from "@/shared/types/path-params";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
-import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-articles";
+import { fetchInitialArticle } from "@/entities/article/api/fetch-initial-article";
 import { Metadata } from "next";
 
 export async function generateMetadata({
@@ -37,7 +37,7 @@ export async function generateMetadata({
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
-  const articles = await fetchInitialArticles(String(article?.category.id));
+  const articles = await fetchInitialArticle(String(article?.category.id));
   if (!article) {
     notFound();
   }

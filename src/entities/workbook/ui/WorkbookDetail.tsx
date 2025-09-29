@@ -219,7 +219,8 @@ const WorkbookDetail = ({ workbook }: Props) => {
                                   {sectionIndex * 25 + index + 1}
                                 </span>
                               </div>
-                              <div className="flex-1">
+                              <div
+                               className="flex-1">
                                 <p className="text-gray-900 font-medium mb-2 line-clamp-2">
                                   {quiz.content}
                                 </p>

@@ -1,5 +1,5 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Workbook } from "../types/workbook";
 import { fetchWorkbookQuizzes } from "../api/fetch-workbook-quizzes";
 
@@ -7,17 +7,16 @@ const ITEMS_PER_SECTION = 25;
 
 export const useLoadQuizzes = (workbook: Workbook) => {
   const [quizzesBySection, setQuizzesBySection] = useState<Record<number, Quiz[]>>({});
-
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set());
-  
-  const [isInitialLoading, setIsInitialLoading] = useState(false);
-  
+  const [isInitialLoading, setIsInitialLoading] = useState(true); // ✅ true로 시작
   const [isLoadingSection, setIsLoadingSection] = useState<number | null>(null);
+  
+  const loadedSectionsRef = useRef<Set<number>>(new Set()); // ✅ ref로 추적
 
   const totalSections = Math.ceil(workbook.quizIds.length / ITEMS_PER_SECTION);
 
   const loadSection = async (sectionIndex: number) => {
-    if (loadedSections.has(sectionIndex)) {
+    if (loadedSectionsRef.current.has(sectionIndex)) {
       return;
     }
 
@@ -35,7 +34,8 @@ export const useLoadQuizzes = (workbook: Workbook) => {
         [sectionIndex]: sectionQuizzes
       }));
       
-      setLoadedSections(prev => new Set([...prev, sectionIndex]));
+      loadedSectionsRef.current.add(sectionIndex); 
+      setLoadedSections(new Set(loadedSectionsRef.current));
       
     } catch (error) {
       console.error(`구간 ${sectionIndex + 1} 퀴즈 로드 실패:`, error);
@@ -43,21 +43,33 @@ export const useLoadQuizzes = (workbook: Workbook) => {
       setIsLoadingSection(null);
     }
   };
+
   useEffect(() => {
     const loadAllSectionsGradually = async () => {
+      if (totalSections === 0) {
+        setIsInitialLoading(false); 
+        return;
+      }
+
       await loadSection(0);
+      setIsInitialLoading(false);
       
       for (let i = 1; i < totalSections; i++) {
         setTimeout(() => {
-          if (!loadedSections.has(i)) {
+          if (!loadedSectionsRef.current.has(i)) {
             loadSection(i);
           }
         }, i * 300);
       }
     };
     
+    loadedSectionsRef.current.clear();
+    setLoadedSections(new Set());
+    setQuizzesBySection({});
+    setIsInitialLoading(true);
+    
     loadAllSectionsGradually();
-  }, [workbook.id]);
+  }, [workbook.id, totalSections]);
 
   return {
     quizzesBySection,        

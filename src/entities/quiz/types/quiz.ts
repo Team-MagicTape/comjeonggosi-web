@@ -10,4 +10,5 @@ export interface Quiz {
   articleId: number | null;
   type: QuizType;
   difficulty: number;
+  imageUrl?: string;
 }

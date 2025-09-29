@@ -36,7 +36,7 @@ const ArticlesPage = async ({ searchParams }: Props) => {
   const categoryId = resolvedSearchParams.categoryId || "1";
 
   const [articles, categories] = await Promise.all([
-    fetchInitialArticles(),
+    fetchInitialArticles(categoryId),
     fetchCategories(),
   ]);
 

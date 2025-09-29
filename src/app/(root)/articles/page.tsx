@@ -26,13 +26,14 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     categoryId?: string;
-  };
+  }>;
 }
 
 const ArticlesPage = async ({ searchParams }: Props) => {
-  const categoryId = searchParams.categoryId || "1";
+  const resolvedSearchParams = await searchParams;
+  const categoryId = resolvedSearchParams.categoryId || "1";
 
   const [articles, categories] = await Promise.all([
     fetchInitialArticles(),

@@ -110,6 +110,17 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       </h2>
                     </div>
 
+                    {/* 퀴즈 이미지 */}
+                    {quiz?.imageUrl && (
+                      <div className="px-4 sm:px-8 mb-4">
+                        <img
+                          src={quiz.imageUrl}
+                          alt="퀴즈 이미지"
+                          className="w-full max-w-lg mx-auto h-auto rounded-lg border border-gray-200 shadow-sm"
+                        />
+                      </div>
+                    )}
+
                     {quiz.type === "OX" ? (
                       <OxOption
                         currentIdx={currentIdx}

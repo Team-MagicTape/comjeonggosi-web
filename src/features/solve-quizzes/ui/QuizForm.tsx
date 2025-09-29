@@ -60,7 +60,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
           setCategory={setCategory}
         />
       </div>
-      
+
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
@@ -85,6 +85,17 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                         {quiz?.content}
                       </h2>
                     </div>
+
+                    {/* 퀴즈 이미지 */}
+                    {quiz?.imageUrl && (
+                      <div className="px-4 sm:px-8 mb-4">
+                        <img
+                          src={quiz.imageUrl}
+                          alt="퀴즈 이미지"
+                          className="w-full max-w-lg mx-auto h-auto rounded-lg border border-gray-200 shadow-sm"
+                        />
+                      </div>
+                    )}
 
                     {quiz.type === "OX" ? (
                       <OxOption

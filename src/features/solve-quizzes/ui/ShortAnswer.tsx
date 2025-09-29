@@ -2,6 +2,7 @@
 
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { Check, X } from "lucide-react";
+import { useShortAnswer } from "../model/useShortAnswer";
 
 interface Props {
   shortAnswer: string;
@@ -28,11 +29,13 @@ const ShortAnswer = ({
   quiz,
   isAnswered = false,
 }: Props) => {
+  const {inputRef} = useShortAnswer(showAnswer, quizIdx, currentIdx, isAnswered)
   return (
     <div className="px-4 pt-4 sm:px-8 mb-6 sm:mb-8">
       <div className="space-y-4">
         <div className="relative">
           <input
+            ref={inputRef}
             type="text"
             value={shortAnswer}
             onChange={(e) => setShortAnswer(e.target.value)}

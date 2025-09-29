@@ -30,14 +30,30 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
+    
     const correct = currentQuiz?.answer === answer;
     setCorrected(prev => correct ? prev + 1 : prev);
     setSelectedAnswer(answer);
     setShowAnswer(true);
+  
     setAnsweredQuizzes((prev) =>
-      new Map(prev).set(currentIdx, { answer, isCorrect: correct })
+      new Map(prev).set(currentIdx, { answer, isCorrect: false }) // 임시로 false
     );
-    submit(answer)
+    
+    // 서버 결과를 기다려서 점수 업데이트
+    try {
+      const isCorrect = await submit(answer);
+      
+      setAnsweredQuizzes((prev) =>
+        new Map(prev).set(currentIdx, { answer, isCorrect })
+      );
+      
+      if (isCorrect) {
+        setCorrected((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error('API 제출 실패:', error);
+    }
   };
 
   const handleShortAnswerSubmit = () => {
@@ -49,11 +65,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     const nextQuizAnswer = answeredQuizzes.get(currentIdx + 1);
     if (nextQuizAnswer) {
-      // 다음 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(nextQuizAnswer.answer);
       setShowAnswer(true);
     } else {
-      // 답변되지 않은 문제라면 초기화
       setSelectedAnswer(null);
       setShowAnswer(false);
     }
@@ -69,11 +83,9 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     const prevQuizAnswer = answeredQuizzes.get(currentIdx - 1);
     if (prevQuizAnswer) {
-      // 이전 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(prevQuizAnswer.answer);
       setShowAnswer(true);
     } else {
-      // 답변되지 않은 문제라면 초기화
       setSelectedAnswer(null);
       setShowAnswer(false);
     }

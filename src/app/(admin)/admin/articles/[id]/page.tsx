@@ -5,12 +5,12 @@ import DeleteButton from "@/features/delete-article/ui/DeleteButton";
 import EditButton from "@/features/edit-article/ui/EditButton";
 import ArticleSidebar from "@/entities/article/ui/ArticleSidebar";
 import Markdown from "@/shared/ui/Markdown";
-import { fetchInitialArticle } from "@/entities/article/api/fetch-initial-article";
+import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-articles";
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
   const article = await getArticleDetail(Number(id));
-  const articles = await fetchInitialArticle(String(article?.category.id));
+  const articles = await fetchInitialArticles(String(article?.category.id));
   if (!article) {
     notFound();
   }
@@ -22,9 +22,7 @@ const ArticleDetail = async ({ params }: PathParams) => {
       </div>
       <div className="w-full bg-white border border-border rounded-2xl p-8 flex flex-col gap-6">
         <span className="flex items-center justify-between w-full">
-          <h1 className="font-extrabold xl:text-3xl text-2xl">
-            {article.title}
-          </h1>
+          <h1 className="font-extrabold xl:text-3xl text-2xl">{article.title}</h1>
           <div className="flex items-center gap-2">
             <DeleteButton articleId={Number(params)} />
             <EditButton articleId={Number(params)} />
@@ -36,7 +34,7 @@ const ArticleDetail = async ({ params }: PathParams) => {
         </div>
       </div>
       <div className="block mt-4 xl:hidden">
-        <ArticleSidebar data={articles} title="관련글" />
+        <ArticleSidebar data={articles} title="관련글"/>
       </div>
     </div>
   );

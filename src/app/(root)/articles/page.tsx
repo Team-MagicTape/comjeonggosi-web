@@ -25,20 +25,9 @@ export const metadata: Metadata = {
   },
 };
 
-interface Props {
-  searchParams: Promise<{
-    categoryId?: string;
-  }>;
-}
-
-const ArticlesPage = async ({ searchParams }: Props) => {
-  const resolvedSearchParams = await searchParams;
-  const categoryId = resolvedSearchParams.categoryId || "1";
-
-  const [articles, categories] = await Promise.all([
-    fetchInitialArticles(categoryId),
-    fetchCategories(),
-  ]);
+const ArticlesPage = async () => {
+  const categories = await fetchCategories();
+  const articles = await fetchInitialArticles(categories[0].id.toString());
 
   if (!categories || categories.length === 0) {
     return (
@@ -58,45 +47,28 @@ const ArticlesPage = async ({ searchParams }: Props) => {
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-bold mb-2">아티클</h1>
         <p className="text-sm lg:text-base text-gray-600">
-          컴퓨터 정보처리 관련 아티클을 읽어보세요
+          컴퓨터 정보 관련 아티클을 읽어보세요
         </p>
       </div>
 
-      {articles.length === 0 ? (
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="text-center">
-            <p className="text-xl font-semibold text-gray-600 mb-2">
-              아직 작성된 아티클이 없습니다
-            </p>
-            <p className="text-gray-500">
-              곧 새로운 아티클이 업데이트될 예정입니다
-            </p>
+      <Suspense
+        fallback={
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-lg shadow-md p-6 animate-pulse"
+              >
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+              </div>
+            ))}
           </div>
-        </div>
-      ) : (
-        <Suspense
-          fallback={
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-lg shadow-md p-6 animate-pulse"
-                >
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full mb-2"></div>
-                  <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                </div>
-              ))}
-            </div>
-          }
-        >
-          <ArticleList
-            articles={articles}
-            categories={categories}
-            selectedCategoryId={parseInt(categoryId)}
-          />
-        </Suspense>
-      )}
+        }
+      >
+        <ArticleList articles={articles} categories={categories} />
+      </Suspense>
     </div>
   );
 };

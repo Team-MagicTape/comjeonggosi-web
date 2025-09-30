@@ -12,15 +12,22 @@ import { useGetArticles } from "../model/useGetArticles";
 interface Props {
   articles: Article[];
   categories: Category[];
+  seletedCategoryId: string;
 }
 
-const ArticleList = ({ articles, categories }: Props) => {
+const ArticleList = ({
+  articles,
+  categories,
+  seletedCategoryId = categories[0].id.toString(),
+}: Props) => {
   const tabs = categories.map((item) => ({
     name: item.name,
     value: `${item.id}`,
   }));
   const router = useCustomRouter();
-  const [category, setCategory] = useState(tabs[0]);
+  const [category, setCategory] = useState(
+    tabs.find((item) => item.value === seletedCategoryId)!
+  );
   const { isLoading } = useGetArticles(category.value, articles);
 
   const handleCategoryChange = (tab: Tab) => {

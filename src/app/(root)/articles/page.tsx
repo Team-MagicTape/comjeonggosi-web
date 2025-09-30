@@ -24,10 +24,18 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+interface Props {
+  searchParams: Promise<{
+    categoryId?: string;
+  }>;
+}
 
-const ArticlesPage = async () => {
+const ArticlesPage = async ({ searchParams }: Props) => {
   const categories = await fetchCategories();
-  const articles = await fetchInitialArticles(categories[0].id.toString());
+  const resolvedSearchParams = await searchParams;
+  const categoryId =
+    resolvedSearchParams.categoryId || categories[0].id.toString();
+  const articles = await fetchInitialArticles(categoryId);
 
   if (!categories || categories.length === 0) {
     return (
@@ -67,7 +75,11 @@ const ArticlesPage = async () => {
           </div>
         }
       >
-        <ArticleList articles={articles} categories={categories} />
+        <ArticleList
+          articles={articles}
+          categories={categories}
+          seletedCategoryId={categoryId}
+        />
       </Suspense>
     </div>
   );

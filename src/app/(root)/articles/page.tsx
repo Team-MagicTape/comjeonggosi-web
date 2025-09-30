@@ -37,7 +37,7 @@ const ArticlesPage = async ({ searchParams }: Props) => {
     resolvedSearchParams.categoryId || categories[0].id.toString();
   const articles = await fetchInitialArticles(categoryId);
 
-  if (!categories || categories.length === 0) {
+  if (categories.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[400px]">
         <div className="text-center">

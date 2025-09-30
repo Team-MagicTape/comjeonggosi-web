@@ -93,7 +93,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     >
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-medium text-white">
-                          {quizIdx + 1}
+                          {currentIdx + 1}
                         </span>
                       </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -184,15 +184,13 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       />
                     )}
 
-                    {quizIdx === currentIdx && (
-                      <QuizNavigation
-                        currentIdx={currentIdx}
-                        handlePrev={handlePrev}
-                        handleNext={handleNext}
-                        showAnswer={showAnswer}
-                        settings={settings}
-                      />
-                    )}
+                    <QuizNavigation
+                      currentIdx={currentIdx}
+                      handlePrev={handlePrev}
+                      handleNext={handleNext}
+                      showAnswer={showAnswer}
+                      settings={settings}
+                    />
 
                     <WorkbookQuizSettings
                       settings={settings}

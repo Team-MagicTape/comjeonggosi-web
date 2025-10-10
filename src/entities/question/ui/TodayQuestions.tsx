@@ -33,7 +33,7 @@ const TodayQuestions = ({ categories, questions }: Props) => {
         />
       </div>
       <div className="gap-6 mb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {data ? data.map((item) => (
+        {data ? data?.map((item) => (
           <TodayQuestionItem
             data={item}
             category={categories.find((c) => c.id === item.id) || null}

@@ -12,6 +12,7 @@ import MyContentCards from "@/widgets/section/ui/MyContentCard";
 
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
+import ReportForm from "@/entities/report/ui/ReportForm";
 
 export const metadata: Metadata = {
   title: "마이페이지 | 컴정고시",
@@ -76,6 +77,7 @@ const My = async () => {
           },
         ]}
       />
+      <ReportForm/>
     </div>
   );
 };

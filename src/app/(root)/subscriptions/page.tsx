@@ -1,7 +1,7 @@
 import React from 'react'
 import SubscribtionForm from '@/entities/subscribtion/ui/SubscriptionForm'
 
-function page() {
+const Subscribe = () =>{
   return (
     <div>
       < SubscribtionForm/>
@@ -9,4 +9,4 @@ function page() {
   )
 }
 
-export default page
+export default Subscribe;

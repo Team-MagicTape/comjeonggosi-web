@@ -38,6 +38,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
     restart,
     isCurrentQuizAnswered,
     answeredQuizzes,
+    wrongOnlyMode,
   } = useWorkbookQuizForm(data);
 
   return (
@@ -45,9 +46,19 @@ const WorkbookQuizForm = ({ data }: Props) => {
       {/* 진행도 표시 막대 */}
       {quizzes.length > 0 && answeredQuizzes.size <= quizzes.length && (
         <div className="w-full space-y-3 xl:px-4">
+          {wrongOnlyMode && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center justify-center gap-2">
+              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+              <span className="text-sm font-medium text-red-700">
+                틀린 문제만 다시 풀기 모드
+              </span>
+            </div>
+          )}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">진행률</span>
+              <span className="text-sm font-medium text-gray-600">
+                {wrongOnlyMode ? "틀린 문제 다시 풀기" : "진행률"}
+              </span>
               <span className="text-sm font-semibold text-primary">
                 {answeredQuizzes.size} / {quizzes.length}
               </span>
@@ -356,12 +367,24 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     <div className="space-y-3 w-full max-w-sm">
                       <Button
                         isFullWidth
-                        onClick={restart}
+                        onClick={() => restart(false)}
                         className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center gap-2"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         다시 풀기
                       </Button>
+                      {/* 틀린 문제가 있을 때만 표시 */}
+                      {corrected < quizzes.length && (
+                        <Button
+                          isFullWidth
+                          onClick={() => restart(true)}
+                          className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center gap-2"
+                        >
+                          <ArrowLeftIcon className="w-4 h-4" />
+                          틀린 문제만 다시 풀기 ({quizzes.length - corrected}
+                          문제)
+                        </Button>
+                      )}
                       <CustomLink
                         href="/workbooks"
                         className="flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"

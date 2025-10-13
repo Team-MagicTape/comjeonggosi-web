@@ -19,29 +19,32 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     autoNext: false,
     noDelay: false,
   });
-  const currentQuiz = shuffledQuizzes[currentIdx];
+  const [wrongOnlyMode, setWrongOnlyMode] = useState(false);
+  const [filteredQuizzes, setFilteredQuizzes] =
+    useState<Quiz[]>(shuffledQuizzes);
+  const currentQuiz = filteredQuizzes[currentIdx];
   const isCorrect = currentQuiz?.answer === selectedAnswer;
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
     if (!answer) return;
-    const {result} = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    if(!result) return;
+    const { result } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
+    if (!result) return;
     return result.isCorrect as boolean;
   };
 
   const handleAnswerSelect = async (answer: string) => {
     // 이미 답변한 문제인지 확인
     if (answeredQuizzes.has(currentIdx)) return;
-    
+
     const correct = currentQuiz?.answer === answer;
-    setCorrected(prev => correct ? prev + 1 : prev);
+    setCorrected((prev) => (correct ? prev + 1 : prev));
     setSelectedAnswer(answer);
     setShowAnswer(true);
     setAnsweredQuizzes((prev) =>
       new Map(prev).set(currentIdx, { answer, isCorrect: correct })
     );
-    submit(answer)
+    submit(answer);
   };
 
   const handleShortAnswerSubmit = () => {
@@ -50,11 +53,11 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const handleNext = () => {
     if (!showAnswer) return;
-    if (currentIdx >= shuffledQuizzes.length) return;
+    if (currentIdx >= filteredQuizzes.length) return;
 
     const nextIdx = currentIdx + 1;
     const nextQuizAnswer = answeredQuizzes.get(nextIdx);
-    
+
     if (nextQuizAnswer) {
       // 다음 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(nextQuizAnswer.answer);
@@ -66,7 +69,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       setShowAnswer(false);
       setShortAnswer("");
     }
-    
+
     setTimeout(() => setCurrentIdx(nextIdx), 50);
   };
 
@@ -75,7 +78,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
     const prevIdx = currentIdx - 1;
     const prevQuizAnswer = answeredQuizzes.get(prevIdx);
-    
+
     if (prevQuizAnswer) {
       // 이전 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(prevQuizAnswer.answer);
@@ -87,7 +90,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       setShowAnswer(false);
       setShortAnswer("");
     }
-    
+
     setTimeout(() => setCurrentIdx(prevIdx), 100);
   };
 
@@ -136,14 +139,30 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     }
   };
 
-  const restart = () => {
+  const restart = (wrongOnly = false) => {
+    setWrongOnlyMode(wrongOnly);
     setCurrentIdx(0);
-    setCorrected(0);
-    setAnsweredQuizzes(new Map()); // 답변 상태 초기화
     setSelectedAnswer(null);
-    setShowAnswer(false);
     setShortAnswer("");
+    setShowAnswer(false);
+    if (!wrongOnly) {
+      setAnsweredQuizzes(new Map());
+    }
   };
+
+  // 필터링된 퀴즈 목록 업데이트
+  useEffect(() => {
+    if (wrongOnlyMode) {
+      // 틀린 문제만 필터링
+      const wrongQuizzes = shuffledQuizzes.filter((_, index) => {
+        const answer = answeredQuizzes.get(index);
+        return answer && !answer.isCorrect;
+      });
+      setFilteredQuizzes(wrongQuizzes);
+    } else {
+      setFilteredQuizzes(shuffledQuizzes);
+    }
+  }, [wrongOnlyMode, shuffledQuizzes, answeredQuizzes]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyboard);
@@ -162,7 +181,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   return {
     currentIdx,
     currentQuiz,
-    quizzes: shuffledQuizzes,
+    quizzes: filteredQuizzes,
     selectedAnswer,
     showAnswer,
     isCorrect,
@@ -178,5 +197,6 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     restart,
     isCurrentQuizAnswered,
     answeredQuizzes,
+    wrongOnlyMode,
   };
 };

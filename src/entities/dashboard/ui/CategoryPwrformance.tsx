@@ -27,9 +27,9 @@ const CategoryPerformance = async () => {
                     </p>
                   </div>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-3.5">
+                <div className="w-full bg-gray-100 rounded-full h-3">
                   <div
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-full h-3.5 transition-all duration-500"
+                    className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-full h-3 transition-all duration-500"
                     style={{ width: `${category.averageScore}%` }}
                   />
                 </div>

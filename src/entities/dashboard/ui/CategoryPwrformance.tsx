@@ -8,7 +8,7 @@ const CategoryPerformance = async () => {
         <div>
             <div className="bg-white border border-gray-100 rounded-lg p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold text-gray-900">카테고리별 성과</h2>
+            <h2 className="text-xl font-semibold text-gray-900">카테고리별 성과</h2>
             <BarChart3 className="w-5 h-5 text-gray-400" />
           </div>
           <div className="space-y-5">
@@ -16,8 +16,8 @@ const CategoryPerformance = async () => {
               <div key={category.categoryId} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
-                    <p className="text-xl font-medium text-gray-900">{category.categoryName}</p>
-                    <p className="text-base text-gray-500">
+                    <p className="text-lg font-medium text-gray-900">{category.categoryName}</p>
+                    <p className="text-sm text-gray-500">
                       {category.totalAttempts.toLocaleString()}회 응시
                     </p>
                   </div>

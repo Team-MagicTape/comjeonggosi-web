@@ -15,18 +15,14 @@ interface Props {
   seletedCategoryId: string;
 }
 
-const ArticleList = ({
-  articles,
-  categories,
-  seletedCategoryId = categories[0].id.toString(),
-}: Props) => {
+const ArticleList = ({ articles, categories, seletedCategoryId }: Props) => {
   const tabs = categories.map((item) => ({
     name: item.name,
     value: `${item.id}`,
   }));
   const router = useCustomRouter();
   const [category, setCategory] = useState(
-    tabs.find((item) => item.value === seletedCategoryId)!
+    tabs.find((item) => item.value === seletedCategoryId) ?? tabs[0]
   );
   const { isLoading } = useGetArticles(category.value, articles);
 
@@ -34,6 +30,19 @@ const ArticleList = ({
     setCategory(tab);
     router.push(`?categoryId=${tab.value}`);
   };
+
+  if (categories.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-xl font-semibold text-gray-600 mb-2">
+            카테고리가 없습니다
+          </p>
+          <p className="text-gray-500">잠시 후 다시 시도해주세요</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

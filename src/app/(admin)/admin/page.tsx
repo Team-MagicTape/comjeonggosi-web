@@ -4,6 +4,7 @@ import { fetchInitialStates } from "@/entities/dashboard/api/fetch-initial-state
 import States from "@/entities/dashboard/ui/Stats";
 import UserGrowth from "@/entities/dashboard/ui/UserGrowth";
 import CategoryPerformance from "@/entities/dashboard/ui/CategoryPwrformance";
+import SubscriptionState from "@/entities/dashboard/ui/SubscriptionState";
 
 const Admin = async () => {
   const initialStats = await fetchInitialStates({ period: "day" });
@@ -73,6 +74,7 @@ const Admin = async () => {
       <div className="grid grid-rows-1 gap-8 mb-8">
         <UserGrowth />
         <CategoryPerformance />
+        <SubscriptionState />
       </div>
     </div>
   );

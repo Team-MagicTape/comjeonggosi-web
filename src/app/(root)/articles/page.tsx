@@ -33,9 +33,6 @@ interface Props {
 const ArticlesPage = async ({ searchParams }: Props) => {
   const categories = await fetchCategories();
   const resolvedSearchParams = await searchParams;
-  const categoryId =
-    resolvedSearchParams.categoryId || categories[0].id.toString();
-  const articles = await fetchInitialArticles(categoryId);
 
   if (categories.length === 0) {
     return (
@@ -49,6 +46,10 @@ const ArticlesPage = async ({ searchParams }: Props) => {
       </div>
     );
   }
+
+  const categoryId =
+    resolvedSearchParams.categoryId || categories[0].id.toString();
+  const articles = await fetchInitialArticles(categoryId);
 
   return (
     <div className="w-full py-4 lg:py-6">

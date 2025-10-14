@@ -3,7 +3,7 @@ import CustomLink from "@/shared/ui/CustomLink";
 import { fetchInitialStates } from "@/entities/dashboard/api/fetch-initial-states";
 import States from "@/entities/dashboard/ui/Stats";
 import UserGrowth from "@/entities/dashboard/ui/UserGrowth";
-import CategoryPerformance from "@/entities/dashboard/ui/CategoryPwrformance";
+import CategoryPerformance from "@/entities/dashboard/ui/CategoryPerformance";
 import SubscriptionState from "@/entities/dashboard/ui/SubscriptionState";
 
 const Admin = async () => {

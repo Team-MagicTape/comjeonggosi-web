@@ -1,6 +1,6 @@
 import { fetchSubState } from "../api/fetch-sub-state";
 import { LineChart } from "lucide-react";
-import { User,UserCheck,Wallet,TrendingDown} from "lucide-react";
+import { User, UserCheck, Wallet, TrendingDown } from "lucide-react";
 
 const SubscriptionState = async () => {
   const state = await fetchSubState();
@@ -35,14 +35,19 @@ const SubscriptionState = async () => {
           <LineChart className="w-5 h-5 text-gray-400" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {plans.map((plan, index) => (
-            <div key={index} className="bg-white border border-gray-100 rounded-lg p-6">
+          {plans.map((plan) => (
+            <div
+              key={plan.label}
+              className="bg-white border border-gray-100 rounded-lg p-6"
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="p-2 bg-gray-100 rounded-lg">
                   <plan.icon className="w-5 h-5 text-gray-700" />
                 </div>
               </div>
-              <h3 className="text-[21px] font-bold text-gray-900 mb-1">{plan.value}</h3>
+              <h3 className="text-[21px] font-bold text-gray-900 mb-1">
+                {plan.value}
+              </h3>
               <p className="text-lg text-gray-600">{plan.label}</p>
             </div>
           ))}

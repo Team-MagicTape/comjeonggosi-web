@@ -45,7 +45,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       const isCorrect = await submit(answer);
       
       setAnsweredQuizzes((prev) =>
-        new Map(prev).set(currentIdx, { answer, isCorrect })
+        new Map(prev).set(currentIdx, { answer, isCorrect: isCorrect ?? false })
       );
       
       if (isCorrect) {

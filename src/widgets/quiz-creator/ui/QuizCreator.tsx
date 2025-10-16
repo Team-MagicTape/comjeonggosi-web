@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
 import { Category } from "@/entities/category/types/category";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
-import { apiClient } from "@/shared/libs/custom-axios";
+import { bulkQuizzes } from "../api/bulk-quiz";
+import { createQuizzes } from "../api/create-quiz";
 import {
   Plus,
   Minus,
@@ -13,466 +13,399 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { useQuizCreator } from "../model/useQuizCreator";
 
 interface Props {
   categories: Category[];
 }
 
-type QuizType = "MULTIPLE_CHOICE" | "OX" | "SHORT_ANSWER";
-
-interface QuizData {
-  content: string;
-  answer: string;
-  categoryId: string;
-  articleId: string;
-  difficulty: string;
-  type: QuizType;
-  explanation?: string;
-  imageUrl: string;
-}
-
 const QuizCreator = ({ categories }: Props) => {
-  const [data, setData] = useState<QuizData>({
-    content: "",
-    answer: "",
-    categoryId: "",
-    articleId: "",
-    difficulty: "3",
-    type: "MULTIPLE_CHOICE",
-    explanation: "",
-    imageUrl: "",
-  });
-  const [options, setOptions] = useState<string[]>(["", "", ""]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  const handleData = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { value, name } = e.target;
-
-    if (name === "type") {
-      setData((prev) => ({
-        ...prev,
-        [name]: value as QuizType,
-        answer: value === "OX" ? "O" : "",
-      }));
-
-      if (value === "MULTIPLE_CHOICE") {
-        setOptions(["", "", ""]);
-      } else {
-        setOptions([]);
-      }
-    } else {
-      setData((prev) => ({
-        ...prev,
-        [name]:
-          name === "categoryId" || name === "articleId"
-            ? Number(value) || value
-            : value,
-      }));
-    }
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
-
-  const addOption = () => {
-    if (options.length < 6) {
-      setOptions([...options, ""]);
-    }
-  };
-
-  const removeOption = (index: number) => {
-    if (options.length > 3) {
-      setOptions(options.filter((_, i) => i !== index));
-    }
-  };
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        // 5MB 제한
-        alert("이미지 파일 크기는 5MB 이하여야 합니다.");
-        return;
-      }
-
-      if (!file.type.startsWith("image/")) {
-        alert("이미지 파일만 업로드 가능합니다.");
-        return;
-      }
-
-      setImageFile(file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        const previewUrl = reader.result as string;
-        setImagePreview(previewUrl);
-        // imageUrl에도 설정
-        setData((prev) => ({ ...prev, imageUrl: previewUrl }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
-    setData((prev) => ({ ...prev, imageUrl: "" }));
-  };
+  const {
+    quizForms,
+    isLoading,
+    setIsLoading,
+    addQuizForm,
+    removeQuizForm,
+    handleData,
+    handleOptionChange,
+    addOption,
+    removeOption,
+    handleImageChange,
+    removeImage,
+    convertFormToApiData,
+    resetForms,
+    isAllFormsValid,
+  } = useQuizCreator();
 
   const submit = async () => {
     setIsLoading(true);
     try {
-      let submitOptions: string[] = [];
-
-      if (data.type === "MULTIPLE_CHOICE") {
-        const filteredOptions = options.filter(
-          (option) => option.trim() !== ""
-        );
-        submitOptions = filteredOptions;
-      } else if (data.type === "OX") {
-        submitOptions = [data.answer === "O" ? "X" : "O"];
+      if (quizForms.length === 1) {
+        await createQuizzes(convertFormToApiData(quizForms[0]));
+      } else {
+        const quizzesData = quizForms.map(convertFormToApiData);
+        await bulkQuizzes(quizzesData);
       }
 
-      const submitData = {
-        ...data,
-        options: submitOptions,
-        difficulty: Number(data.difficulty),
-        imageUrl: data.imageUrl,
-      };
-
-      await apiClient.post("/api/admin/quizzes", submitData);
-
-      setData({
-        content: "",
-        answer: "",
-        categoryId: data.categoryId,
-        articleId: "",
-        difficulty: "3",
-        type: data.type,
-        explanation: "",
-        imageUrl: "",
-      });
-
-      if (data.type === "MULTIPLE_CHOICE") {
-        setOptions(["", "", ""]);
-      }
-
-      // 이미지 관련 상태 초기화
-      setImageFile(null);
-      setImagePreview(null);
-
-      alert("퀴즈가 성공적으로 생성되었습니다!");
-    } catch {
+      resetForms();
+      alert(`퀴즈가 성공적으로 생성되었습니다! (${quizForms.length}개)`);
+    } catch (error) {
       alert("퀴즈 생성에 실패했습니다.");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-6">
-        <AdminCard className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <CircleHelp className="w-5 h-5" />
-            퀴즈 정보
-          </h2>
+    <div className="space-y-6">
+      {/* 상단 헤더 */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-gray-900">퀴즈 생성</h1>
+          {quizForms.length > 1 && (
+            <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full">
+              {quizForms.length}개
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={addQuizForm}
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors shadow-sm"
+        >
+          <Plus className="w-5 h-5" />
+          퀴즈 추가
+        </button>
+      </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                퀴즈 타입 <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="type"
-                value={data.type}
-                onChange={handleData}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+      {/* 퀴즈 폼들 */}
+      {quizForms.map((formData, formIndex) => (
+        <div
+          key={formIndex}
+          className="border-2 border-gray-200 rounded-xl p-6 relative bg-white shadow-sm"
+        >
+          {quizForms.length > 1 && (
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
+                #{formIndex + 1}
+              </span>
+              <button
+                type="button"
+                onClick={() => removeQuizForm(formIndex)}
+                className="p-1.5 text-red-500 hover:bg-red-50 rounded-full transition-colors"
               >
-                <option value="MULTIPLE_CHOICE">객관식</option>
-                <option value="OX">O/X 문제</option>
-                <option value="SHORT_ANSWER">단답형</option>
-              </select>
+                <X className="w-5 h-5" />
+              </button>
             </div>
+          )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                문제 내용 <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                name="content"
-                value={data.content}
-                onChange={handleData}
-                rows={4}
-                placeholder="문제를 입력하세요..."
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
-              />
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+            <div className="lg:col-span-2 space-y-6">
+              <AdminCard className="p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <CircleHelp className="w-5 h-5" />
+                  퀴즈 정보
+                </h2>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                정답 <span className="text-red-500">*</span>
-              </label>
-              {data.type === "OX" ? (
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="answer"
-                      value="O"
-                      checked={data.answer === "O"}
-                      onChange={handleData}
-                      className="text-primary focus:ring-primary"
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      퀴즈 타입 <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="type"
+                      value={formData.type}
+                      onChange={(e) => handleData(formIndex, e)}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    >
+                      <option value="MULTIPLE_CHOICE">객관식</option>
+                      <option value="OX">O/X 문제</option>
+                      <option value="SHORT_ANSWER">단답형</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      문제 내용 <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      name="content"
+                      value={formData.content}
+                      onChange={(e) => handleData(formIndex, e)}
+                      rows={4}
+                      placeholder="문제를 입력하세요..."
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
                     />
-                    <span className="text-green-600 font-medium">O (참)</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="answer"
-                      value="X"
-                      checked={data.answer === "X"}
-                      onChange={handleData}
-                      className="text-primary focus:ring-primary"
-                    />
-                    <span className="text-red-600 font-medium">X (거짓)</span>
-                  </label>
-                </div>
-              ) : (
-                <input
-                  type="text"
-                  name="answer"
-                  value={data.answer}
-                  onChange={handleData}
-                  placeholder={
-                    data.type === "MULTIPLE_CHOICE"
-                      ? "정답 텍스트를 입력하세요"
-                      : "정답을 입력하세요"
-                  }
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                />
-              )}
-            </div>
+                  </div>
 
-            {data.type === "MULTIPLE_CHOICE" && (
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    선택지 <span className="text-red-500">*</span>
-                  </label>
-                  <button
-                    type="button"
-                    onClick={addOption}
-                    disabled={options.length >= 6}
-                    className="text-sm text-primary hover:text-primary/80 disabled:text-gray-400 disabled:cursor-not-allowed"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-                <div className="space-y-2">
-                  {options.map((option, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500 w-6">
-                        {index + 1}.
-                      </span>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      정답 <span className="text-red-500">*</span>
+                    </label>
+                    {formData.type === "OX" ? (
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name={`answer-${formIndex}`}
+                            value="O"
+                            checked={formData.answer === "O"}
+                            onChange={(e) => handleData(formIndex, e)}
+                            className="text-primary focus:ring-primary"
+                          />
+                          <span className="text-green-600 font-medium">
+                            O (참)
+                          </span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name={`answer-${formIndex}`}
+                            value="X"
+                            checked={formData.answer === "X"}
+                            onChange={(e) => handleData(formIndex, e)}
+                            className="text-primary focus:ring-primary"
+                          />
+                          <span className="text-red-600 font-medium">
+                            X (거짓)
+                          </span>
+                        </label>
+                      </div>
+                    ) : (
                       <input
                         type="text"
-                        value={option}
-                        onChange={(e) =>
-                          handleOptionChange(index, e.target.value)
+                        name="answer"
+                        value={formData.answer}
+                        onChange={(e) => handleData(formIndex, e)}
+                        placeholder={
+                          formData.type === "MULTIPLE_CHOICE"
+                            ? "정답 텍스트를 입력하세요"
+                            : "정답을 입력하세요"
                         }
-                        placeholder="선택지를 입력하세요"
-                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                       />
-                      {options.length > 3 && (
+                    )}
+                  </div>
+
+                  {formData.type === "MULTIPLE_CHOICE" && (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          선택지 <span className="text-red-500">*</span>
+                        </label>
                         <button
                           type="button"
-                          onClick={() => removeOption(index)}
-                          className="p-1 text-red-500 hover:bg-red-50 rounded"
+                          onClick={() => addOption(formIndex)}
+                          disabled={formData.options.length >= 6}
+                          className="text-sm text-primary hover:text-primary/80 disabled:text-gray-400 disabled:cursor-not-allowed"
                         >
-                          <Minus className="w-4 h-4" />
+                          <Plus className="w-4 h-4" />
                         </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  최소 3개, 최대 6개의 선택지 (정답 포함)
-                </p>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                해설
-              </label>
-              <textarea
-                name="explanation"
-                value={data.explanation}
-                onChange={handleData}
-                rows={3}
-                placeholder="정답에 대한 해설을 입력하세요 (선택사항)"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                이미지 첨부
-              </label>
-              {!imagePreview ? (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                    id="image-upload"
-                  />
-                  <label htmlFor="image-upload" className="cursor-pointer">
-                    <div className="flex flex-col items-center gap-2">
-                      <Upload className="w-8 h-8 text-gray-400" />
-                      <p className="text-sm text-gray-600">
-                        이미지를 선택하거나 여기에 드래그하세요
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, GIF (최대 5MB)
+                      </div>
+                      <div className="space-y-2">
+                        {formData.options.map((option, optionIndex) => (
+                          <div
+                            key={optionIndex}
+                            className="flex items-center gap-2"
+                          >
+                            <span className="text-sm text-gray-500 w-6">
+                              {optionIndex + 1}.
+                            </span>
+                            <input
+                              type="text"
+                              value={option}
+                              onChange={(e) =>
+                                handleOptionChange(
+                                  formIndex,
+                                  optionIndex,
+                                  e.target.value
+                                )
+                              }
+                              placeholder="선택지를 입력하세요"
+                              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                            />
+                            {formData.options.length > 3 && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  removeOption(formIndex, optionIndex)
+                                }
+                                className="p-1 text-red-500 hover:bg-red-50 rounded"
+                              >
+                                <Minus className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        최소 3개, 최대 6개의 선택지 (정답 포함)
                       </p>
                     </div>
-                  </label>
+                  )}
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      해설
+                    </label>
+                    <textarea
+                      name="explanation"
+                      value={formData.explanation}
+                      onChange={(e) => handleData(formIndex, e)}
+                      rows={3}
+                      placeholder="정답에 대한 해설을 입력하세요 (선택사항)"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      이미지 첨부
+                    </label>
+                    {!formData.imagePreview ? (
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageChange(formIndex, e)}
+                          className="hidden"
+                          id={`image-upload-${formIndex}`}
+                        />
+                        <label
+                          htmlFor={`image-upload-${formIndex}`}
+                          className="cursor-pointer"
+                        >
+                          <div className="flex flex-col items-center gap-2">
+                            <Upload className="w-8 h-8 text-gray-400" />
+                            <p className="text-sm text-gray-600">
+                              이미지를 선택하거나 여기에 드래그하세요
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              PNG, JPG, GIF (최대 5MB)
+                            </p>
+                          </div>
+                        </label>
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <img
+                          src={formData.imagePreview}
+                          alt="Preview"
+                          className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(formIndex)}
+                          className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-48 object-cover rounded-lg border border-gray-200"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+              </AdminCard>
+            </div>
+
+            <div className="space-y-6">
+              <AdminCard className="p-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                  <Hash className="w-5 h-5" />
+                  메타데이터
+                </h2>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      카테고리 <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      name="categoryId"
+                      value={formData.categoryId}
+                      onChange={(e) => handleData(formIndex, e)}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    >
+                      <option value="">카테고리 선택</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      난이도
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="range"
+                        name="difficulty"
+                        min="1"
+                        max="5"
+                        value={formData.difficulty}
+                        onChange={(e) => handleData(formIndex, e)}
+                        className="flex-1"
+                      />
+                      <span className="w-8 text-center font-medium text-gray-700">
+                        {formData.difficulty}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>쉬움</span>
+                      <span>보통</span>
+                      <span>어려움</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      연관 아티클 ID
+                    </label>
+                    <input
+                      type="number"
+                      name="articleId"
+                      value={formData.articleId}
+                      onChange={(e) => handleData(formIndex, e)}
+                      placeholder="아티클 ID (선택사항)"
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                    />
+                  </div>
                 </div>
-              )}
+              </AdminCard>
             </div>
           </div>
-        </AdminCard>
-      </div>
+        </div>
+      ))}
 
-      <div className="space-y-6">
-        <AdminCard className="p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Hash className="w-5 h-5" />
-            메타데이터
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                카테고리 <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="categoryId"
-                value={data.categoryId}
-                onChange={handleData}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-              >
-                <option value="">카테고리 선택</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                난이도
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="range"
-                  name="difficulty"
-                  min="1"
-                  max="5"
-                  value={data.difficulty}
-                  onChange={handleData}
-                  className="flex-1"
-                />
-                <span className="w-8 text-center font-medium text-gray-700">
-                  {data.difficulty}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>쉬움</span>
-                <span>보통</span>
-                <span>어려움</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                연관 아티클 ID
-              </label>
-              <input
-                type="number"
-                name="articleId"
-                value={data.articleId}
-                onChange={handleData}
-                placeholder="아티클 ID (선택사항)"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-              />
-            </div>
-          </div>
-        </AdminCard>
-
-        <AdminCard className="p-6">
-          <button
-            onClick={submit}
-            disabled={
-              isLoading ||
-              !data.content.trim() ||
-              !data.answer.trim() ||
-              !data.categoryId ||
-              (data.type === "MULTIPLE_CHOICE" &&
-                options.filter((opt) => opt.trim()).length < 3)
-            }
-            className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
-              isLoading ||
-              !data.content.trim() ||
-              !data.answer.trim() ||
-              !data.categoryId ||
-              (data.type === "MULTIPLE_CHOICE" &&
-                options.filter((opt) => opt.trim()).length < 3)
-                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-primary text-white hover:bg-primary/90"
-            }`}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                생성 중...
-              </>
-            ) : (
-              <>
-                <Plus className="w-4 h-4" />
-                퀴즈 생성
-              </>
-            )}
-          </button>
-        </AdminCard>
-      </div>
+      {/* 하단 생성 버튼 */}
+      <AdminCard className="p-6 sticky bottom-6">
+        <button
+          onClick={submit}
+          disabled={isLoading || !isAllFormsValid}
+          className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+            isLoading || !isAllFormsValid
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-primary text-white hover:bg-primary/90 shadow-lg"
+          }`}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              생성 중...
+            </>
+          ) : (
+            <>
+              <Plus className="w-5 h-5" />
+              {quizForms.length === 1
+                ? "퀴즈 생성"
+                : `${quizForms.length}개 퀴즈 일괄 생성`}
+            </>
+          )}
+        </button>
+      </AdminCard>
     </div>
   );
 };

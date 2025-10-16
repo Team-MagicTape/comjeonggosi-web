@@ -24,20 +24,38 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
-    const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    return isCorrect as boolean;
+    if (!answer) return;
+    const {result} = await solveQuizzes(currentQuiz?.id ?? "0", answer);
+    if(!result) return;
+    return result.isCorrect as boolean;
   };
 
   const handleAnswerSelect = async (answer: string) => {
     if (showAnswer || isCurrentQuizAnswered) return;
+    
     const correct = currentQuiz?.answer === answer;
     setCorrected(prev => correct ? prev + 1 : prev);
     setSelectedAnswer(answer);
     setShowAnswer(true);
+  
     setAnsweredQuizzes((prev) =>
-      new Map(prev).set(currentIdx, { answer, isCorrect: correct })
+      new Map(prev).set(currentIdx, { answer, isCorrect: false }) // 임시로 false
     );
-    submit(answer)
+    
+    // 서버 결과를 기다려서 점수 업데이트
+    try {
+      const isCorrect = await submit(answer);
+      
+      setAnsweredQuizzes((prev) =>
+        new Map(prev).set(currentIdx, { answer, isCorrect: isCorrect ?? false })
+      );
+      
+      if (isCorrect) {
+        setCorrected((prev) => prev + 1);
+      }
+    } catch (error) {
+      console.error('API 제출 실패:', error);
+    }
   };
 
   const handleShortAnswerSubmit = () => {
@@ -46,39 +64,41 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
 
   const handleNext = () => {
     if (!showAnswer) return;
+    if (currentIdx >= shuffledQuizzes.length) return;
 
-    const nextQuizAnswer = answeredQuizzes.get(currentIdx + 1);
+    const nextIdx = currentIdx + 1;
+    const nextQuizAnswer = answeredQuizzes.get(nextIdx);
+    
     if (nextQuizAnswer) {
-      // 다음 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(nextQuizAnswer.answer);
       setShowAnswer(true);
+      setShortAnswer(nextQuizAnswer.answer);
     } else {
-      // 답변되지 않은 문제라면 초기화
       setSelectedAnswer(null);
       setShowAnswer(false);
+      setShortAnswer("");
     }
-
-    setShortAnswer("");
-
-    if (currentIdx >= shuffledQuizzes.length) return;
-    setTimeout(() => setCurrentIdx((prev) => prev + 1), 50);
+    
+    setTimeout(() => setCurrentIdx(nextIdx), 50);
   };
 
   const handlePrev = () => {
     if (currentIdx === 0) return;
 
-    const prevQuizAnswer = answeredQuizzes.get(currentIdx - 1);
+    const prevIdx = currentIdx - 1;
+    const prevQuizAnswer = answeredQuizzes.get(prevIdx);
+    
     if (prevQuizAnswer) {
-      // 이전 문제가 답변되어 있다면 해당 답변으로 설정
       setSelectedAnswer(prevQuizAnswer.answer);
       setShowAnswer(true);
+      setShortAnswer(prevQuizAnswer.answer);
     } else {
-      // 답변되지 않은 문제라면 초기화
       setSelectedAnswer(null);
       setShowAnswer(false);
+      setShortAnswer("");
     }
-
-    setTimeout(() => setCurrentIdx((prev) => prev - 1), 100);
+    
+    setTimeout(() => setCurrentIdx(prevIdx), 100);
   };
 
   const handleSettingChange = (setting: keyof Settings) => {
@@ -106,14 +126,13 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
       return;
     }
 
-    // 이후에는 답안 선택만 막고 싶으면 그대로 막음
-    if (isCurrentQuizAnswered) return;
+    // 이미 답변한 문제는 다시 선택 못하게
+    if (answeredQuizzes.has(currentIdx)) return;
 
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
       if (["1", "2", "3", "4"].includes(e.key)) {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
-      // (스페이스는 위에서 처리)
     } else if (currentQuiz.type === "OX") {
       if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
@@ -141,7 +160,7 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     return () => {
       document.removeEventListener("keydown", handleKeyboard);
     };
-  }, [currentQuiz, showAnswer, shortAnswer, isCurrentQuizAnswered]);
+  }, [currentQuiz, showAnswer, shortAnswer, answeredQuizzes]);
 
   useEffect(() => {
     if (!showAnswer || !settings.autoNext) return;

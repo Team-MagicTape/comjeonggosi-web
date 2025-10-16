@@ -16,7 +16,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { fetchDeletedCategories } from "@/entities/category/api/fetch-deleted-categories";
-import { restoreCategory } from "@/features/restore-category/api/restore-category";
+import { restoreCategory } from "@/entities/category/api/restore-category";
 
 interface Props {
   initialCategories: Category[];
@@ -284,7 +284,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
 
         {isLoadingDeleted ? (
           <div className="p-8 text-center">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-400" />
+            <Loader2 className="w-6 h-6 mx-auto text-gray-400 animate-spin" />
             <p className="mt-2 text-sm text-gray-600">불러오는 중...</p>
           </div>
         ) : deletedCategories.length === 0 ? (
@@ -316,7 +316,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
                       </p>
                     )}
                     {category.deletedAt && (
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="mt-1 text-xs text-gray-500">
                         삭제일:{" "}
                         {new Date(category.deletedAt).toLocaleDateString(
                           "ko-KR"

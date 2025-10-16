@@ -1,5 +1,5 @@
-import { customFetch } from "@/shared/libs/custom-fetch";
 import { Category } from "../types/category";
+import { apiClient } from "@/shared/libs/custom-axios";
 
 /**
  * 삭제된 카테고리 포함 목록 조회 (GraphQL)
@@ -19,9 +19,9 @@ export const fetchDeletedCategories = async () => {
       }
     `;
 
-    const response = await customFetch.post<{
+    const response = await apiClient.post<{
       data: { deletedCategories: Category[] };
-    }>("/graphql", {
+    }>("/api/graphql", {
       query,
     });
 

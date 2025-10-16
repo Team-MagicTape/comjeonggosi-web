@@ -9,6 +9,9 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MyContentCards from "@/widgets/section/ui/MyContentCard";
+import MyReviews from "@/widgets/section/ui/MyReviews";
+import { fetchReviewRecommandations } from "@/entities/review/api/fetch-review-recommandations";
+import { fetchReviewStats } from "@/entities/review/api/fetch-review-stats";
 
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
@@ -30,16 +33,25 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const My = async () => {
-  const [user, categories, submissions, mails] = await Promise.all([
+  const [
+    user,
+    categories,
+    submissions,
+    mails,
+    reviewRecommendations,
+    reviewStats,
+  ] = await Promise.all([
     fetchUser(),
     fetchCategories(),
     fetchInitialSubmissions(),
     fetchInitialMails(),
+    fetchReviewRecommandations(),
+    fetchReviewStats(),
   ]);
 
   if (!user) {
@@ -69,6 +81,12 @@ const My = async () => {
           {
             child: <MySubmissions submissions={submissions} />,
             title: "퀴즈 풀이",
+          },
+          {
+            child: (
+              <MyReviews reviews={reviewRecommendations} stats={reviewStats} />
+            ),
+            title: "복습 관리",
           },
           {
             child: <QuestionAccordion categories={categories} mails={mails} />,

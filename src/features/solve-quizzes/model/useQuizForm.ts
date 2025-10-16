@@ -62,6 +62,9 @@ export const useQuizForm = (
 
   const getQuizzes = useCallback(async () => {
     if (!category) return;
+    if (mode.value === "REVIEW" && !user) {
+      
+    }
     const quiz = await fetchQuiz(
       category.value,
       mode.value,

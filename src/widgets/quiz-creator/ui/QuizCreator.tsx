@@ -46,7 +46,6 @@ const QuizCreator = ({ categories }: Props) => {
         const quizzesData = quizForms.map(convertFormToApiData);
         await bulkQuizzes(quizzesData);
       }
-
       resetForms();
       alert(`퀴즈가 성공적으로 생성되었습니다! (${quizForms.length}개)`);
     } catch (error) {

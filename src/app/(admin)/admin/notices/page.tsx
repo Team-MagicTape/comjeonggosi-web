@@ -7,10 +7,11 @@ import AdminHeader from "@/widgets/admin/ui/AdminHeader";
 import { Plus } from "lucide-react";
 import AdminNoticeList from "@/entities/notices/ui/AdminNoticeList";
 import { fetchNotices } from "@/entities/notices/api/fetch-notices";
+import { Notice } from "@/entities/notices/types/notice";
 
 const Notices = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [notices, setNotices] = useState<any[]>([]);
+  const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

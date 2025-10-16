@@ -1,11 +1,22 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { apiClient } from "@/shared/libs/custom-axios";
 import { Category } from "@/entities/category/types/category";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import AdminEmptyState from "@/widgets/admin/ui/AdminEmptyState";
-import { Plus, Trash2, Edit2, Check, X, FolderOpen, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Check,
+  X,
+  FolderOpen,
+  Loader2,
+  RotateCcw,
+} from "lucide-react";
+import { fetchDeletedCategories } from "@/entities/category/api/fetch-deleted-categories";
+import { restoreCategory } from "@/features/restore-category/api/restore-category";
 
 interface Props {
   initialCategories: Category[];
@@ -13,19 +24,38 @@ interface Props {
 
 const CategoryManagement = ({ initialCategories }: Props) => {
   const [categories, setCategories] = useState(initialCategories);
+  const [deletedCategories, setDeletedCategories] = useState<Category[]>([]);
   const [newCategory, setNewCategory] = useState({ name: "", description: "" });
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingData, setEditingData] = useState({ name: "", description: "" });
+  const [isLoadingDeleted, setIsLoadingDeleted] = useState(false);
+
+  // 삭제된 카테고리 목록 불러오기
+  useEffect(() => {
+    loadDeletedCategories();
+  }, []);
+
+  const loadDeletedCategories = async () => {
+    setIsLoadingDeleted(true);
+    try {
+      const deleted = await fetchDeletedCategories();
+      setDeletedCategories(deleted);
+    } catch (error) {
+      console.error("Failed to load deleted categories", error);
+    } finally {
+      setIsLoadingDeleted(false);
+    }
+  };
 
   const handleNewCategoryChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewCategory(prev => ({ ...prev, [name]: value }));
+    setNewCategory((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleEditChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEditingData(prev => ({ ...prev, [name]: value }));
+    setEditingData((prev) => ({ ...prev, [name]: value }));
   };
 
   const createCategory = async () => {
@@ -33,7 +63,10 @@ const CategoryManagement = ({ initialCategories }: Props) => {
 
     setIsCreating(true);
     try {
-      const { data } = await apiClient.post<Category>("/api/admin/categories", newCategory);
+      const { data } = await apiClient.post<Category>(
+        "/api/admin/categories",
+        newCategory
+      );
       setCategories([...categories, data]);
       setNewCategory({ name: "", description: "" });
     } catch {
@@ -45,7 +78,10 @@ const CategoryManagement = ({ initialCategories }: Props) => {
 
   const startEdit = (category: Category) => {
     setEditingId(category.id);
-    setEditingData({ name: category.name, description: category.description || "" });
+    setEditingData({
+      name: category.name,
+      description: category.description || "",
+    });
   };
 
   const cancelEdit = () => {
@@ -56,9 +92,11 @@ const CategoryManagement = ({ initialCategories }: Props) => {
   const saveEdit = async (id: number) => {
     try {
       await apiClient.put(`/api/admin/categories/${id}`, editingData);
-      setCategories(categories.map(cat => 
-        cat.id === id ? { ...cat, ...editingData } : cat
-      ));
+      setCategories(
+        categories.map((cat) =>
+          cat.id === id ? { ...cat, ...editingData } : cat
+        )
+      );
       setEditingId(null);
     } catch {
       alert("카테고리 수정에 실패했습니다.");
@@ -70,17 +108,31 @@ const CategoryManagement = ({ initialCategories }: Props) => {
 
     try {
       await apiClient.delete(`/api/admin/categories/${id}`);
-      setCategories(categories.filter(cat => cat.id !== id));
+      setCategories(categories.filter((cat) => cat.id !== id));
     } catch {
       alert("카테고리 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleRestoreCategory = async (id: number) => {
+    try {
+      const restoredCategory = await restoreCategory(id);
+      // 복원된 카테고리를 활성 목록에 추가하고 삭제 목록에서 제거
+      setCategories([...categories, restoredCategory]);
+      setDeletedCategories(deletedCategories.filter((cat) => cat.id !== id));
+      alert("카테고리가 복원되었습니다.");
+    } catch {
+      alert("카테고리 복원에 실패했습니다.");
     }
   };
 
   return (
     <div className="space-y-6">
       <AdminCard className="p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">새 카테고리 추가</h2>
-        
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+          새 카테고리 추가
+        </h2>
+
         <div className="flex gap-3">
           <input
             type="text"
@@ -127,9 +179,11 @@ const CategoryManagement = ({ initialCategories }: Props) => {
       <AdminCard className="overflow-hidden">
         <div className="p-6 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">카테고리 목록</h2>
-          <p className="text-sm text-gray-600 mt-1">전체 {categories.length}개의 카테고리</p>
+          <p className="mt-1 text-sm text-gray-600">
+            전체 {categories.length}개의 카테고리
+          </p>
         </div>
-        
+
         {categories.length === 0 ? (
           <AdminEmptyState
             icon={FolderOpen}
@@ -172,9 +226,13 @@ const CategoryManagement = ({ initialCategories }: Props) => {
                 ) : (
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium text-gray-900">{category.name}</h3>
+                      <h3 className="font-medium text-gray-900">
+                        {category.name}
+                      </h3>
                       {category.description && (
-                        <p className="text-sm text-gray-600 mt-0.5">{category.description}</p>
+                        <p className="text-sm text-gray-600 mt-0.5">
+                          {category.description}
+                        </p>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
@@ -194,8 +252,88 @@ const CategoryManagement = ({ initialCategories }: Props) => {
                   </div>
                 )}
               </div>
-            ))
-          }
+            ))}
+          </div>
+        )}
+      </AdminCard>
+
+      {/* 삭제된 카테고리 목록 */}
+      <AdminCard className="overflow-hidden">
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                삭제된 카테고리
+              </h2>
+              <p className="mt-1 text-sm text-gray-600">
+                삭제된 {deletedCategories.length}개의 카테고리
+              </p>
+            </div>
+            <button
+              onClick={loadDeletedCategories}
+              disabled={isLoadingDeleted}
+              className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <RotateCcw
+                className={`w-4 h-4 ${isLoadingDeleted ? "animate-spin" : ""}`}
+              />
+              새로고침
+            </button>
+          </div>
+        </div>
+
+        {isLoadingDeleted ? (
+          <div className="p-8 text-center">
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-gray-400" />
+            <p className="mt-2 text-sm text-gray-600">불러오는 중...</p>
+          </div>
+        ) : deletedCategories.length === 0 ? (
+          <AdminEmptyState
+            icon={FolderOpen}
+            title="삭제된 카테고리가 없습니다"
+            description="삭제된 카테고리가 여기에 표시됩니다"
+          />
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {deletedCategories.map((category) => (
+              <div
+                key={category.id}
+                className="p-4 bg-red-50/30 hover:bg-red-50/50"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-medium text-gray-900">
+                        {category.name}
+                      </h3>
+                      <span className="px-2 py-0.5 text-xs font-medium text-red-600 bg-red-100 rounded-full">
+                        삭제됨
+                      </span>
+                    </div>
+                    {category.description && (
+                      <p className="text-sm text-gray-600 mt-0.5">
+                        {category.description}
+                      </p>
+                    )}
+                    {category.deletedAt && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        삭제일:{" "}
+                        {new Date(category.deletedAt).toLocaleDateString(
+                          "ko-KR"
+                        )}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => handleRestoreCategory(category.id)}
+                    className="px-3 py-1.5 text-sm font-medium text-green-600 bg-green-50 hover:bg-green-100 rounded-lg transition-colors flex items-center gap-1.5"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    복원
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </AdminCard>

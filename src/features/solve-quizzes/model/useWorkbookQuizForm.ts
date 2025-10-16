@@ -147,16 +147,18 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     setShowAnswer(false);
     if (!wrongOnly) {
       setAnsweredQuizzes(new Map());
+      setCorrected(0);
     }
   };
 
   // 필터링된 퀴즈 목록 업데이트
   useEffect(() => {
     if (wrongOnlyMode) {
+      const answeredQuizzesSnapshot = new Map(answeredQuizzes);
       // 틀린 문제만 필터링
       const wrongQuizzes = shuffledQuizzes.filter((_, index) => {
-        const answer = answeredQuizzes.get(index);
-        return answer && !answer.isCorrect;
+        const answer = answeredQuizzesSnapshot.get(index);
+        return answer?.isCorrect === false;
       });
       setFilteredQuizzes(wrongQuizzes);
     } else {

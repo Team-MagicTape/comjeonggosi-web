@@ -1,3 +1,5 @@
+"use client";
+
 import { useEditNotices } from "../model/useEditNotices";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import { X } from "lucide-react";
@@ -19,9 +21,10 @@ const EditNotice = ({
   Title,
   Content,
 }: Props) => {
-  const { setId, setTitle, setContent } = useEditNotices();
+  const { setId, setTitle, setContent, handleNotices } = useEditNotices();
   const [title, setTitleValue] = useState(Title);
   const [content, setContentValue] = useState(Content);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isModalOpen) return null;
 
@@ -36,11 +39,18 @@ const EditNotice = ({
     setTitle(title);
     setContent(content);
 
+    setIsSubmitting(true);
+
     try {
+      await handleNotices();
+
+      toast.success("공지사항이 성공적으로 수정되었습니다.");
       setIsModalOpen(false);
     } catch (error) {
       toast.error("공지사항 수정에 실패했습니다.");
       console.error("Edit notice error:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -71,7 +81,7 @@ const EditNotice = ({
                 value={title}
                 onChange={(e) => setTitleValue(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
-                placeholder={title}
+                placeholder="제목을 입력하세요"
               />
             </div>
 
@@ -83,7 +93,7 @@ const EditNotice = ({
                 value={content}
                 onChange={(e) => setContentValue(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none"
-                placeholder={content}
+                placeholder="내용을 입력하세요"
                 rows={13}
               />
             </div>
@@ -94,6 +104,7 @@ const EditNotice = ({
               type="button"
               onClick={() => setIsModalOpen(false)}
               className="flex-1 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              disabled={isSubmitting}
             >
               취소
             </button>
@@ -104,8 +115,9 @@ const EditNotice = ({
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-primary text-white hover:bg-primary/90"
               }`}
+              disabled={isSubmitting || !title.trim()}
             >
-              수정
+              {isSubmitting ? "수정 중..." : "수정"}
             </button>
           </div>
         </form>

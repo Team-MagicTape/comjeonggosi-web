@@ -7,15 +7,16 @@ export const useEditNotices = () => {
   const [content, setContent] = useState("");
   const [id, setId] = useState("");
 
-  const handleNotices = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleNotices = async (onSuccess?: () => void) => {
     try {
       await FetchEditNotices(id, { title, content });
       setTitle("");
       setContent("");
       toast.success("공지사항이 수정되었습니다.");
-    } catch {
+      if (onSuccess) onSuccess();
+    } catch (error) {
       toast.error("공지사항 수정에 실패했습니다.");
+      console.error("Edit notice error:", error);
     }
   };
 

@@ -11,7 +11,7 @@ export const fetchReviewRecommendations = async () => {
     );
     return data;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return null;
   }
 };

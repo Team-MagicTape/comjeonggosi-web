@@ -14,16 +14,12 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { ArrowLeftIcon, CheckCircle2 } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
-import { useWorkbookNavigation } from "../model/useWorkbookNavigation";
-
 
 interface Props {
   data: Quiz[];
 }
 
 const WorkbookQuizForm = ({ data }: Props) => {
-  const { sectionInfo, goToWorkbookDetail } = useWorkbookNavigation();
-
   const {
     currentIdx,
     selectedAnswer,
@@ -51,11 +47,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
         <div className="w-full space-y-3 xl:px-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">
-                {sectionInfo.isSection
-                  ? `${sectionInfo.sectionNumber}구간 진행률`
-                  : "진행률"}
-              </span>
+              <span className="text-sm font-medium text-gray-600">진행률</span>
               <span className="text-sm font-semibold text-primary">
                 {answeredQuizzes.size} / {quizzes.length}
               </span>
@@ -79,7 +71,6 @@ const WorkbookQuizForm = ({ data }: Props) => {
           </div>
         </div>
       )}
-
       <div className="w-full flex items-start justify-center relative">
         <div className="flex-1 max-w-4xl overflow-hidden">
           <div
@@ -102,7 +93,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     >
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-medium text-white">
-                          {currentIdx + 1}
+                          {quizIdx + 1}
                         </span>
                       </div>
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
@@ -193,13 +184,15 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       />
                     )}
 
-                    <QuizNavigation
-                      currentIdx={currentIdx}
-                      handlePrev={handlePrev}
-                      handleNext={handleNext}
-                      showAnswer={showAnswer}
-                      settings={settings}
-                    />
+                    {quizIdx === currentIdx && (
+                      <QuizNavigation
+                        currentIdx={currentIdx}
+                        handlePrev={handlePrev}
+                        handleNext={handleNext}
+                        showAnswer={showAnswer}
+                        settings={settings}
+                      />
+                    )}
 
                     <WorkbookQuizSettings
                       settings={settings}
@@ -328,9 +321,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       수고하셨습니다!
                     </h3>
                     <p className="text-lg text-gray-600 mb-6">
-                      {sectionInfo.isSection
-                        ? `${sectionInfo.sectionNumber}구간의 모든 문제를 완료했습니다`
-                        : "문제집의 모든 문제를 완료했습니다"}
+                      문제집의 모든 문제를 완료했습니다
                     </p>
 
                     {/* 점수 표시 */}
@@ -373,20 +364,13 @@ const WorkbookQuizForm = ({ data }: Props) => {
                         <ArrowLeftIcon className="w-4 h-4" />
                         다시 풀기
                       </Button>
-                      <button
-                        onClick={goToWorkbookDetail}
-                        className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+                      <CustomLink
+                        href="/workbooks"
+                        className="flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
-                        문제집으로 돌아가기
-                      </button>
-                      <button
-                        onClick={goToWorkbookDetail}
-                        className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-                      >
-                        <ArrowLeftIcon className="w-4 h-4" />
-                        문제집으로 돌아가기
-                      </button>
+                        문제집 목록으로
+                      </CustomLink>
                     </div>
                   </div>
                 </div>

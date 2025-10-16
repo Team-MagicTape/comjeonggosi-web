@@ -1,7 +1,7 @@
 "use client";
 
 import { Review } from "../types/review";
-import { AlertCircle, Brain, CheckCircle2 } from "lucide-react";
+import { Brain } from "lucide-react";
 
 interface Props {
   review: Review;

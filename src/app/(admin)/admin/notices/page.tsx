@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateNotices from "@/features/create-notice/ui/CreateNotices";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import AdminHeader from "@/widgets/admin/ui/AdminHeader";
@@ -8,9 +8,22 @@ import { Plus } from "lucide-react";
 import AdminNoticeList from "@/entities/notices/ui/AdminNoticeList";
 import { fetchNotices } from "@/entities/notices/api/fetch-notices";
 
-const Notices = async () => {
+const Notices = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const notices = await fetchNotices();
+  const [notices, setNotices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await fetchNotices();
+        setNotices(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   return (
     <div>
@@ -37,7 +50,11 @@ const Notices = async () => {
             </div>
           </div>
 
-          <AdminNoticeList notices={notices} />
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : (
+            <AdminNoticeList notices={notices} />
+          )}
         </AdminCard>
       </div>
 

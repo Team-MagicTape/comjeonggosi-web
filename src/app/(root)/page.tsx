@@ -3,6 +3,7 @@ import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MainArticle from "@/widgets/section/ui/MainArticle";
 import MainMailApply from "@/widgets/section/ui/MainMailApply";
 import MainQuiz from "@/widgets/section/ui/MainQuiz";
+import MainNotice from "@/entities/notices/ui/MainNotice";
 
 const Main = async () => {
   const categories = await fetchCategories();
@@ -20,6 +21,7 @@ const Main = async () => {
         <div className="lg:col-span-1 flex flex-col gap-4">
           <MainQuiz />
           <MainMailApply />
+          <MainNotice />
         </div>
       </div>
     </div>

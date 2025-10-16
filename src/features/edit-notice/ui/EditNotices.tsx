@@ -3,7 +3,7 @@
 import { useEditNotices } from "../model/useEditNotices";
 import AdminCard from "@/widgets/admin/ui/AdminCard";
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/shared/providers/ToastProvider";
 
 interface Props {
@@ -26,10 +26,19 @@ const EditNotice = ({
   const [content, setContentValue] = useState(Content);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // 모달 열릴 때 초기값 세팅
+  useEffect(() => {
+    if (isModalOpen) {
+      setTitleValue(Title);
+      setContentValue(Content);
+    }
+  }, [isModalOpen, Title, Content]);
+
   if (!isModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!title.trim()) {
       toast.warning("제목을 입력해주세요.");
       return;
@@ -38,14 +47,13 @@ const EditNotice = ({
     setId(noticeId);
     setTitle(title);
     setContent(content);
-
     setIsSubmitting(true);
 
     try {
-      await handleNotices();
-
-      toast.success("공지사항이 성공적으로 수정되었습니다.");
-      setIsModalOpen(false);
+      // 실제 API 호출 + 성공 시 모달 닫기
+      await handleNotices(() => {
+        setIsModalOpen(false);
+      });
     } catch (error) {
       toast.error("공지사항 수정에 실패했습니다.");
       console.error("Edit notice error:", error);

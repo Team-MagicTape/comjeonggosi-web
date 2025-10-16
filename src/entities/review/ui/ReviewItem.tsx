@@ -25,7 +25,7 @@ const getPriorityStyle = (priority: Review["priority"]) => {
         icon: "text-yellow-500",
         label: "보통",
       };
-    case "LOW":
+    default:
       return {
         bg: "bg-blue-50",
         border: "border-blue-200",

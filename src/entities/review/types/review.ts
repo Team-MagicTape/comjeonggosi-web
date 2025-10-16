@@ -3,4 +3,4 @@ export interface Review {
   title: string;
   reason: string;
   priority: "HIGH" | "MIDDLE" | "LOW";
-};
+}

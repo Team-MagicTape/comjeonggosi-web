@@ -20,12 +20,12 @@ export const fetchDeletedCategories = async () => {
     `;
 
     const response = await apiClient.post<{
-      data: { deletedCategories: Category[] };
+      data: { categories: { nodes: Category[] } };
     }>("/api/graphql", {
       query,
     });
 
-    return response.data.data.deletedCategories;
+    return response.data.data.categories.nodes;
   } catch (e) {
     console.error("fetchDeletedCategories error", e);
     return [];

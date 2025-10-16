@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Notice } from "../types/notice";
 import { useDeleteNotice } from "@/features/delete-notice/model/useDeleteNotice";
 import EditNotice from "@/features/edit-notice/ui/EditNotices";
@@ -11,23 +11,30 @@ interface Props {
 }
 
 const AdminNoticeList = ({ notices }: Props) => {
-  const { deleteNotice } = useDeleteNotice();
+  const [localNotices, setLocalNotices] = useState(notices);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [NoticeId, setNoticeId] = useState<string>("");
-  
-  const handleDelete = (id: string) => {
-    deleteNotice(id);
-  };
-
+  const [noticeId, setNoticeId] = useState<string>("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const sortedNotices = [...notices].sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  // 삭제 후 상태 갱신 콜백
+  const { deleteNotice } = useDeleteNotice({
+    onSuccess: () => {
+      setLocalNotices(prev => prev.filter(n => n.id !== noticeId));
+    },
   });
+
+  const handleDelete = (id: string) => {
+    setNoticeId(id);
+    deleteNotice(id);
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
   };
+
+  const sortedNotices = [...localNotices].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
@@ -57,22 +64,20 @@ const AdminNoticeList = ({ notices }: Props) => {
                         })}
                       </p>
                     </div>
-                    <div className="flex justify-end">
-                      <div className="flex gap-3">
-              <button
-                onClick={() => (setIsModalOpen(true), setNoticeId(notice.id))}
-                className="px-4 py-2 border border-primary text-black rounded-lg flex items-center gap-2 font-medium"
-              >
-                수정
-              </button>
-              <button
-                onClick={() => handleDelete(notice.id)}
-                className="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2 font-medium"
-              >
-                삭제
-              </button>
-              </div>
-            </div>
+                    <div className="flex justify-end gap-3">
+                      <button
+                        onClick={() => (setIsModalOpen(true), setNoticeId(notice.id))}
+                        className="px-4 py-2 border border-primary text-black rounded-lg flex items-center gap-2 font-medium"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleDelete(notice.id)}
+                        className="px-4 py-2 bg-primary text-white rounded-lg flex items-center gap-2 font-medium"
+                      >
+                        삭제
+                      </button>
+                    </div>
                     {expandedId === notice.id ? (
                       <ChevronUp className="w-5 h-5 text-gray-400 shrink-0 mt-1" />
                     ) : (
@@ -80,7 +85,7 @@ const AdminNoticeList = ({ notices }: Props) => {
                     )}
                   </div>
                 </button>
-                
+
                 {expandedId === notice.id && (
                   <div className="px-6 pb-6 pt-2">
                     <div className="text-gray-700 whitespace-pre-wrap leading-relaxed border-l-2 border-primary/20 pl-4">
@@ -97,10 +102,10 @@ const AdminNoticeList = ({ notices }: Props) => {
       <EditNotice
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        noticeId={NoticeId}
-        Title={notices.find(n => n.id == NoticeId)?.title || ""}
-        Content={notices.find(n => n.id == NoticeId)?.content || ""} 
-        />
+        noticeId={noticeId}
+        Title={localNotices.find(n => n.id === noticeId)?.title || ""}
+        Content={localNotices.find(n => n.id === noticeId)?.content || ""}
+      />
     </div>
   );
 };

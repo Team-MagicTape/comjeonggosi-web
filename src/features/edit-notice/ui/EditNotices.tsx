@@ -22,7 +22,6 @@ const EditNotice = ({
   const { setId, setTitle, setContent } = useEditNotices();
   const [title, setTitleValue] = useState(Title);
   const [content, setContentValue] = useState(Content);
-  console.log(noticeId, Title, Content);
 
   if (!isModalOpen) return null;
 
@@ -41,6 +40,7 @@ const EditNotice = ({
       setIsModalOpen(false);
     } catch (error) {
       toast.error("공지사항 수정에 실패했습니다.");
+      console.error("Edit notice error:", error);
     }
   };
 

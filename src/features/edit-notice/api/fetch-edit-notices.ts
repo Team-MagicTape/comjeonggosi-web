@@ -7,6 +7,6 @@ export const FetchEditNotices = async (id: string, editData: NoticesType) => {
     return data;
   } catch (error) {
     console.error("공지사항 수정 오류", error);
-    throw Error;
+    throw error;
   }
 };

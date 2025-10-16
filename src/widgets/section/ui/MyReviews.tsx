@@ -6,32 +6,36 @@ import ReviewItem from "@/entities/review/ui/ReviewItem";
 import ReviewStats from "@/entities/review/ui/ReviewStats";
 import Button from "@/shared/ui/Button";
 import CustomLink from "@/shared/ui/CustomLink";
-import { Brain } from "lucide-react";
+import { Brain, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   reviews: Review[] | null;
   stats: ReviewStat | null;
 }
 
+const INITIAL_DISPLAY_COUNT = 5;
+
 const MyReviews = ({ reviews, stats }: Props) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <div className="w-full p-4 border border-gray-200 bg-white rounded-2xl">
-      <h2 className="text-xl font-semibold mb-4">복습 관리</h2>
+    <div className="w-full p-4 bg-white border border-gray-200 rounded-2xl">
+      <h2 className="mb-4 text-xl font-semibold">복습 관리</h2>
 
       {stats && <ReviewStats stats={stats} />}
 
-      <div className="space-y-3 mt-4">
+      <div className="mt-4 space-y-3">
         {!reviews || reviews.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="p-4 bg-gray-50 rounded-full w-fit mx-auto mb-4">
+          <div className="py-12 text-center">
+            <div className="p-4 mx-auto mb-4 rounded-full bg-gray-50 w-fit">
               <Brain className="text-gray-400" size={32} />
             </div>
-            <p className="text-gray text-base">아직 복습할 항목이 없습니다.</p>
-            <p className="text-lightgray text-sm mt-1">
+            <p className="text-base text-gray">아직 복습할 항목이 없습니다.</p>
+            <p className="mt-1 text-sm text-lightgray">
               퀴즈를 풀고 복습을 시작해보세요!
             </p>
             <CustomLink
-              className="w-full flex justify-center mt-4"
+              className="flex justify-center w-full mt-4"
               href="/quizzes"
             >
               <Button>퀴즈 바로가기</Button>
@@ -47,17 +51,35 @@ const MyReviews = ({ reviews, stats }: Props) => {
                 {reviews.length}개 항목
               </span>
             </div>
-            {reviews.map((review) => (
+            {(isExpanded
+              ? reviews
+              : reviews.slice(0, INITIAL_DISPLAY_COUNT)
+            ).map((review) => (
               <ReviewItem key={review.id} review={review} />
             ))}
           </>
         )}
       </div>
 
-      {reviews && reviews.length > 0 && (
-        <div className="w-full border-t border-border text-center mt-6 pt-3 text-gray cursor-pointer hover:text-primary transition-colors">
-          더보기
-        </div>
+      {reviews && reviews.length > INITIAL_DISPLAY_COUNT && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center justify-center w-full gap-2 pt-3 mt-6 text-center transition-colors border-t cursor-pointer border-border text-gray hover:text-primary"
+        >
+          {isExpanded ? (
+            <>
+              <span>접기</span>
+              <ChevronUp className="w-4 h-4" />
+            </>
+          ) : (
+            <>
+              <span>
+                더보기 ({reviews.length - INITIAL_DISPLAY_COUNT}개 더 보기)
+              </span>
+              <ChevronDown className="w-4 h-4" />
+            </>
+          )}
+        </button>
       )}
     </div>
   );

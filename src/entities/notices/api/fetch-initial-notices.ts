@@ -8,7 +8,7 @@ export const fetchInitialNotices = async (): Promise<Notice[]> => {
     }>("/graphql", {
       query: `
         query {
-          notices(page: 1, limit: 5) {
+          notices {
             nodes {
               id
               title

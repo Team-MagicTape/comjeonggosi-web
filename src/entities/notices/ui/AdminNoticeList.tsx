@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Notice } from "../types/notice";
 import { useDeleteNotice } from "@/features/delete-notice/model/useDeleteNotice";
@@ -16,10 +16,12 @@ const AdminNoticeList = ({ notices, onUpdate }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noticeId, setNoticeId] = useState<string>("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  useEffect(() => {
+    setLocalNotices(notices);
+  }, [notices]);
 
   const { deleteNotice } = useDeleteNotice({
     onSuccess: () => {
-      setLocalNotices(prev => prev.filter(n => n.id !== noticeId));
       onUpdate?.();
     },
   });
@@ -58,16 +60,21 @@ const AdminNoticeList = ({ notices, onUpdate }: Props) => {
                         {notice.title}
                       </h2>
                       <p className="text-xs text-gray-400">
-                        {new Date(notice.createdAt).toLocaleDateString('ko-KR', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
+                        {new Date(notice.createdAt).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
                       </p>
                     </div>
                     <div className="flex justify-end gap-3">
                       <button
-                        onClick={() => (setIsModalOpen(true), setNoticeId(notice.id))}
+                        onClick={() => (
+                          setIsModalOpen(true), setNoticeId(notice.id)
+                        )}
                         className="px-4 py-2 border border-primary text-black rounded-lg flex items-center gap-2 font-medium"
                       >
                         수정
@@ -104,8 +111,8 @@ const AdminNoticeList = ({ notices, onUpdate }: Props) => {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         noticeId={noticeId}
-        Title={localNotices.find(n => n.id === noticeId)?.title || ""}
-        Content={localNotices.find(n => n.id === noticeId)?.content || ""}
+        Title={localNotices.find((n) => n.id === noticeId)?.title || ""}
+        Content={localNotices.find((n) => n.id === noticeId)?.content || ""}
       />
     </div>
   );

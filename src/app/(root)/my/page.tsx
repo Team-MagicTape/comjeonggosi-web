@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MyContentCards from "@/widgets/section/ui/MyContentCard";
 import MyReviews from "@/widgets/section/ui/MyReviews";
-import { fetchReviewRecommandations } from "@/entities/review/api/fetch-review-recommandations";
+import { fetchReviewRecommendations } from "@/entities/review/api/fetch-review-recommendations";
 import { fetchReviewStats } from "@/entities/review/api/fetch-review-stats";
 
 import { Metadata } from "next";
@@ -50,7 +50,7 @@ const My = async () => {
     fetchCategories(),
     fetchInitialSubmissions(),
     fetchInitialMails(),
-    fetchReviewRecommandations(),
+    fetchReviewRecommendations(),
     fetchReviewStats(),
   ]);
 
@@ -59,15 +59,15 @@ const My = async () => {
   }
 
   return (
-    <div className="w-full flex items-start gap-4 flex-col py-4 lg:py-6">
-      <div className="w-full p-4 border border-border bg-white rounded-2xl flex flex-col gap-4">
-        <div className="w-full flex xl:items-center gap-4 flex-col xl:flex-row">
+    <div className="flex flex-col items-start w-full gap-4 py-4 lg:py-6">
+      <div className="flex flex-col w-full gap-4 p-4 bg-white border border-border rounded-2xl">
+        <div className="flex flex-col w-full gap-4 xl:items-center xl:flex-row">
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
               {user.nickname}님
             </p>
-            <p className="text-sm text-gray mb-2">{user.email}</p>
+            <p className="mb-2 text-sm text-gray">{user.email}</p>
             <p className="text-sm text-gray">
               가입일: {parseDate(user.createdAt)}
             </p>

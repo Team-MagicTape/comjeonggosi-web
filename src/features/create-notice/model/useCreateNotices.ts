@@ -6,8 +6,8 @@ export const useCreateNotices = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const handleNotices = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleNotices = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     try {
       await FetchCreateNotices({ title, content });
       setTitle("");

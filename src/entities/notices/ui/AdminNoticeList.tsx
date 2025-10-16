@@ -8,18 +8,19 @@ import EditNotice from "@/features/edit-notice/ui/EditNotices";
 
 interface Props {
   notices: Notice[];
+  onUpdate?: () => void;
 }
 
-const AdminNoticeList = ({ notices }: Props) => {
+const AdminNoticeList = ({ notices, onUpdate }: Props) => {
   const [localNotices, setLocalNotices] = useState(notices);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [noticeId, setNoticeId] = useState<string>("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // 삭제 후 상태 갱신 콜백
   const { deleteNotice } = useDeleteNotice({
     onSuccess: () => {
       setLocalNotices(prev => prev.filter(n => n.id !== noticeId));
+      onUpdate?.();
     },
   });
 

@@ -14,16 +14,20 @@ const Notices = () => {
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const loadNotices = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchNotices();
+      setNotices(data);
+    } catch (error) {
+      console.error("공지사항 불러오기 실패:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await fetchNotices();
-        setNotices(data);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    loadNotices();
   }, []);
 
   return (
@@ -36,9 +40,7 @@ const Notices = () => {
       <div className="space-y-6">
         <AdminCard className="p-6">
           <div className="mb-6 flex items-center justify-between">
-            <p className="text-xl font-semibold text-gray-900">
-              공지사항 목록
-            </p>
+            <p className="text-xl font-semibold text-gray-900">공지사항 목록</p>
 
             <div className="flex justify-end">
               <button
@@ -54,7 +56,10 @@ const Notices = () => {
           {loading ? (
             <p>로딩 중...</p>
           ) : (
-            <AdminNoticeList notices={notices} />
+            <AdminNoticeList
+              notices={notices}
+              onUpdate={loadNotices} // 삭제/수정 후 다시 fetch
+            />
           )}
         </AdminCard>
       </div>
@@ -62,6 +67,7 @@ const Notices = () => {
       <CreateNotices
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        onSuccess={loadNotices} // 새 공지 생성 후 목록 갱신
       />
     </div>
   );

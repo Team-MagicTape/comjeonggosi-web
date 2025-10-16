@@ -9,7 +9,7 @@ export const fetchDeletedCategories = async () => {
     // GraphQL query for fetching deleted categories
     const query = `
       {
-        categories(onlyDeleted : true) {
+        categories(onlyDeleted: true) {
           nodes {
             id
             name

@@ -9,7 +9,7 @@ export const fetchReviewStats = async () => {
     const { data } = await customFetch.get<ReviewStat>("/reviews/stats");
     return data;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return null;
   }
 };

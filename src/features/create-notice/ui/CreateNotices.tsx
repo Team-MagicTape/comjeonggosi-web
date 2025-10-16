@@ -6,29 +6,23 @@ import AdminCard from "@/widgets/admin/ui/AdminCard";
 interface Props {
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
-  onUpdate?: () => void; // 부모에게 데이터 갱신 요청
+  onSuccess?: () => void; // 추가
 }
 
-const CreateNotices = ({ isModalOpen, setIsModalOpen, onUpdate }: Props) => {
-  const { setTitle, setContent, handleNotices } = useCreateNotices();
+const CreateNotices = ({ isModalOpen, setIsModalOpen, onSuccess }: Props) => {
+  const { setTitle, setContent, handleNotices } = useCreateNotices({
+    onSuccess,
+  });
 
   if (!isModalOpen) return null;
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await handleNotices();
-      setIsModalOpen(false);
-      onUpdate?.(); // 부모에게 갱신 요청
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <AdminCard className="w-full max-w-md h-auto">
-        <form onSubmit={handleSubmit} className="flex flex-col p-6 space-y-6">
+        <form
+          onSubmit={handleNotices}
+          className="flex flex-col p-6 space-y-6"
+        >
           <h2 className="text-lg font-semibold text-gray-900">
             공지사항 생성
           </h2>

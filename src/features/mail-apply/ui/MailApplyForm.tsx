@@ -158,6 +158,18 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
           </div>
         </div>
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            이메일 주소
+          </label>
+          <input
+            type="email"
+            placeholder="your@email.com"
+            onChange={handleEmail}
+            value={email}
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all"
+          />
+        </div>
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
             받고 싶은 주제를 선택해주세요
           </label>

@@ -1,5 +1,5 @@
 export interface subscribeRequest{
     hour : number,
-    categoryIds : number[],
-    email: string
+    categoryIds : string[],
+    email : string
 }

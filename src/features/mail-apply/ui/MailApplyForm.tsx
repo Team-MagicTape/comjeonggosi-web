@@ -157,20 +157,6 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
             </div>
           </div>
         </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            이메일 주소
-          </label>
-          <input
-            type="email"
-            placeholder="your@email.com"
-            onChange={handleEmail}
-            value={email}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all"
-          />
-        </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
             받고 싶은 주제를 선택해주세요
@@ -179,9 +165,9 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
             {categories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => handleCategoryChange(cat.id)}
+                onClick={() => handleCategoryChange(String(cat.id))}
                 className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
-                  selectedCategoryIds.includes(cat.id)
+                  selectedCategoryIds.includes((String(cat.id)))
                     ? "bg-primary text-white"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}

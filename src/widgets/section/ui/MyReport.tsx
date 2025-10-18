@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { postReport } from '@/entities/report/api/post-report';
 
-const ReportForm = async() => {
+const  MyReport = async() => {
 //   const report = await postReport();
   
   return (
@@ -63,4 +63,4 @@ const ReportForm = async() => {
   );
 };
 
-export default ReportForm;
+export default MyReport;

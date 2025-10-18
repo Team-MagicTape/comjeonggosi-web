@@ -1,5 +1,5 @@
 import { ChangeEvent, useState, useMemo } from "react";
-import { subscribeMail} from "../api/subscribe-mail";
+import { subscribeMail } from "../api/subscribe-mail";
 import { deleteSubscribe } from "../api/delete-subscription";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
@@ -8,18 +8,21 @@ import { User } from "@/entities/user/types/user";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
 import { mailApplySchema } from "../types/validation";
 
-export const useMailApplyForm = (initialData: SubscribeMail | null, user: User | null) => {
+export const useMailApplyForm = (
+  initialData: SubscribeMail | null,
+  user: User | null
+) => {
   const [time, setTime] = useState(
-    initialData
-      ? String(initialData.hour).padStart(2, "0")
-      : "00"
+    initialData ? String(initialData.hour).padStart(2, "0") : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(!!initialData);
   const [customEmail, setEmail] = useState(initialData?.email || "");
   const [isLoading, setIsLoading] = useState(false);
 
-  const initialCategories = initialData?.categories.map(item => String(item.id)) || [];
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(initialCategories);
+  const initialCategories =
+    initialData?.categories.map((item) => String(item.id)) || [];
+  const [selectedCategoryIds, setSelectedCategoryIds] =
+    useState<string[]>(initialCategories);
 
   const handleCategoryChange = (id: string) => {
     setSelectedCategoryIds((prev) =>
@@ -62,7 +65,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
   const isFormValid = useMemo(() => {
     try {
       mailApplySchema.parse({
-        customEmail,
+        email: customEmail.trim(),
         selectedCategoryIds,
         time: Number(time),
       });
@@ -94,7 +97,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
         const result = await subscribeMail({
           hour,
           categoryIds: selectedCategoryIds,
-          customEmail : customEmail.trim() == "" ? null : customEmail,
+          customEmail: customEmail.trim() == "" ? null : customEmail,
         });
 
         if (result) {
@@ -110,6 +113,9 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
         if (result) {
           toast.success("신청이 취소 되었습니다");
           setIsSubscribed(false);
+          setSelectedCategoryIds([]);
+          setEmail("");
+          setTime("00");
         } else {
           toast.error("취소에 실패했습니다. 다시 시도해주세요.");
         }

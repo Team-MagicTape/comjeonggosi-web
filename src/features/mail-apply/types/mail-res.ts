@@ -11,6 +11,7 @@ export interface CategoryType {
     id: string;
     userId: string;
     hour: number;
+    customEmail? : string | null
     isActive: boolean;
     createdAt: string;
     updatedAt: string;

@@ -15,7 +15,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
       : "00"
   );
   const [isSubscribed, setIsSubscribed] = useState(!!initialData);
-  const [email, setEmail] = useState(initialData?.email || "");
+  const [customEmail, setEmail] = useState(initialData?.email || "");
   const [isLoading, setIsLoading] = useState(false);
 
   const initialCategories = initialData?.categories.map(item => String(item.id)) || [];
@@ -62,7 +62,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
   const isFormValid = useMemo(() => {
     try {
       mailApplySchema.parse({
-        email,
+        customEmail,
         selectedCategoryIds,
         time: Number(time),
       });
@@ -70,7 +70,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
     } catch {
       return false;
     }
-  }, [email, selectedCategoryIds, time]);
+  }, [customEmail, selectedCategoryIds, time]);
 
   const handleClick = async () => {
     // Check authentication
@@ -94,7 +94,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
         const result = await subscribeMail({
           hour,
           categoryIds: selectedCategoryIds,
-          email,
+          customEmail : customEmail.trim() == "" ? null : customEmail,
         });
 
         if (result) {
@@ -133,7 +133,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
     handleTimeDown,
     handleTimeUp,
     handleEmail,
-    email,
+    customEmail,
     handleTimeChange,
     handleTimeBlur,
     isFormValid,

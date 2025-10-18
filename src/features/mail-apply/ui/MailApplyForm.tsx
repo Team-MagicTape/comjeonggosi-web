@@ -19,7 +19,7 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
     handleCategoryChange,
     selectedCategoryIds,
     handleEmail,
-    email,
+    customEmail,
     handleTimeChange,
     isFormValid,
   } = useMailApplyForm(initialData, user);
@@ -165,7 +165,7 @@ const MailApplyForm = ({ initialData, categories, user }: Props) => {
             type="email"
             placeholder="your@email.com"
             onChange={handleEmail}
-            value={email}
+            value={customEmail}
             className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all"
           />
         </div>

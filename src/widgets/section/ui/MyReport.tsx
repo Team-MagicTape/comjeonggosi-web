@@ -14,7 +14,7 @@ const  MyReport = async() => {
       </div>
       <div className="flex flex-col items-end pr-4">
         <span className="text-white font-bold text-6xl">{`${report.studyTime}시간`}</span>
-        <span className="text-white font-semibold text-[14px]">총 학습시간</span>
+        <span className="text-white font-semibold text-[17px]">총 학습시간</span>
       </div>
     </div>
 

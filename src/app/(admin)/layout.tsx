@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await fetchUser();
 
-  if (!user) {
-    redirect("/");
-  }
+  // if (!user) {
+  //   redirect("/");
+  // }
 
   return <AdminLayoutContent>{children}</AdminLayoutContent>;
 }

@@ -331,11 +331,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       </div>
                       <div className="flex items-center justify-center gap-2">
                         <span className="text-4xl font-bold text-primary">
-                          34
+                        {corrected}
                         </span>
                         <span className="text-2xl text-gray-400">/</span>
                         <span className="text-4xl font-bold text-gray-700">
-                          4
+                        {quizzes.length}
                         </span>
                       </div>
                       <div className="mt-3">
@@ -343,12 +343,12 @@ const WorkbookQuizForm = ({ data }: Props) => {
                           <div
                             className="bg-gradient-to-r bg-primary h-2 rounded-full transition-all duration-1000 ease-out"
                             style={{
-                              width: `4%`,
+                              width: `${(corrected / quizzes.length) * 100}%`,
                             }}
                           ></div>
                         </div>
                         <div className="text-sm text-gray-500 mt-2">
-                          정답률: {Math.round(4)}%
+                        정답률: {Math.round((corrected / quizzes.length) * 100)}%
                         </div>
                       </div>
                     </div>
@@ -357,6 +357,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     <div className="space-y-3 w-full max-w-sm">
                       <Button
                         isFullWidth
+                         onClick={restart}
                         className="w-full bg-primary  text-white font-semibold py-3 px-6 rounded-xl shadow-lg flex cursor-pointer items-center justify-center gap-2"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />

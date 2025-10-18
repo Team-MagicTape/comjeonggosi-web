@@ -44,9 +44,9 @@ const My = async () => {
     fetchInitialMails(),
   ]);
 
-  // if (!user) {
-  //   redirect("/");
-  // }
+  if (!user) {
+    redirect("/");
+  }
 
   return (
     <div className="w-full flex items-start gap-4 flex-col py-4 lg:py-6">
@@ -77,11 +77,10 @@ const My = async () => {
             title: "받은 질문",
           },{
             child : <MyReport/>,
-            title : "주간 포트",
+            title : "주간 리포트",
           }
         ]}
       />
-      {/* <ReportForm/> */}
     </div>
   );
 };

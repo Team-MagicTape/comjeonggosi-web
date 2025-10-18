@@ -3,7 +3,9 @@ import { fetchStreak } from "../api/fetch-streaks"
 
 const StreakForm = async() => {
   const streak = await fetchStreak();
-  
+  if (!streak) {
+    return null;
+  }
   return (
     <div className="w-full bg-white border border-gray-100 rounded-lg p-5 hover:shadow-md transition-all">
     <div className="flex justify-between items-center mb-4">

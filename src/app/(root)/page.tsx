@@ -5,6 +5,7 @@ import MainMailApply from "@/widgets/section/ui/MainMailApply";
 import MainQuiz from "@/widgets/section/ui/MainQuiz";
 import StreakForm from "@/entities/streak/ui/StreakForm";
 import { fetchUser } from "@/entities/user/api/fetch-user";
+import MainNotice from "@/entities/notices/ui/MainNotice";
 
 const Main = async () => {
   const categories = await fetchCategories();
@@ -23,6 +24,7 @@ const Main = async () => {
           {user && <StreakForm/>}
           <MainQuiz />
           <MainMailApply />
+          <MainNotice />
         </div>
       </div>
     </div>

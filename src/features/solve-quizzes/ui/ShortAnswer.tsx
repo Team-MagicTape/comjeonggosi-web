@@ -39,7 +39,7 @@ const ShortAnswer = ({
             type="text"
             value={shortAnswer}
             onChange={(e) => setShortAnswer(e.target.value)}
-            disabled={showAnswer || isAnswered}
+            disabled={showAnswer || quizIdx !== currentIdx || isAnswered}
             placeholder="정답을 입력하세요..."
             className={`
               w-full px-4 py-4 sm:px-6 sm:py-5 text-lg rounded-xl border-2 
@@ -66,7 +66,8 @@ const ShortAnswer = ({
             </div>
           )}
         </div>
-            {!showAnswer && !isAnswered && (
+
+        {!showAnswer && quizIdx === currentIdx && !isAnswered && (
           <button
             onClick={handleShortAnswerSubmit}
             disabled={!shortAnswer.trim()}
@@ -82,6 +83,7 @@ const ShortAnswer = ({
             정답 제출
           </button>
         )}
+
         {showAnswer && (
           <div className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
             <div className="text-sm text-gray-600 mb-1">정답:</div>

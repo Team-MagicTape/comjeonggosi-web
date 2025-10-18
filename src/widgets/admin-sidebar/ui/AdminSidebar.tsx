@@ -10,6 +10,7 @@ import {
   ListTodo,
   FolderOpen,
   LogOut,
+  Bell,
   X
 } from "lucide-react";
 import Image from "next/image";
@@ -52,6 +53,11 @@ const AdminSidebar = ({ isOpen, onClose }: Props) => {
       label: "문제 관리",
       href: "/admin/questions",
       icon: ListTodo,
+    },
+    {
+      label: "공지 관리",
+      href: "/admin/notices",
+      icon: Bell,
     },
   ];
 

@@ -131,7 +131,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
             <div className="space-y-3">
               {quizzes.map((quiz, index) => (
                 <div
-                  key={quiz?.id}
+                  key={quiz.id}
                   className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <div className="flex items-start gap-3">
@@ -159,7 +159,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                             : "단답형"}
                         </span>
                         <span className="text-gray-500">
-                          {quiz?.category?.name}
+                          {quiz.category.name}
                         </span>
                         <span className="text-gray-500">
                           난이도 {quiz.difficulty}

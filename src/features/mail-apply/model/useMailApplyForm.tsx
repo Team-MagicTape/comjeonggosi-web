@@ -1,53 +1,54 @@
 import { ChangeEvent, useState, useMemo } from "react";
 import { subscribeMail } from "../api/subscribe-mail";
+import { deleteSubscribe } from "../api/delete-subscription";
 import { toast } from "@/shared/providers/ToastProvider";
 import { AxiosError } from "axios";
-import { EMAIL_REGEX } from "../constants/regex";
 import { SubscribeMail } from "../types/get-mail";
 import { User } from "@/entities/user/types/user";
 import { login } from "@/widgets/login-modal/libs/modal-controller";
 import { mailApplySchema } from "../types/validation";
 
-export const useMailApplyForm = (initialData: SubscribeMail | null, user: User | null) => {
+export const useMailApplyForm = (
+  initialData: SubscribeMail | null,
+  user: User | null
+) => {
   const [time, setTime] = useState(
-    initialData
-      ? `${String(initialData.hour).padStart(2, "0")}`
-      : "00"
+    initialData ? String(initialData.hour).padStart(2, "0") : "00"
   );
-  const [isSubscribed, setIsSubscribed] = useState(
-    !!initialData
-  );
-  const [email, setEmail] = useState(initialData ? initialData.email : "");
+  const [isSubscribed, setIsSubscribed] = useState(!!initialData);
+  const [customEmail, setEmail] = useState(initialData?.email || "");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const initialCategories = initialData ? initialData.categories.map(item => item.id) : [];
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(initialCategories || []);
-  const handleCategoryChange = (id: number) => {
+  const initialCategories =
+    initialData?.categories.map((item) => String(item.id)) || [];
+  const [selectedCategoryIds, setSelectedCategoryIds] =
+    useState<string[]>(initialCategories);
+
+  const handleCategoryChange = (id: string) => {
     setSelectedCategoryIds((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
     );
   };
 
   const handleTimeUp = () => {
-    const [hourStr] = time.split(":");
-    const newHour = (Number(hourStr) + 1) % 24;
-    setTime(`${newHour.toString().padStart(2, "0")}`);
+    const hour = Number(time);
+    const newHour = (hour + 1) % 24;
+    setTime(newHour.toString().padStart(2, "0"));
+  };
+
+  const handleTimeDown = () => {
+    const hour = Number(time);
+    const newHour = (hour - 1 + 24) % 24;
+    setTime(newHour.toString().padStart(2, "0"));
   };
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleTimeDown = () => {
-    const [hourStr] = time.split(":");
-    const newHour = (Number(hourStr) - 1 + 24) % 24;
-    setTime(`${newHour.toString().padStart(2, "0")}`);
-  };
-
   const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, "");
-    if (value.length > 2) {
-      return;
-    }
+    if (value.length > 2) return;
     setTime(value);
   };
 
@@ -56,15 +57,15 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
     if (isNaN(hour) || hour < 0 || hour > 23) {
       setTime("00");
     } else {
-      setTime(String(hour).padStart(2, "0"));
+      setTime(hour.toString().padStart(2, "0"));
     }
   };
 
-  // Form validation
+  // Form validation using Zod schema
   const isFormValid = useMemo(() => {
     try {
       mailApplySchema.parse({
-        email,
+        email: customEmail.trim(),
         selectedCategoryIds,
         time: Number(time),
       });
@@ -72,69 +73,106 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
     } catch {
       return false;
     }
-  }, [email, selectedCategoryIds, time]);
+  }, [customEmail, selectedCategoryIds, time]);
 
   const handleClick = async () => {
-    if(!user) {
+    // 🧪 테스트 모드 설정
+    const TEST_MODE = true; // 테스트 끝나면 false로!
+    
+    if (!TEST_MODE && !user) {
       login.open();
       return;
     }
-    if (email.trim().length <= 0) {
-      toast.warning("이메일을 입력해 주세요.");
+  
+    // ⚠️ 테스트 모드일 때는 validation 스킵
+    if (!TEST_MODE && !isFormValid) {
+      toast.warning("모든 필수 항목을 올바르게 입력해주세요.");
       return;
     }
-    if (!EMAIL_REGEX.test(email)) {
-      toast.warning("올바른 이메일 형식이 아닙니다.");
+  
+    setIsLoading(true);
+    
+    // 🧪 테스트용 더미 데이터
+    if (TEST_MODE) {
+      const dummyData = {
+        hour: 14,
+        categoryIds: ["5a427644-96f3-4c42-8e52-94529e650908"],
+        customEmail: "test@example.com"
+      };
+      
+      console.log('🧪 ===== 테스트 모드 시작 =====');
+      console.log('📤 전송할 데이터:', dummyData);
+      
+      try {
+        const result = await subscribeMail(dummyData);
+        console.log('🎯 최종 결과:', result);
+        
+        if (result) {
+          toast.success("✅ 테스트 성공!");
+        } else {
+          toast.error("❌ 테스트 실패 (result가 null)");
+        }
+      } catch (error) {
+        console.error('💥 에러 발생:', error);
+        toast.error("테스트 중 오류 발생");
+      } finally {
+        setIsLoading(false);
+        console.log('🧪 ===== 테스트 모드 종료 =====');
+      }
       return;
     }
-    if (!isSubscribed && !time) {
-      toast.warning("선호 시간을 선택해주세요.");
-      return;
-    }
-    if (selectedCategoryIds.length === 0) {
-      toast.warning("관심 주제를 선택해주세요.");
-      return;
-    }
-
+    
+    // 기존 실제 로직...
     try {
+      const hour = Number(time);
+  
       if (!isSubscribed) {
-        const [hourStr, minuteStr] = time.split(":");
-
-        await subscribeMail({
-          hour: +hourStr,
+        const result = await subscribeMail({
+          hour,
           categoryIds: selectedCategoryIds,
-          email,
+          customEmail : customEmail.trim() === "" ? null : customEmail,
         });
-        toast.success("신청 되었습니다");
-        setIsSubscribed(true);
+  
+        if (result) {
+          toast.success("신청 되었습니다");
+          setIsSubscribed(true);
+        } else {
+          toast.error("신청에 실패했습니다. 다시 시도해주세요.");
+        }
       } else {
-        const [hourStr, minuteStr] = time.split(":");
-        await subscribeMail({
-          hour: +hourStr,
-          categoryIds: selectedCategoryIds,
-          email,
-        });
-        toast.success("신청이 취소 되었습니다");
-        setIsSubscribed(false);
+        const result = await deleteSubscribe();
+  
+        if (result) {
+          toast.success("신청이 취소 되었습니다");
+          setIsSubscribed(false);
+        } else {
+          toast.error("취소에 실패했습니다. 다시 시도해주세요.");
+        }
       }
     } catch (error) {
       const err = error as AxiosError;
-      console.error("구독 실패", err.response?.data || err.message);
+      console.error("구독 처리 실패", err.response?.data || err.message);
+      toast.error("오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
     time,
     isSubscribed,
+    isLoading,
     handleClick,
     handleCategoryChange,
     selectedCategoryIds,
     handleTimeDown,
     handleTimeUp,
     handleEmail,
-    email,
+    customEmail,
     handleTimeChange,
     handleTimeBlur,
     isFormValid,
   };
 };
+
+

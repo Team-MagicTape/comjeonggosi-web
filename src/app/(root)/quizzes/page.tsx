@@ -4,6 +4,7 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import QuizForm from "@/features/solve-quizzes/ui/QuizForm";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import ChatBot from "@/entities/chatBot/ui/ChatBot";
 
 export const metadata: Metadata = {
   title: "퀴즈 | 컴정고시",
@@ -36,6 +37,7 @@ const Quizzes = async () => {
   return (
     <Suspense>
       <QuizForm categories={categories} initialQuiz={quiz} user={user} />
+      <ChatBot />
     </Suspense>
   );
 };

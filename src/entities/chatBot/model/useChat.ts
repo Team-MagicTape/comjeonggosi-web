@@ -7,6 +7,7 @@ export const useChat = (quizContent?: string) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -15,6 +16,12 @@ export const useChat = (quizContent?: string) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    return () => {
+      eventSourceRef.current?.close();
+    };
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -35,7 +42,7 @@ export const useChat = (quizContent?: string) => {
         ? encodeURIComponent(`현재 퀴즈: ${quizContent}`)
         : "";
 
-      const eventSource = new EventSource(
+      eventSourceRef.current = new EventSource(
         `https://devai.comgo.dev/chat?user_message=${encodedMessage}${
           encodedContext ? `&context=${encodedContext}` : ""
         }`
@@ -54,7 +61,7 @@ export const useChat = (quizContent?: string) => {
         },
       ]);
 
-      eventSource.addEventListener("message", (event) => {
+      eventSourceRef.current.addEventListener("message", (event) => {
         if (event.data === "[DONE]") {
           setMessages((prev) => {
             const updated = [...prev];
@@ -66,7 +73,7 @@ export const useChat = (quizContent?: string) => {
             }
             return updated;
           });
-          eventSource.close();
+          eventSourceRef.current?.close();
           setIsLoading(false);
           return;
         }
@@ -85,8 +92,17 @@ export const useChat = (quizContent?: string) => {
         });
       });
 
-      eventSource.onerror = () => {
-        eventSource.close();
+      eventSourceRef.current.onerror = () => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: "죄송합니다. 연결 중 오류가 발생했습니다. 다시 시도해주세요.",
+            timestamp: new Date(),
+            done: true,
+          },
+        ]);
+        eventSourceRef.current?.close();
         setIsLoading(false);
       };
     } catch (error) {

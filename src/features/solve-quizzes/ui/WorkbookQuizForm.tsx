@@ -43,7 +43,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center pt-4 overflow-hidden">
-      <ChatBot/>
+      <ChatBot />
       {/* 진행도 표시 막대 */}
       {quizzes.length > 0 && answeredQuizzes.size <= quizzes.length && (
         <div className="w-full space-y-3 xl:px-4">
@@ -86,13 +86,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                   className="w-full flex-shrink-0 xl:px-4 pb-8"
                 >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
-                    <div
-                      className={`mb-2 px-6 py-8 text-white flex gap-3 items-start ${
-                        quizIdx === currentIdx && isCurrentQuizAnswered
-                          ? "bg-gray-500"
-                          : "bg-primary"
-                      }`}
-                    >
+                    <div className="mb-2 px-6 py-8 text-black flex gap-3 items-start">
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-medium text-white">
                           {quizIdx + 1}
@@ -173,6 +167,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
                               )}
                               showAnswer={showAnswer}
                               handleAnswerSelect={handleAnswerSelect}
+                              selectedAnswer={selectedAnswer}
+                              explanation={quiz?.explanation}
                             />
                           );
                         })}
@@ -333,11 +329,11 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       </div>
                       <div className="flex items-center justify-center gap-2">
                         <span className="text-4xl font-bold text-primary">
-                        {corrected}
+                          {corrected}
                         </span>
                         <span className="text-2xl text-gray-400">/</span>
                         <span className="text-4xl font-bold text-gray-700">
-                        {quizzes.length}
+                          {quizzes.length}
                         </span>
                       </div>
                       <div className="mt-3">
@@ -350,7 +346,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
                           ></div>
                         </div>
                         <div className="text-sm text-gray-500 mt-2">
-                        정답률: {Math.round((corrected / quizzes.length) * 100)}%
+                          정답률:{" "}
+                          {Math.round((corrected / quizzes.length) * 100)}%
                         </div>
                       </div>
                     </div>
@@ -359,7 +356,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                     <div className="space-y-3 w-full max-w-sm">
                       <Button
                         isFullWidth
-                         onClick={restart}
+                        onClick={restart}
                         className="w-full bg-primary  text-white font-semibold py-3 px-6 rounded-xl shadow-lg flex cursor-pointer items-center justify-center gap-2"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
@@ -367,7 +364,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       </Button>
                       <CustomLink
                         href="/workbooks"
-                        className="flex items-center justify-center gap-2 text-gray-700 py-3 px-6 font-semibold rounded-xl shadow-lg hover:shadow-xl cursor-pointer bg-gray-300"
+                        className="flex items-center justify-center gap-2 text-gray-700 py-3 px-6 font-semibold rounded-xl shadow-lg hover:cursor-pointer bg-gray-200"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         문제집 목록으로

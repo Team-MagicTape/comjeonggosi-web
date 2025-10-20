@@ -91,12 +91,20 @@ const ShortAnswer = ({
               {quiz.answer}
             </div>
             {selectedAnswer && selectedAnswer !== quiz.answer && (
+              <>
               <div className="mt-2">
                 <div className="text-sm text-red-600 mb-1">당신의 답:</div>
                 <div className="text-lg font-semibold text-red-600">
                   {selectedAnswer}
                 </div>
               </div>
+              <div className="mt-2">
+                <div className="text-sm text-blue-600 mb-1">해설</div>
+                <div className="text-lg font-semibold text-black">
+                  {quiz.explanation || "해설이 제공되지 않았습니다."}
+                </div>
+              </div>
+              </>
             )}
           </div>
         )}

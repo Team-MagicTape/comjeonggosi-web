@@ -93,15 +93,6 @@ export const useChat = (quizContent?: string) => {
       });
 
       eventSourceRef.current.onerror = () => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content: "죄송합니다. 연결 중 오류가 발생했습니다. 다시 시도해주세요.",
-            timestamp: new Date(),
-            done: true,
-          },
-        ]);
         eventSourceRef.current?.close();
         setIsLoading(false);
       };

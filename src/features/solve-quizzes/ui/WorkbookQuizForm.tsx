@@ -14,6 +14,7 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { ArrowLeftIcon, CheckCircle2 } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
+import ChatBot from "@/entities/chatBot/ui/ChatBot";
 
 interface Props {
   data: Quiz[];
@@ -42,6 +43,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center pt-4 overflow-hidden">
+      <ChatBot/>
       {/* 진행도 표시 막대 */}
       {quizzes.length > 0 && answeredQuizzes.size <= quizzes.length && (
         <div className="w-full space-y-3 xl:px-4">

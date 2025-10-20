@@ -33,14 +33,14 @@ const QuestionAccordion = ({ categories, mails }: Props) => {
           setSelected={setCategory}
         />
         <div className="flex flex-col">
-          {data.length > 0 ? (
+          {Array.isArray(data) && data.length > 0 ? (
             data.map((mail, idx, arr) => (
               <QuestionItem
-                isLast={arr.length - 1 === idx}
                 key={mail.id}
                 data={mail}
                 isOpen={openIndex === idx}
                 onToggle={() => handleToggle(idx)}
+                isLast={arr.length - 1 === idx}
                 isLoading={isLoading}
               />
             ))

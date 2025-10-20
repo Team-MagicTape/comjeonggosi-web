@@ -13,6 +13,7 @@ import MyReviews from "@/widgets/section/ui/MyReviews";
 import { fetchReviewRecommendations } from "@/entities/review/api/fetch-review-recommendations";
 import { fetchReviewStats } from "@/entities/review/api/fetch-review-stats";
 
+import MyReport from "@/widgets/section/ui/MyReport";
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
 
@@ -65,11 +66,11 @@ const My = async () => {
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
-              {user.nickname}님
+              {/* {user.nickname}님 */}
             </p>
-            <p className="mb-2 text-sm text-gray">{user.email}</p>
+            {/* <p className="text-sm text-gray mb-2">{user.email}</p> */}
             <p className="text-sm text-gray">
-              가입일: {parseDate(user.createdAt)}
+              {/* 가입일: {parseDate(user.createdAt)} */}
             </p>
           </div>
           <Spacer />
@@ -91,7 +92,10 @@ const My = async () => {
           {
             child: <QuestionAccordion categories={categories} mails={mails} />,
             title: "받은 질문",
-          },
+          },{
+            child : <MyReport/>,
+            title : "주간 리포트",
+          }
         ]}
       />
     </div>

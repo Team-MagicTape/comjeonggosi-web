@@ -4,7 +4,7 @@ import { customFetch } from "@/shared/libs/custom-fetch";
 export const fetchSubState = async () => {
   try {
     const { data } = await customFetch.get<SubStateType>(
-      "/api/admin/dashboard/stats"
+      "/api/admin/subscriptions/stats"
     );
     console.log("구독 통계 성공");
     return data;

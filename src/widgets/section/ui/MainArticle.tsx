@@ -40,7 +40,7 @@ const MainArticle = ({ categories, initialData }: Props) => {
             <p className="text-gray-400 text-sm">아직 등록된 아티클이 없습니다</p>
           </div>
         ) : (
-          data.slice(0.7).map((item) => (
+          data.slice(0,6).map((item) => (
             <ArticleItem data={item} key={item.id} isLoading={false} />
           ))
         )}

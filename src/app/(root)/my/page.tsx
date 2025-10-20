@@ -9,6 +9,10 @@ import { fetchUser } from "@/entities/user/api/fetch-user";
 import { redirect } from "next/navigation";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import MyContentCards from "@/widgets/section/ui/MyContentCard";
+import MyReviews from "@/widgets/section/ui/MyReviews";
+import { fetchReviewRecommendations } from "@/entities/review/api/fetch-review-recommendations";
+import { fetchReviewStats } from "@/entities/review/api/fetch-review-stats";
+
 import MyReport from "@/widgets/section/ui/MyReport";
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
@@ -30,16 +34,25 @@ export const metadata: Metadata = {
       },
     ],
     locale: "ko_KR",
-    type: "website"
-  }
+    type: "website",
+  },
 };
 
 const My = async () => {
-  const [user, categories, submissions, mails] = await Promise.all([
+  const [
+    user,
+    categories,
+    submissions,
+    mails,
+    reviewRecommendations,
+    reviewStats,
+  ] = await Promise.all([
     fetchUser(),
     fetchCategories(),
     fetchInitialSubmissions(),
     fetchInitialMails(),
+    fetchReviewRecommendations(),
+    fetchReviewStats(),
   ]);
 
   if (!user) {
@@ -47,9 +60,9 @@ const My = async () => {
   }
 
   return (
-    <div className="w-full flex items-start gap-4 flex-col py-4 lg:py-6">
-      <div className="w-full p-4 border border-border bg-white rounded-2xl flex flex-col gap-4">
-        <div className="w-full flex xl:items-center gap-4 flex-col xl:flex-row">
+    <div className="flex flex-col items-start w-full gap-4 py-4 lg:py-6">
+      <div className="flex flex-col w-full gap-4 p-4 bg-white border border-border rounded-2xl">
+        <div className="flex flex-col w-full gap-4 xl:items-center xl:flex-row">
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
@@ -69,6 +82,12 @@ const My = async () => {
           {
             child: <MySubmissions submissions={submissions} />,
             title: "퀴즈 풀이",
+          },
+          {
+            child: (
+              <MyReviews reviews={reviewRecommendations} stats={reviewStats} />
+            ),
+            title: "복습 관리",
           },
           {
             child: <QuestionAccordion categories={categories} mails={mails} />,

@@ -54,7 +54,7 @@ const CrateArticleForm = ({ categories }: Props) => {
 
       <Select
         value={categoryId}
-        onChange={(e) => setCategoryId(Number(e.target.value))}
+        onChange={(e) => setCategoryId(e.target.value)}
       >
         <option value="">카테고리를 선택해주세요.</option>
         {categories.map((category) => (

@@ -1,7 +1,7 @@
 import { Category } from "@/entities/category/types/category";
 
 export interface Article {
-  id: number;
+  id: string;
   title: string;
   content: string;
   category: Category;

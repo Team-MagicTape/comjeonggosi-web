@@ -27,7 +27,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
   const [deletedCategories, setDeletedCategories] = useState<Category[]>([]);
   const [newCategory, setNewCategory] = useState({ name: "", description: "" });
   const [isCreating, setIsCreating] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [editingData, setEditingData] = useState({ name: "", description: "" });
   const [isLoadingDeleted, setIsLoadingDeleted] = useState(false);
 
@@ -89,7 +89,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
     setEditingData({ name: "", description: "" });
   };
 
-  const saveEdit = async (id: number) => {
+  const saveEdit = async (id: string) => {
     try {
       await apiClient.put(`/api/admin/categories/${id}`, editingData);
       setCategories(
@@ -103,7 +103,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
     }
   };
 
-  const deleteCategory = async (id: number) => {
+  const deleteCategory = async (id: string) => {
     if (!confirm("정말로 이 카테고리를 삭제하시겠습니까?")) return;
 
     try {
@@ -114,7 +114,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
     }
   };
 
-  const handleRestoreCategory = async (id: number) => {
+  const handleRestoreCategory = async (id: string) => {
     try {
       const restoredCategory = await restoreCategory(id);
       // 복원된 카테고리를 활성 목록에 추가하고 삭제 목록에서 제거

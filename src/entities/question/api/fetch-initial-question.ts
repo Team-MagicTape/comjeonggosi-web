@@ -1,7 +1,7 @@
 import { customFetch } from "@/shared/libs/custom-fetch";
 import { QuestionType } from "../type/question";
 
-export const fetchQuestionById = async (questionId: number) => {
+export const fetchQuestionById = async (questionId: string) => {
   try {
     const { data } = await customFetch.get<QuestionType>(
       `/questions/${questionId}`

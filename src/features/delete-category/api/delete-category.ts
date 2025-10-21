@@ -1,6 +1,6 @@
 import { apiClient } from "@/shared/libs/custom-axios";
 
-export const deleteCategory = async (categoryId: number) => {
+export const deleteCategory = async (categoryId: string) => {
   try {
     const { data } = await apiClient.delete(`/api/admin/categories/${categoryId}`);
     return data;

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 const Quizzes = async () => {
   const [categories, quiz, user] = await Promise.all([
     fetchCategories(),
-    fetchInitialQuiz(1),
+    fetchInitialQuiz("1"),
     fetchUser(),
   ]);
 

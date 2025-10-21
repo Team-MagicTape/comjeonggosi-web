@@ -3,12 +3,6 @@
 import OAuthButton from "./OAuthButton";
 import { createPortal } from "react-dom";
 import { login } from "../libs/modal-controller";
-import {
-  GITHUB_OAUTH_LINK,
-  GOOGLE_OAUTH_LINK,
-  KAKAO_OAUTH_LINK,
-  NAVER_OAUTH_LINK,
-} from "@/shared/constants/oauth";
 import { useLoginModal } from "../model/useLoginModal";
 import { Suspense } from "react";
 
@@ -33,28 +27,28 @@ const LoginModal = () => {
         </p>
         <Suspense>
           <OAuthButton
-            href={GOOGLE_OAUTH_LINK}
+            provider="google"
             bgColor="white"
             icon="google"
             name="구글로 로그인"
             textColor="black"
           />
           <OAuthButton
-            href={GITHUB_OAUTH_LINK}
+            provider="github"
             bgColor="#171515"
             icon="github"
             name="깃허브로 로그인"
             textColor="white"
           />
           <OAuthButton
-            href={NAVER_OAUTH_LINK}
+            provider="naver"
             bgColor="#03C75A"
             icon="naver"
             name="네이버로 로그인"
             textColor="white"
           />
           <OAuthButton
-            href={KAKAO_OAUTH_LINK}
+            provider="kakao"
             bgColor="#FEE500"
             icon="kakao"
             name="카카오로 로그인"

@@ -1,7 +1,7 @@
 export interface QuestionType {
-  id: number;
+  id: string;
   day: number;
-  categoryId: number;
+  categoryId: string;
   title: string;
   content: string;
   answer: string;

@@ -2,7 +2,7 @@ import { apiClient } from "@/shared/libs/custom-axios";
 import { EditArticleData } from "../types/edit-article-data";
 
 export const editArticle = async (
-  articleId: number,
+  articleId: string,
   editData: EditArticleData
 ) => {
   try {

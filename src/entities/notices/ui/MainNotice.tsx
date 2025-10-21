@@ -31,7 +31,7 @@ const MainNotice = () => {
         <h2 className="text-lg font-semibold">공지사항</h2>
         <CustomLink
           href="/notices"
-          className="text-sm text-primary font-medium hover:underline cursor-pointer"
+          className="text-sm text-gray-600 font-medium hover:underline cursor-pointer"
         >
           전체보기 →
         </CustomLink>

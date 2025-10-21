@@ -6,7 +6,7 @@ import { useCustomRouter } from "@/shared/model/useCustomRouter";
 export const useCreateArticle = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [categoryId, setCategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState("");
   const router = useCustomRouter();
   const [isMounted, setIsMounted] = useState(false);
 

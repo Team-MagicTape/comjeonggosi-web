@@ -51,7 +51,7 @@ const WorkbookManagement = ({ initialWorkbooks }: Props) => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("정말로 이 문제집을 삭제하시겠습니까?")) return;
 
     try {

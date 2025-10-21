@@ -35,7 +35,6 @@ interface Props {
     categoryId?: string;
   }>;
 }
-
 const ArticlesPage = async ({ searchParams }: Props) => {
   const categories = await fetchCategories();
   const resolvedSearchParams = await searchParams;

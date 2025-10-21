@@ -7,7 +7,7 @@ export interface Quiz {
   options: string[];
   answer: string;
   category: Category;
-  articleId: number | null;
+  articleId: string | null;
   type: QuizType;
   difficulty: number;
   imageUrl?: string;

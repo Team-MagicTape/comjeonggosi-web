@@ -7,7 +7,7 @@ import { OAuthProvider } from "../types/oauth-provider";
 export const exchangeToken = async (
   provider: OAuthProvider,
   code: string
-) => {
+): Promise<number> => {
   try {
     const { status } = await apiClient.post(`/api/auth/${provider}`, {
       code

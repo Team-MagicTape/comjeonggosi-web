@@ -16,19 +16,42 @@ const OAuthCallback = () => {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // URL에서 code와 provider 추출
+        // URL에서 code와 state 추출
         const code = searchParams.get("code");
-        const provider = searchParams.get("state") as OAuthProvider; // state에 provider 정보 저장
+        const receivedState = searchParams.get("state");
 
         if (!code) {
           throw new Error("인증 코드가 없습니다.");
         }
 
-        if (!provider || !OAUTH_PROVIDERS.includes(provider)) {
+        if (!receivedState) {
+          throw new Error("State 파라미터가 없습니다.");
+        }
+
+        // CSRF 방지: state 검증
+        const storedState = sessionStorage.getItem("oauth_state");
+        const storedProvider = sessionStorage.getItem(
+          "oauth_provider"
+        ) as OAuthProvider;
+
+        if (!storedState || !storedProvider) {
+          throw new Error("OAuth 세션 정보가 없습니다. 다시 시도해주세요.");
+        }
+
+        if (receivedState !== storedState) {
+          throw new Error("State 불일치: CSRF 공격 가능성이 있습니다.");
+        }
+
+        if (!OAUTH_PROVIDERS.includes(storedProvider)) {
           throw new Error("유효하지 않은 OAuth 공급자입니다.");
         }
 
-        const status = await exchangeToken(provider, code);
+        // 사용된 state와 provider 정보 삭제 (재사용 방지)
+        sessionStorage.removeItem("oauth_state");
+        sessionStorage.removeItem("oauth_provider");
+
+        // 토큰 교환
+        const status = await exchangeToken(storedProvider, code);
         if (!status.toString().startsWith("2")) {
           throw new Error("토큰 변환에 실패했습니다.");
         }
@@ -39,6 +62,11 @@ const OAuthCallback = () => {
         router.replace(redirectPath);
       } catch (err) {
         console.error("OAuth callback error:", err);
+
+        // 에러 발생 시 저장된 OAuth 정보 정리
+        sessionStorage.removeItem("oauth_state");
+        sessionStorage.removeItem("oauth_provider");
+
         setError(
           err instanceof Error
             ? err.message

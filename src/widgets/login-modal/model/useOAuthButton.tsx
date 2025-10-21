@@ -2,6 +2,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { OAuthProvider } from "@/features/oauth/types/oauth-provider";
 import { getOAuthUrl } from "@/features/oauth/libs/oauth-config";
 
+/**
+ * CSRF 공격 방지를 위한 랜덤 state 생성
+ */
+const generateSecureState = (): string => {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
 export const useOAuthButton = (provider: OAuthProvider) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -13,11 +20,18 @@ export const useOAuthButton = (provider: OAuthProvider) => {
     }`;
     localStorage.setItem("redirect", pathToStore);
 
-    // OAuth URL 생성 및 이동
+    // CSRF 방지를 위한 랜덤 state 생성
+    const state = generateSecureState();
+
+    // state와 provider를 sessionStorage에 저장 (콜백에서 검증용)
+    sessionStorage.setItem("oauth_state", state);
+    sessionStorage.setItem("oauth_provider", provider);
+
+    // OAuth URL 생성
     const oauthUrl = getOAuthUrl(provider);
 
-    // state 파라미터에 provider 정보 추가 (콜백에서 사용)
-    const urlWithState = `${oauthUrl}&state=${provider}`;
+    // state 파라미터 추가 (CSRF 방지용)
+    const urlWithState = `${oauthUrl}&state=${state}`;
 
     // OAuth 공급자 페이지로 리다이렉트
     window.location.href = urlWithState;

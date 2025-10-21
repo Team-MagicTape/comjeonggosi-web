@@ -31,11 +31,10 @@ const Articles = () => {
 };
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     categoryId?: string;
-  };
+  }>;
 }
-
 const ArticlesPage = async ({ searchParams }: Props) => {
   const categories = await fetchCategories();
   const resolvedSearchParams = await searchParams;

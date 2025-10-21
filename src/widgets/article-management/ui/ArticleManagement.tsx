@@ -42,7 +42,7 @@ const ArticleManagement = ({ articles }: Props) => {
     setFilteredArticles(filtered);
   }, [searchQuery, selectedCategory, articles]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("정말로 이 아티클을 삭제하시겠습니까?")) return;
 
     try {

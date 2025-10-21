@@ -11,7 +11,6 @@ const OAuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
-  const [isProcessing, setIsProcessing] = useState(true);
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -72,7 +71,6 @@ const OAuthCallback = () => {
             ? err.message
             : "로그인 처리 중 오류가 발생했습니다."
         );
-        setIsProcessing(false);
       }
     };
 

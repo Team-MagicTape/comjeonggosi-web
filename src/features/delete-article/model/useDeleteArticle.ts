@@ -4,7 +4,7 @@ import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 export const useDeleteArticle = () => {
   const router = useCustomRouter();
-  const handleDelete = async (articleId: number) => {
+  const handleDelete = async (articleId: string) => {
     try {
       await deleteArticle(articleId);
       router.push("/");

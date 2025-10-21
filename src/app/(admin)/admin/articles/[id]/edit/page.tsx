@@ -4,7 +4,7 @@ import { getArticleDetail } from "@/entities/article/api/get-article-detail";
 
 const EditArticle = async ({ params }: PathParams) => {
   const { id } = await params;
-  const articleId = Number(id);
+  const articleId = Array.isArray(id) ? id[0] : id ?? "";
   const article = await getArticleDetail(articleId);
 
   if (!article) {

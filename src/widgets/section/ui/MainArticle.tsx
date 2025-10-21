@@ -21,7 +21,7 @@ const MainArticle = ({ categories, initialData }: Props) => {
     <div className="w-full bg-white border border-gray-100 rounded-lg p-4 lg:p-6">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-lg font-semibold">아티클</h2>
-        <CustomLink href="/articles" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+        <CustomLink href="/articles" className="text-sm text-gray-600 hover:text-gray-900 transition-colors hover:underline cursor-pointer">
           전체보기 →
         </CustomLink>
       </div>

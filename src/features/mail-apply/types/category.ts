@@ -1,5 +1,5 @@
 export interface getCategoryType {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }

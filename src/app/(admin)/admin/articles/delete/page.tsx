@@ -44,7 +44,7 @@ const DeleteArticles = () => {
     },
   });
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await apiClient.delete(`/api/admin/articles/${id}`);
       await queryClient.invalidateQueries({

@@ -1,8 +1,8 @@
 export interface MailDetail {
-  id: number;
+  id: string;
   day: number;
   title: string;
   content: string;
-  categoryId: number;
+  categoryId: string;
   answer: string;
 }

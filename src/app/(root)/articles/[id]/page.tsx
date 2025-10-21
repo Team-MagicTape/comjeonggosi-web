@@ -10,7 +10,7 @@ export async function generateMetadata({
   params,
 }: PathParams): Promise<Metadata> {
   const { id } = await params;
-  const article = await getArticleDetail(Number(id));
+  const article = await getArticleDetail(String(id));
 
   return {
     title: `${article?.title || ""} | 컴정고시`,
@@ -36,7 +36,7 @@ export async function generateMetadata({
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
-  const article = await getArticleDetail(Number(id));
+  const article = await getArticleDetail(String(id));
   const articles = await fetchInitialArticles(String(article?.category.id));
   if (!article) {
     notFound();

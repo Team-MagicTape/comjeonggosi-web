@@ -1,8 +1,8 @@
 export interface Mail {
-  id: number;
+  id: string;
   title: string;
   content: string;
   answer: string;
-  categoryId: number;
+  categoryId: string;
   day: number;
 }

@@ -9,7 +9,7 @@ import { fetchInitialArticles } from "@/entities/article/api/fetch-initial-artic
 
 const ArticleDetail = async ({ params }: PathParams) => {
   const { id } = await params;
-  const article = await getArticleDetail(Number(id));
+  const article = await getArticleDetail(String(id));
   const articles = await fetchInitialArticles(String(article?.category.id));
   if (!article) {
     notFound();
@@ -24,8 +24,8 @@ const ArticleDetail = async ({ params }: PathParams) => {
         <span className="flex items-center justify-between w-full">
           <h1 className="font-extrabold xl:text-3xl text-2xl">{article.title}</h1>
           <div className="flex items-center gap-2">
-            <DeleteButton articleId={Number(params)} />
-            <EditButton articleId={Number(params)} />
+            <DeleteButton articleId={String(article.id)} />
+            <EditButton articleId={String(article.id)} />
           </div>
         </span>
         <hr className="border border-gray-200 w-full" />

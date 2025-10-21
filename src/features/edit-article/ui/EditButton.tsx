@@ -4,7 +4,7 @@ import Button from "@/shared/ui/Button";
 import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 interface Props {
-  articleId: number;
+  articleId: string;
 }
 
 const EditButton = ({ articleId }: Props) => {

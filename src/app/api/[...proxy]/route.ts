@@ -45,6 +45,10 @@ const handler = async (
     };
     console.log(cookie);
 
+    // 압축 관련 헤더 제거 (gzip 응답 깨짐 방지)
+    delete headers["accept-encoding"];
+    delete headers["content-encoding"];
+
     if (!data || data instanceof FormData) {
       delete headers["content-type"];
     } else {
@@ -58,6 +62,7 @@ const handler = async (
       data,
       validateStatus: () => true,
       withCredentials: true,
+      decompress: true, // axios가 자동으로 압축 해제하도록 설정
     });
   };
 
@@ -127,7 +132,9 @@ const handler = async (
 
     // OAuth 인증 엔드포인트 처리 (Google, GitHub, Naver, Kakao)
     const oauthPaths = OAUTH_PROVIDERS.map((v) => "auth/" + v);
-    if (oauthPaths.some((path) => targetPath === path)) {
+    const isAuthLogin = targetPath === "auth/login";
+    
+    if (oauthPaths.some((path) => targetPath === path) || isAuthLogin) {
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
         apiResponse.data;
 

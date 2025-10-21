@@ -62,7 +62,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
   const isFormValid = useMemo(() => {
     try {
       mailApplySchema.parse({
-        email : customEmail,
+        email : customEmail.trim(),
         selectedCategoryIds,
         time: Number(time),
       });
@@ -94,7 +94,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
         const result = await subscribeMail({
           hour,
           categoryIds: selectedCategoryIds,
-          customEmail : customEmail.trim() == "" ? null : customEmail,
+          customEmail : customEmail.trim() === "" ? null : customEmail,
         });
 
         if (result) {

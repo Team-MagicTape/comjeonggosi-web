@@ -19,7 +19,7 @@ export const useEditArticle = (article: { title: string; content: string }) => {
 
   const handleEdit = async (
     e: React.FormEvent<HTMLFormElement>,
-    articleId: number
+    articleId: string
   ) => {
     e.preventDefault();
     try {

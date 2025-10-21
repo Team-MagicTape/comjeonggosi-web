@@ -8,7 +8,7 @@ import { Article } from "@/entities/article/types/article";
 import Markdown from "@/shared/ui/Markdown";
 
 interface Props {
-  articleId: number;
+  articleId: string;
   article: Article;
 }
 

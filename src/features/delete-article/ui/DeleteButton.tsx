@@ -4,7 +4,7 @@ import Button from '@/shared/ui/Button';
 import { useDeleteArticle } from '@/features/delete-article/model/useDeleteArticle';
 
 interface Props {
-  articleId: number;
+  articleId: string;
 }
 
 const DeleteButton = ({ articleId }: Props) => {

@@ -1,6 +1,6 @@
 import { OAuthConfig, OAuthProvider } from "../types/oauth";
 
-const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "");
 const redirectUri = `${baseUrl}/auth/callback`;
 
 export const oauthConfigs: Record<OAuthProvider, OAuthConfig> = {

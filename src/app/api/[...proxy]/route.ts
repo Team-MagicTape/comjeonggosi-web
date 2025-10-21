@@ -7,6 +7,7 @@ import {
   ACCESSTOKEN_COOKIE_OPTION,
   REFRESHTOKEN_COOKIE_OPTION,
 } from "@/shared/constants/cookie-option";
+import { OAUTH_PROVIDERS } from "@/shared/constants/oauth-providers";
 
 const handler = async (
   req: NextRequest,
@@ -122,6 +123,33 @@ const handler = async (
       });
 
       return response;
+    }
+
+    // OAuth 인증 엔드포인트 처리 (Google, GitHub, Naver, Kakao)
+    const oauthPaths = OAUTH_PROVIDERS.map((v) => "auth/" + v);
+    if (oauthPaths.some((path) => targetPath === path)) {
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        apiResponse.data;
+
+      if (newAccessToken && newRefreshToken) {
+        response = NextResponse.json(apiResponse.data, {
+          status: apiResponse.status,
+        });
+
+        // 쿠키에 토큰 저장
+        response.cookies.set(
+          "accessToken",
+          newAccessToken,
+          ACCESSTOKEN_COOKIE_OPTION
+        );
+        response.cookies.set(
+          "refreshToken",
+          newRefreshToken,
+          REFRESHTOKEN_COOKIE_OPTION
+        );
+
+        return response;
+      }
     }
 
     if (apiResponse.status === 204) {

@@ -3,13 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { exchangeToken } from "@/features/oauth/api/exchange-token";
-import { OAuthProvider } from "@/features/oauth/types/oauth";
+import { OAuthProvider } from "@/features/oauth/types/oauth-provider";
 import { Loader2, AlertCircle } from "lucide-react";
-import { cookies } from "next/headers";
-import {
-  ACCESSTOKEN_COOKIE_OPTION,
-  REFRESHTOKEN_COOKIE_OPTION,
-} from "@/shared/constants/cookie-option";
+import { OAUTH_PROVIDERS } from "@/shared/constants/oauth-providers";
 
 const OAuthCallback = () => {
   const router = useRouter();
@@ -28,25 +24,14 @@ const OAuthCallback = () => {
           throw new Error("인증 코드가 없습니다.");
         }
 
-        if (
-          !provider ||
-          !["google", "github", "naver", "kakao"].includes(provider)
-        ) {
+        if (!provider || !OAUTH_PROVIDERS.includes(provider)) {
           throw new Error("유효하지 않은 OAuth 공급자입니다.");
         }
 
-        const { accessToken, refreshToken } = await exchangeToken(
-          provider,
-          code
-        );
-
-        const cookieStore = await cookies();
-        cookieStore.set("accessToken", accessToken, {
-          ...ACCESSTOKEN_COOKIE_OPTION,
-        });
-        cookieStore.set("refreshToken", refreshToken, {
-          ...REFRESHTOKEN_COOKIE_OPTION,
-        });
+        const status = await exchangeToken(provider, code);
+        if (!status.toString().startsWith("2")) {
+          throw new Error("토큰 변환에 실패했습니다.");
+        }
 
         const redirectPath = localStorage.getItem("redirect") || "/";
         localStorage.removeItem("redirect");
@@ -68,25 +53,25 @@ const OAuthCallback = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-red-100">
+      <div className="flex items-center justify-center min-h-screen p-4 bg-gray-50">
+        <div className="w-full max-w-md">
+          <div className="p-8 bg-white border border-red-100 shadow-lg rounded-2xl">
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-50">
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
             </div>
 
-            <div className="text-center mb-8">
-              <p className="text-2xl font-bold text-gray-900 mb-3">
+            <div className="mb-8 text-center">
+              <p className="mb-3 text-2xl font-bold text-gray-900">
                 로그인 실패
               </p>
-              <p className="text-gray-600 leading-relaxed">{error}</p>
+              <p className="leading-relaxed text-gray-600">{error}</p>
             </div>
 
             <button
               onClick={() => router.replace("/login")}
-              className="w-full bg-red-500 text-white py-3 px-4 rounded-xl font-medium hover:bg-red-600 transition-colors duration-200"
+              className="w-full px-4 py-3 font-medium text-white transition-colors duration-200 bg-red-500 rounded-xl hover:bg-red-600"
             >
               다시 시도하기
             </button>
@@ -97,20 +82,20 @@ const OAuthCallback = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gray-50">
+      <div className="w-full max-w-md">
+        <div className="p-8 bg-white border border-gray-100 shadow-lg rounded-2xl">
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-50">
               <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
             </div>
           </div>
 
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900 mb-3">
+            <p className="mb-3 text-2xl font-bold text-gray-900">
               로그인 처리 중
             </p>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed text-gray-600">
               잠시만 기다려주세요...
             </p>
           </div>

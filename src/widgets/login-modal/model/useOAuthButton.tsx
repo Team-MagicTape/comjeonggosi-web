@@ -1,5 +1,5 @@
 import { usePathname, useSearchParams } from "next/navigation";
-import { OAuthProvider } from "@/features/oauth/types/oauth";
+import { OAuthProvider } from "@/features/oauth/types/oauth-provider";
 import { getOAuthUrl } from "@/features/oauth/libs/oauth-config";
 
 export const useOAuthButton = (provider: OAuthProvider) => {

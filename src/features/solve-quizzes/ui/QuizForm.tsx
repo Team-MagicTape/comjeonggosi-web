@@ -74,13 +74,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                   className="w-full flex-shrink-0 xl:px-4 pb-8"
                 >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
-                    <div
-                      className={`mb-2 px-6 py-8 text-white flex flex-col gap-3 items-start ${
-                        quizIdx === currentIdx && isCurrentQuizAnswered
-                          ? "bg-gray-500"
-                          : "bg-primary"
-                      }`}
-                    >
+                    <div className="mb-2 px-6 py-8 text-black flex flex-col gap-3 items-start">
                       <h2 className="text-lg sm:text-2xl font-bold flex-1 leading-tight">
                         {quiz?.content}
                       </h2>
@@ -156,6 +150,8 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                               )}
                               showAnswer={showAnswer}
                               handleAnswerSelect={handleAnswerSelect}
+                              selectedAnswer={selectedAnswer}
+                              explanation={quiz?.explanation}
                             />
                           );
                         })}

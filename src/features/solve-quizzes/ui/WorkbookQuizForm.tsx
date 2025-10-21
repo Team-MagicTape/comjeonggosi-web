@@ -14,6 +14,7 @@ import { getOptionCircleStyle } from "../utils/get-option-circle-style";
 import { getOptionCircleContent } from "../utils/get-option-circle-content";
 import { ArrowLeftIcon, CheckCircle2 } from "lucide-react";
 import WorkbookQuizSettings from "./WorkbookQuizSettings";
+import ChatBot from "@/entities/chatBot/ui/ChatBot";
 
 interface Props {
   data: Quiz[];
@@ -42,6 +43,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
 
   return (
     <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col gap-4 justify-center pt-4 overflow-hidden">
+      <ChatBot />
       {/* 진행도 표시 막대 */}
       {quizzes.length > 0 && answeredQuizzes.size <= quizzes.length && (
         <div className="w-full space-y-3 xl:px-4">
@@ -84,13 +86,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                   className="w-full flex-shrink-0 xl:px-4 pb-8"
                 >
                   <div className="w-full mx-auto bg-white rounded-2xl sm:rounded-3xl h-full overflow-hidden shadow-xl">
-                    <div
-                      className={`mb-2 px-6 py-8 text-white flex gap-3 items-start ${
-                        quizIdx === currentIdx && isCurrentQuizAnswered
-                          ? "bg-gray-500"
-                          : "bg-primary"
-                      }`}
-                    >
+                    <div className="mb-2 px-6 py-8 text-black flex gap-3 items-start">
                       <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-medium text-white">
                           {quizIdx + 1}
@@ -171,6 +167,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
                               )}
                               showAnswer={showAnswer}
                               handleAnswerSelect={handleAnswerSelect}
+                              selectedAnswer={selectedAnswer}
+                              explanation={quiz?.explanation}
                             />
                           );
                         })}
@@ -306,14 +304,14 @@ const WorkbookQuizForm = ({ data }: Props) => {
             )}
 
             <div className="w-full flex-shrink-0 pb-8 xl:px-4" key={10000}>
-              <div className="w-full h-146 mx-auto bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl border border-emerald-100">
+              <div className="w-full h-146 mx-auto rounded-2xl flex flex-col items-center justify-center sm:rounded-3xl overflow-hidden shadow-xl ">
                 <div className="flex flex-col items-center px-8 py-12">
                   {/* 축하 아이콘 */}
                   <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                    <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-lg">
                       <CheckCircle2 className="w-10 h-10 text-white" />
                     </div>
-                    <div className="absolute inset-0 bg-emerald-200 rounded-full opacity-25 animate-ping"></div>
+                    <div className="absolute inset-0 bg-orange-200 rounded-full opacity-25 animate-ping"></div>
                   </div>
 
                   <div className="text-center space-y-4">
@@ -330,7 +328,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                         최종 점수
                       </div>
                       <div className="flex items-center justify-center gap-2">
-                        <span className="text-4xl font-bold text-emerald-500">
+                        <span className="text-4xl font-bold text-primary">
                           {corrected}
                         </span>
                         <span className="text-2xl text-gray-400">/</span>
@@ -341,7 +339,7 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       <div className="mt-3">
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-emerald-400 to-emerald-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                            className="bg-gradient-to-r bg-primary h-2 rounded-full transition-all duration-1000 ease-out"
                             style={{
                               width: `${(corrected / quizzes.length) * 100}%`,
                             }}
@@ -359,14 +357,14 @@ const WorkbookQuizForm = ({ data }: Props) => {
                       <Button
                         isFullWidth
                         onClick={restart}
-                        className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex cursor-pointer items-center justify-center gap-2"
+                        className="w-full bg-primary  text-white font-semibold py-3 px-6 rounded-xl shadow-lg flex cursor-pointer items-center justify-center gap-2"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         다시 풀기
                       </Button>
                       <CustomLink
                         href="/workbooks"
-                        className="flex items-center justify-center gap-2 py-3 px-6 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
+                        className="flex items-center justify-center gap-2 text-gray-700 py-3 px-6 font-semibold rounded-xl shadow-lg hover:cursor-pointer bg-gray-200"
                       >
                         <ArrowLeftIcon className="w-4 h-4" />
                         문제집 목록으로

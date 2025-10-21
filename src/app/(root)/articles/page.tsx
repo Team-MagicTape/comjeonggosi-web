@@ -31,9 +31,9 @@ const Articles = () => {
 };
 
 interface Props {
-  searchParams: Promise<{
+  searchParams: {
     categoryId?: string;
-  }>;
+  };
 }
 
 const ArticlesPage = async ({ searchParams }: Props) => {

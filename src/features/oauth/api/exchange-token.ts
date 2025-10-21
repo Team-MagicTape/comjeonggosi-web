@@ -1,20 +1,20 @@
-import { apiClient } from "@/shared/libs/custom-axios";
-import { OAuthProvider } from "../types/oauth-provider";
+export const sendAuthToken = async (
+  provider: string,
+  token: string
+): Promise<void> => {
+  const isGithub = provider === "github";
+  const body = isGithub ? { code: token } : { idToken: token };
 
-/**
- * authorization code를 서버에 전송하여 access token과 refresh token을 받아옴
- */
-export const exchangeToken = async (
-  provider: OAuthProvider,
-  code: string
-): Promise<number> => {
-  try {
-    const { status } = await apiClient.post(`/api/auth/${provider}`, {
-      code
-    });
-    return status;
-  } catch (error) {
-    console.error("exchangeToken error", error);
-    throw error;
+  const response = await fetch(`/api/auth/${provider}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: "Authentication failed" }));
+    throw new Error(error.error || "Authentication failed");
   }
 };

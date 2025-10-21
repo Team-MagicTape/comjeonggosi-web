@@ -6,7 +6,7 @@ const baseUrl =
   (typeof window !== "undefined" ? window.location.origin : "");
 const redirectUri = `${baseUrl}/auth/callback`;
 
-export const oauthConfigs: Record<OAuthProvider, OAuthConfig> = {
+const oauthConfigs: Record<OAuthProvider, OAuthConfig> = {
   google: {
     clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
     redirectUri,
@@ -38,6 +38,13 @@ export const oauthConfigs: Record<OAuthProvider, OAuthConfig> = {
  */
 export const getOAuthUrl = (provider: OAuthProvider): string => {
   const config = oauthConfigs[provider];
+
+  if (!config.clientId || config.clientId.trim() === "") {
+    console.error(`Missing environment variable: ${provider}`);
+    throw new Error(
+      `OAuth 설정 오류: ${provider} 환경변수가 설정되지 않았습니다.`
+    );
+  }
   const params = new URLSearchParams({
     client_id: config.clientId,
     redirect_uri: config.redirectUri,

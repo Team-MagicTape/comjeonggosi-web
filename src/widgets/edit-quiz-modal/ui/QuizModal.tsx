@@ -121,8 +121,8 @@ const EditQuizModal = () => {
     try {
       const submitData = {
         ...data,
-        articleId: Number(data.articleId),
-        categoryId: Number(data.categoryId),
+        articleId: data.articleId,
+        categoryId: data.categoryId,
         options: submitOptions,
       };
       await apiClient.patch(`/api/admin/quizzes/${value.id}`, submitData);

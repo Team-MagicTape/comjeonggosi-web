@@ -2,14 +2,14 @@
 
 interface Props {
   question: {
-    id: number;
+    id: string;
     day: number;
-    categoryId: number;
+    categoryId: string;
     title: string;
     content: string;
     answer: string;
   };
-  category?: { id: number; name: string; description: string };
+  category?: { id: string; name: string; description: string };
 }
 
 const TodayQuestionForm = ({ question, category }: Props) => {

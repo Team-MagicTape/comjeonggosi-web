@@ -8,7 +8,7 @@ export async function generateMetadata({
   params,
 }: PathParams): Promise<Metadata> {
   const { id } = await params;
-  const workbook = await fetchWorkbook(Number(id));
+  const workbook = await fetchWorkbook(String(id));
 
   return {
     title: `${workbook?.name || "문제집"} | 컴정고시`,
@@ -34,7 +34,7 @@ export async function generateMetadata({
 
 const WorkbookDetail = async ({ params }: PathParams) => {
   const { id } = await params;
-  const workbook = await fetchWorkbook(Number(id));
+  const workbook = await fetchWorkbook(String(id));
 
   if (!workbook) {
     notFound();

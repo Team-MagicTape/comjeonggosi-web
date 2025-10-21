@@ -5,7 +5,7 @@ import { PathParams } from "@/shared/types/path-params";
 
 const WorkbookQuizzes = async ({ params }: PathParams) => {
   const { id } = await params;
-  const workbook = await fetchWorkbook(Number(id));
+  const workbook = await fetchWorkbook(String(id));
   const quizzes = await fetchInitialWorkbookQuizzes(workbook?.quizIds || []);
 
   return (

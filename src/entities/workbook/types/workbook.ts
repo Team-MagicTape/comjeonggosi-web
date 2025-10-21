@@ -1,5 +1,5 @@
 export interface Workbook {
-  id: number;
+  id: string;
   name: string;
   description: string;
   quizIds: string[];

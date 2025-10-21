@@ -10,7 +10,7 @@ export async function generateMetadata({
 }: PathParams): Promise<Metadata> {
   const { id } = await params;
   const [question, categories] = await Promise.all([
-    fetchQuestionById(Number(id)),
+    fetchQuestionById(String(id)),
     fetchCategories(),
   ]);
   const category = categories.find((c) => c.id === question?.categoryId);
@@ -41,7 +41,7 @@ const TodayQuestionDetail = async ({ params }: PathParams) => {
   const { id } = await params;
 
   const [question, categories] = await Promise.all([
-    fetchQuestionById(Number(id)),
+    fetchQuestionById(String(id)),
     fetchCategories(),
   ]);
 

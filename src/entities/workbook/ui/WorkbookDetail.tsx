@@ -72,14 +72,14 @@ const WorkbookDetail = ({ workbook }: Props) => {
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span className="flex items-center gap-1">
                 <BookOpen className="w-4 h-4" />
-                {workbook.quizIds.length}개 문제
+                {workbook._count?.workbookQuizzes || 0}개 문제
               </span>
             </div>
           </div>
         </div>
         
         <div className="pt-4 border-t border-gray-100">
-          {workbook.quizIds.length > 0 ? (
+          {(workbook._count?.workbookQuizzes || 0) > 0 ? (
             <CustomLink
               href={`/workbooks/${workbook.id}/quizzes`}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
@@ -106,7 +106,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
         {isLoadingQuizzes ? (
           <div className="space-y-3">
-            {Array.from({ length: Math.min(3, workbook.quizIds.length) }).map((_, index) => (
+            {Array.from({ length: Math.min(3, workbook._count?.workbookQuizzes || 0) }).map((_, index) => (
               <div
                 key={index}
                 className="p-4 bg-gray-50 rounded-lg animate-pulse"
@@ -121,7 +121,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               </div>
             ))}
           </div>
-        ) : workbook.quizIds.length === 0 ? (
+        ) : (workbook._count?.workbookQuizzes || 0) === 0 ? (
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500">아직 등록된 문제가 없습니다</p>
@@ -171,7 +171,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               ))}
             </div>
 
-            {loadedCount < workbook.quizIds.length && (
+            {loadedCount < (workbook._count?.workbookQuizzes || 0) && (
               <div className="flex justify-center mt-6">
                 <button
                   onClick={loadMoreQuizzes}
@@ -192,7 +192,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                       <Plus className="w-4 h-4" />
                       더보기 ({Math.min(
                         ITEMS_PER_PAGE,
-                        workbook.quizIds.length - loadedCount
+                        (workbook._count?.workbookQuizzes || 0) - loadedCount
                       )}개)
                     </>
                   )}
@@ -202,7 +202,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
             {quizzes.length > 0 && (
               <div className="text-center text-xs text-gray-500 mt-4">
-                {quizzes.length} / {workbook.quizIds.length} 문제 표시됨
+                {quizzes.length} / {workbook._count?.workbookQuizzes || 0} 문제 표시됨
               </div>
             )}
           </>

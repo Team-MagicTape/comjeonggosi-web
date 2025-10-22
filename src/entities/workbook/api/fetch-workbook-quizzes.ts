@@ -1,15 +1,44 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
-import { fetchQuizById } from "./fetch-quiz-by-id";
+import { customFetch } from "@/shared/libs/custom-fetch";
 
-// 워크북의 모든 퀴즈들을 개별적으로 조회
-export const fetchWorkbookQuizzes = async (quizIds: string[]) => {
+interface WorkbookQuiz {
+  id: string;
+  quizId: string;
+  createdAt: string;
+  quiz: Quiz;
+}
+
+interface FetchWorkbookQuizzesResponse {
+  quizzes: WorkbookQuiz[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+// 워크북의 퀴즈들을 페이지네이션으로 조회
+export const fetchWorkbookQuizzes = async (
+  workbookId: string,
+  page: number = 1,
+  limit: number = 15
+): Promise<FetchWorkbookQuizzesResponse> => {
   try {
-    const quizPromises = quizIds.map((quizId) => fetchQuizById(quizId));
-    const quizzes = await Promise.all(quizPromises);
-
-    // null이 아닌 퀴즈들만 필터링
-    return quizzes.filter((quiz): quiz is Quiz => quiz !== null);
+    const { data } = await customFetch.get<FetchWorkbookQuizzesResponse>(
+      `/workbooks/${workbookId}/quizzes?page=${page}&limit=${limit}`
+    );
+    return data;
   } catch (e) {
-    return [];
+    console.error("Failed to fetch workbook quizzes:", e);
+    return {
+      quizzes: [],
+      pagination: {
+        page,
+        limit,
+        total: 0,
+        totalPages: 0,
+      },
+    };
   }
 };

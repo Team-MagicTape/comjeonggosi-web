@@ -43,7 +43,7 @@ export const useChat = (quizContent?: string) => {
         : "";
 
       eventSourceRef.current = new EventSource(
-        `https://devai.comgo.dev/chat?user_message=${encodedMessage}${
+        `http://192.168.0.38/chat?user_message=${encodedMessage}${
           encodedContext ? `&context=${encodedContext}` : ""
         }`
       );

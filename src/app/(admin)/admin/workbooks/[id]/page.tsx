@@ -1,7 +1,6 @@
 "use client";
 
 import { Quiz } from "@/entities/quiz/types/quiz";
-import { fetchWorkbookQuizzes } from "@/entities/workbook/api/fetch-workbook-quizzes";
 import { Workbook } from "@/entities/workbook/types/workbook";
 import { apiClient } from "@/shared/libs/custom-axios";
 import { useParams } from "next/navigation";
@@ -16,8 +15,12 @@ const AdminWorkbookDetail = () => {
     try {
       const { data } = await apiClient.get<Workbook>(`/api/workbooks/${id}`);
       setWorkbook(data);
-      const quiz = await fetchWorkbookQuizzes(data.quizIds);
-      setQuizzes(quiz);
+      
+      // Load all quizzes using pagination
+      const { data: quizzesData } = await apiClient.get<{ quizzes: Array<{ quiz: Quiz }> }>(
+        `/api/workbooks/${id}/quizzes?page=1&limit=1000`
+      );
+      setQuizzes(quizzesData.quizzes.map((wq) => wq.quiz));
     } catch (error) {
       console.error("워크북 로드 실패:", error);
       setWorkbook(undefined);

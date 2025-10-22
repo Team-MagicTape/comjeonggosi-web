@@ -243,8 +243,8 @@ const WorkbookQuizForm = ({ data }: Props) => {
                                   ) : quizzes[currentIdx]?.type !==
                                     "SHORT_ANSWER" ? (
                                     <div className="flex flex-wrap gap-x-3 gap-y-1">
-                                      {quizzes[currentIdx]?.options?
-                                        .slice(0, 4)
+                                      {quizzes[currentIdx]?.options
+                                        ?.slice(0, 4)
                                         .map((_, idx) => (
                                           <span key={idx}>
                                             <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">

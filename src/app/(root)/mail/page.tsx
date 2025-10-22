@@ -1,5 +1,4 @@
 import MailApplyForm from "@/features/mail-apply/ui/MailApplyForm";
-import { getSubscription } from "@/features/mail-apply/api/get-subscription";
 import { fetchCategories } from "@/entities/category/api/fetch-categories";
 import { fetchUser } from "@/entities/user/api/fetch-user";
 import { Metadata } from "next";
@@ -26,8 +25,7 @@ export const metadata: Metadata = {
 };
 
 const MailApply = async () => {
-  const [subscription, categories, user] = await Promise.all([
-    getSubscription(),
+  const [categories, user] = await Promise.all([
     fetchCategories(),
     fetchUser(),
   ]);
@@ -35,7 +33,7 @@ const MailApply = async () => {
   return (
     <div className="w-full py-4 lg:py-6">
       <MailApplyForm
-        initialData={subscription}
+        initialData={null}
         categories={categories}
         user={user}
       />

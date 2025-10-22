@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Header from "@/widgets/header/ui/Header";
 import Tabbar from "@/widgets/tabbar/ui/Tabbar";
 import { useSurveyStore } from "@/widgets/survey/model/useSurveyStore";
 import { User } from "@/entities/user/types/user";
+import { saveUser, removeStoredUser } from "@/shared/utils/user-storage";
 
 interface Props {
   children: React.ReactNode;
@@ -12,6 +14,15 @@ interface Props {
 
 export default function MainLayoutContent({ children, user }: Props) {
   const isVisible = useSurveyStore((state) => state.isVisible);
+
+  // 서버에서 받은 user를 localStorage에 동기화
+  useEffect(() => {
+    if (user) {
+      saveUser(user);
+    } else {
+      removeStoredUser();
+    }
+  }, [user]);
 
   return (
     <>

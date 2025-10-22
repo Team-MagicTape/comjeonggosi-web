@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 
-type QuizType = "MULTIPLE_CHOICE" | "OX" | "SHORT_ANSWER";
+type QuizType = "MULTIPLE_CHOICE" | "TRUE_FALSE" | "SHORT_ANSWER";
 
 interface QuizFormData {
   content: string;
@@ -55,7 +55,7 @@ export const useQuizCreator = () => {
       newForms[formIndex] = {
         ...newForms[formIndex],
         [name]: value as QuizType,
-        answer: value === "OX" ? "O" : "",
+        answer: value === "TRUE_FALSE" ? "O" : "",
         options: value === "MULTIPLE_CHOICE" ? ["", "", ""] : [],
       };
     } else if (name === "answer") {
@@ -150,7 +150,7 @@ export const useQuizCreator = () => {
               text: opt,
               isCorrect: opt === formData.answer,
             }))
-        : formData.type === "OX"
+        : formData.type === "TRUE_FALSE"
         ? [
             { text: "O", isCorrect: formData.answer === "O" },
             { text: "X", isCorrect: formData.answer === "X" },

@@ -5,4 +5,11 @@ export interface Article {
   title: string;
   content: string;
   category: Category;
+  author?: {
+    id: string;
+    nickname: string;
+    profileImageUrl?: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }

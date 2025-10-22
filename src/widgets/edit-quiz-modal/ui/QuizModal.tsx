@@ -32,9 +32,9 @@ const EditQuizModal = () => {
 
       // options 설정
       if (value.type === "MULTIPLE_CHOICE") {
-        setOptions(value.options.length > 0 ? value.options : [""]);
-      } else if (value.type === "OX") {
-        setOptions(value.options);
+        setOptions(value.options && value.options.length > 0 ? value.options : [""]);
+      } else if (value.type === "TRUE_FALSE") {
+        setOptions(value.options || []);
       } else {
         setOptions([]);
       }
@@ -50,7 +50,7 @@ const EditQuizModal = () => {
       setData((prev) => ({
         ...prev,
         [name]: inputValue as QuizType,
-        answer: inputValue === "OX" ? "O" : "",
+        answer: inputValue === "TRUE_FALSE" ? "O" : "",
       }));
 
       if (inputValue === "MULTIPLE_CHOICE") {
@@ -111,7 +111,7 @@ const EditQuizModal = () => {
         return;
       }
       submitOptions = filteredOptions;
-    } else if (data.type === "OX") {
+    } else if (data.type === "TRUE_FALSE") {
       submitOptions = [data.answer === "O" ? "X" : "O"];
     } else if (data.type === "SHORT_ANSWER") {
       submitOptions = [];
@@ -194,13 +194,13 @@ const EditQuizModal = () => {
               disabled={isLoading}
             >
               <option value="MULTIPLE_CHOICE">객관식 (Multiple Choice)</option>
-              <option value="OX">OX 문제</option>
+              <option value="TRUE_FALSE">OX 문제</option>
               <option value="SHORT_ANSWER">단답형 (Short Answer)</option>
             </select>
             <p className="text-xs text-gray-500 mt-1">
               {data.type === "MULTIPLE_CHOICE" &&
                 "여러 선택지 중 하나를 고르는 문제"}
-              {data.type === "OX" && "O 또는 X로 답하는 문제"}
+              {data.type === "TRUE_FALSE" && "O 또는 X로 답하는 문제"}
               {data.type === "SHORT_ANSWER" && "짧은 답을 직접 입력하는 문제"}
             </p>
           </div>
@@ -231,7 +231,7 @@ const EditQuizModal = () => {
             >
               정답 <span className="text-red-500">*</span>
             </label>
-            {data.type === "OX" ? (
+            {data.type === "TRUE_FALSE" ? (
               <div className="flex space-x-4">
                 <label className="flex items-center">
                   <input

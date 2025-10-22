@@ -24,8 +24,8 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
-    const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    return isCorrect as boolean;
+    const result = await solveQuizzes(currentQuiz?.id ?? "0", answer);
+    return result?.isCorrected ?? false;
   };
 
   const handleAnswerSelect = async (answer: string) => {
@@ -110,11 +110,11 @@ export const useWorkbookQuizForm = (quizzes: Quiz[]) => {
     if (isCurrentQuizAnswered) return;
 
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      if (["1", "2", "3", "4"].includes(e.key)) {
+      if (["1", "2", "3", "4"].includes(e.key) && currentQuiz.options) {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       // (스페이스는 위에서 처리)
-    } else if (currentQuiz.type === "OX") {
+    } else if (currentQuiz.type === "TRUE_FALSE") {
       if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
       } else if (e.key === "x" || e.key === "X" || e.key === "2") {

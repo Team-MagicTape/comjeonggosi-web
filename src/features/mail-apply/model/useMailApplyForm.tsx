@@ -62,7 +62,7 @@ export const useMailApplyForm = (initialData: SubscribeMail | null, user: User |
   const isFormValid = useMemo(() => {
     try {
       mailApplySchema.parse({
-        email : customEmail.trim(),
+        email: customEmail.trim() || undefined,
         selectedCategoryIds,
         time: Number(time),
       });

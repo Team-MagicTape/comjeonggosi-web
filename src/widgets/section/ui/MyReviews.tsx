@@ -18,6 +18,10 @@ const INITIAL_DISPLAY_COUNT = 5;
 
 const MyReviews = ({ reviews, stats }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // reviews가 배열인지 확인
+  const reviewList = Array.isArray(reviews) ? reviews : [];
+  
   return (
     <div className="w-full p-4 bg-white border border-gray-200 rounded-2xl">
       <h2 className="mb-4 text-xl font-semibold">복습 관리</h2>
@@ -25,7 +29,7 @@ const MyReviews = ({ reviews, stats }: Props) => {
       {stats && <ReviewStats stats={stats} />}
 
       <div className="mt-4 space-y-3">
-        {!reviews || reviews.length === 0 ? (
+        {reviewList.length === 0 ? (
           <div className="py-12 text-center">
             <div className="p-4 mx-auto mb-4 rounded-full bg-gray-50 w-fit">
               <Brain className="text-gray-400" size={32} />
@@ -48,12 +52,12 @@ const MyReviews = ({ reviews, stats }: Props) => {
                 추천 복습 항목
               </h3>
               <span className="text-xs text-gray-500">
-                {reviews.length}개 항목
+                {reviewList.length}개 항목
               </span>
             </div>
             {(isExpanded
-              ? reviews
-              : reviews.slice(0, INITIAL_DISPLAY_COUNT)
+              ? reviewList
+              : reviewList.slice(0, INITIAL_DISPLAY_COUNT)
             ).map((review) => (
               <ReviewItem key={review.id} review={review} />
             ))}
@@ -61,7 +65,7 @@ const MyReviews = ({ reviews, stats }: Props) => {
         )}
       </div>
 
-      {reviews && reviews.length > INITIAL_DISPLAY_COUNT && (
+      {reviewList.length > INITIAL_DISPLAY_COUNT && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center justify-center w-full gap-2 pt-3 mt-6 text-center transition-colors border-t cursor-pointer border-border text-gray hover:text-primary"
@@ -74,7 +78,7 @@ const MyReviews = ({ reviews, stats }: Props) => {
           ) : (
             <>
               <span>
-                더보기 ({reviews.length - INITIAL_DISPLAY_COUNT}개 더 보기)
+                더보기 ({reviewList.length - INITIAL_DISPLAY_COUNT}개 더 보기)
               </span>
               <ChevronDown className="w-4 h-4" />
             </>

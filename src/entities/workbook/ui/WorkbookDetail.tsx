@@ -148,13 +148,13 @@ const WorkbookDetail = ({ workbook }: Props) => {
                         <span className={`px-2 py-0.5 rounded-md ${
                           quiz.type === "MULTIPLE_CHOICE"
                             ? "bg-blue-100 text-blue-700"
-                            : quiz.type === "OX"
+                            : quiz.type === "TRUE_FALSE"
                             ? "bg-green-100 text-green-700"
                             : "bg-purple-100 text-purple-700"
                         }`}>
                           {quiz.type === "MULTIPLE_CHOICE"
                             ? "객관식"
-                            : quiz.type === "OX"
+                            : quiz.type === "TRUE_FALSE"
                             ? "OX"
                             : "단답형"}
                         </span>

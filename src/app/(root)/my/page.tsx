@@ -39,25 +39,27 @@ export const metadata: Metadata = {
 };
 
 const My = async () => {
+  // 사용자 정보 먼저 확인
+  const user = await fetchUser();
+  
+  if (!user) {
+    redirect("/");
+  }
+
+  // 사용자가 있을 때만 나머지 데이터 로드
   const [
-    user,
     categories,
     submissions,
     mails,
     reviewRecommendations,
     reviewStats,
   ] = await Promise.all([
-    fetchUser(),
     fetchCategories(),
     fetchInitialSubmissions(),
     fetchInitialMails(),
     fetchReviewRecommendations(),
     fetchReviewStats(),
   ]);
-
-  if (!user) {
-    redirect("/");
-  }
 
   return (
     <div className="flex flex-col items-start w-full gap-4 py-4 lg:py-6">
@@ -66,11 +68,11 @@ const My = async () => {
           <UserAvatar user={user} size={80} />
           <div className="flex flex-col">
             <p className="text-2xl font-bold text-gray-900">
-              {/* {user.nickname}님 */}
+              {user.nickname}님
             </p>
-            {/* <p className="text-sm text-gray mb-2">{user.email}</p> */}
-            <p className="text-sm text-gray">
-              {/* 가입일: {parseDate(user.createdAt)} */}
+            <p className="text-sm text-gray-600 mb-2">{user.email}</p>
+            <p className="text-sm text-gray-500">
+              가입일: {parseDate(user.createdAt)}
             </p>
           </div>
           <Spacer />
@@ -92,9 +94,10 @@ const My = async () => {
           {
             child: <QuestionAccordion categories={categories} mails={mails} />,
             title: "받은 질문",
-          },{
-            child : <MyReport/>,
-            title : "주간 리포트",
+          },
+          {
+            child: <MyReport />,
+            title: "주간 리포트",
           }
         ]}
       />

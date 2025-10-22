@@ -20,8 +20,13 @@ const middleware = async (req: NextRequest) => {
 
     return res;
   }
+  
   try {
     const { pathname } = req.nextUrl;
+
+    // 보호된 라우트 (로그인 필요)
+    const protectedRoutes = ["/questions", "/my"];
+    const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
     if (
       pathname.startsWith("/api/") ||
@@ -33,6 +38,13 @@ const middleware = async (req: NextRequest) => {
 
     const accessToken = req.cookies.get("accessToken")?.value;
     const refreshToken = req.cookies.get("refreshToken")?.value;
+
+    // 보호된 라우트인데 토큰이 없으면 홈으로 리다이렉트
+    if (isProtectedRoute && !accessToken && !refreshToken) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
 
     if (!accessToken && !refreshToken) {
       return NextResponse.next();
@@ -51,8 +63,13 @@ const middleware = async (req: NextRequest) => {
         }
       );
 
-
       if (!refreshResponse.ok) {
+        // 토큰 갱신 실패하고 보호된 라우트면 홈으로
+        if (isProtectedRoute) {
+          const url = req.nextUrl.clone();
+          url.pathname = "/";
+          return NextResponse.redirect(url);
+        }
         return NextResponse.next();
       }
 

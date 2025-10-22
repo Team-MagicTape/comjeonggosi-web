@@ -91,7 +91,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       </div>
                     )}
 
-                    {quiz.type === "OX" ? (
+                    {quiz.type === "TRUE_FALSE" ? (
                       <OxOption
                         currentIdx={currentIdx}
                         handleAnswerSelect={handleAnswerSelect}
@@ -120,7 +120,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                       />
                     ) : (
                       <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 pt-4 sm:px-8">
-                        {quiz.options.map((option, optionIdx) => {
+                        {quiz.options?.map((option, optionIdx) => {
                           const isCorrectAnswer = quiz.answer === option;
 
                           return (
@@ -202,7 +202,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                                 </div>
                               </div>
                               <div className="text-xs text-yellow-600 space-y-1">
-                                {quizzes[currentIdx]?.type === "OX" ? (
+                                {quizzes[currentIdx]?.type === "TRUE_FALSE" ? (
                                   <div className="flex flex-wrap gap-x-3 gap-y-1">
                                     <span>
                                       <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">
@@ -235,7 +235,7 @@ const QuizForm = ({ categories, initialQuiz, user }: Props) => {
                                   "SHORT_ANSWER" ? (
                                   <div className="flex flex-wrap gap-x-3 gap-y-1">
                                     {quizzes[currentIdx]?.options
-                                      .slice(0, 4)
+                                      ?.slice(0, 4)
                                       .map((_, idx) => (
                                         <span key={idx}>
                                           <kbd className="px-1.5 py-0.5 bg-white border border-yellow-300 rounded text-yellow-700 font-mono">

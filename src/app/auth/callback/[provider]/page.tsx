@@ -41,9 +41,12 @@ const OAuthCallbackPage = () => {
 
         const redirectPath = localStorage.getItem("redirect") || "/";
         localStorage.removeItem("redirect");
-        router.replace(redirectPath);
+        
+        // 캐시를 무시하고 완전히 새로고침 (timestamp 추가로 캐시 방지)
+        const finalUrl = redirectPath + (redirectPath.includes('?') ? '&' : '?') + '_t=' + Date.now();
+        window.location.href = finalUrl;
       } catch (error) {
-        console.error("OAuth callback error:", error);
+        console.error("[OAuthCallback] Auth error:", error);
         router.replace("/login?error=auth_failed");
       }
     };

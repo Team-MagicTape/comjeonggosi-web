@@ -47,7 +47,13 @@ export const useQuizForm = (
 
   const normalizeAnswer = useCallback((answer: string | null | undefined) => {
     if (!answer) return "";
-    return answer.replace(/\s+/g, "").toLowerCase();
+    
+    // O/X를 true/false로 변환
+    const normalized = answer.replace(/\s+/g, "").toLowerCase();
+    if (normalized === "o" || normalized === "true") return "true";
+    if (normalized === "x" || normalized === "false") return "false";
+    
+    return normalized;
   }, []);
 
   const currentQuiz = quizzes[currentIdx];
@@ -56,8 +62,15 @@ export const useQuizForm = (
   const isCurrentQuizAnswered = answeredQuizzes.has(currentIdx);
 
   const submit = async (answer: string) => {
-    const { isCorrect } = await solveQuizzes(currentQuiz?.id ?? "0", answer);
-    return isCorrect;
+    const result = await solveQuizzes(currentQuiz?.id ?? "0", answer);
+    if (!result) {
+      console.error("Quiz submission failed");
+      return false;
+    }
+    // 서버 응답이 { score, correctAnswers, totalQuestions } 형태이므로
+    // 정답 여부는 로컬에서 판단
+    const correct = normalizeAnswer(answer) === normalizeAnswer(currentQuiz?.answer);
+    return correct;
   };
 
   const getQuizzes = useCallback(async () => {
@@ -83,7 +96,10 @@ export const useQuizForm = (
     setAnsweredQuizzes((prev) =>
       new Map(prev).set(currentIdx, { answer, isCorrect: correct })
     );
-    submit(answer);
+    
+    // 서버에 제출할 때 O/X를 true/false로 변환
+    const submitAnswer = normalizeAnswer(answer);
+    submit(submitAnswer);
   };
 
   const handleShortAnswerSubmit = () => {
@@ -183,11 +199,11 @@ export const useQuizForm = (
     if (isCurrentQuizAnswered) return;
 
     if (currentQuiz.type === "MULTIPLE_CHOICE") {
-      if (["1", "2", "3", "4"].includes(e.key)) {
+      if (["1", "2", "3", "4"].includes(e.key) && currentQuiz.options) {
         handleAnswerSelect(currentQuiz.options[Number(e.key) - 1]);
       }
       // (스페이스는 위에서 처리)
-    } else if (currentQuiz.type === "OX") {
+    } else if (currentQuiz.type === "TRUE_FALSE") {
       if (e.key === "o" || e.key === "O" || e.key === "1") {
         handleAnswerSelect("O");
       } else if (e.key === "x" || e.key === "X" || e.key === "2") {

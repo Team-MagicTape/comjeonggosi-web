@@ -119,7 +119,7 @@ const QuizCreator = ({ categories }: Props) => {
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                     >
                       <option value="MULTIPLE_CHOICE">객관식</option>
-                      <option value="OX">O/X 문제</option>
+                      <option value="TRUE_FALSE">O/X 문제</option>
                       <option value="SHORT_ANSWER">단답형</option>
                     </select>
                   </div>
@@ -142,7 +142,7 @@ const QuizCreator = ({ categories }: Props) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       정답 <span className="text-red-500">*</span>
                     </label>
-                    {formData.type === "OX" ? (
+                    {formData.type === "TRUE_FALSE" ? (
                       <div className="flex gap-4">
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input

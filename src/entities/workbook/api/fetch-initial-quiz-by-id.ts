@@ -6,7 +6,6 @@ export const fetchInitialQuizById = async (quizId: string) => {
     const { data } = await customFetch.get<Quiz>(`/quizzes/${quizId}`);
     return data;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };

@@ -3,29 +3,21 @@ import { cookies } from "next/headers";
 const request = async <T>(url: string, options: RequestInit = {}) => {
   try {
     const cookieStore = await cookies();
-    // const accessToken = cookieStore.get("accessToken")?.value;
-    //
-    // const authorization = { Authorization: `Bearer ${accessToken}` };
-    //
-    // const fetchOptions: RequestInit = {
-    //   ...options,
-    //   headers: {
-    //     ...(options.headers || {}),
-    //     ...(accessToken ?  authorization : {})
-       
-    //   },
-    //   credentials: 'include'
-    // };
+    const cookieString = cookieStore.toString();
 
+    // 서버 컴포넌트에서는 Next.js API proxy를 통해 요청
+    // 절대 URL 사용 (서버에서 자신의 API route 호출)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const proxyUrl = `${baseUrl}/api${url}`;
 
     const fetchOptions: RequestInit = {
       ...options,
       headers: {
         ...(options.headers || {}),
-        Cookie: cookieStore.toString()
+        'Cookie': cookieString, // API proxy가 백엔드로 전달
        
       },
-      credentials: 'include'
+      cache: 'no-store', // 항상 최신 데이터 가져오기
     };
 
     if (fetchOptions.body instanceof FormData) {
@@ -37,10 +29,11 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
         ? { ...fetchOptions.headers, "Content-Type": "application/json" }
         : { "Content-Type": "application/json" };
     }
-
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL+url, fetchOptions);
+    
+    const response = await fetch(proxyUrl, fetchOptions);
 
     if(!response.ok) {
+      const errorText = await response.text().catch(() => 'No error body');
       throw new Error(`${response.status || 500}`);
     }
 
@@ -48,7 +41,6 @@ const request = async <T>(url: string, options: RequestInit = {}) => {
 
     return { data: res, status: response.status };
   } catch (e) {
-    console.log(e);
     throw e;
   }
 };

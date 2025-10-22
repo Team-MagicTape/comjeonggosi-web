@@ -68,14 +68,20 @@ const Header = ({ user }: Props) => {
         
         <div className="flex items-center gap-4">
           {user ? (
-            <CustomLink href="/my" className="block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
-              <img
-                src={user.profileImageUrl}
-                alt="Profile"
-                width={40}
-                height={40}
-                className="w-full h-full object-cover"
-              />
+            <CustomLink href="/my" className="block w-10 h-10 rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition-opacity bg-gray-200">
+              {user.profileImageUrl ? (
+                <img
+                  src={user.profileImageUrl}
+                  alt="Profile"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm font-bold">
+                  {user.nickname?.[0] || "U"}
+                </div>
+              )}
             </CustomLink>
           ) : (
             <LoginButton />

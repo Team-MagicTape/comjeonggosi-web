@@ -31,9 +31,13 @@ export const getOAuthUrl = (provider: OAuthProvider, state: string, nonce: strin
   const config = configs[provider];
   const isGithub = provider === "github";
   
+  const redirectUri = `${baseUrl}/auth/callback/${provider}`;
+  
+  console.log('[OAuth] Redirect URI:', redirectUri);
+  
   const params = new URLSearchParams({
     client_id: config.clientId,
-    redirect_uri: `${baseUrl}/auth/callback/${provider}`,
+    redirect_uri: redirectUri,
     response_type: isGithub ? "code" : "id_token",
     state,
     scope: config.scope,

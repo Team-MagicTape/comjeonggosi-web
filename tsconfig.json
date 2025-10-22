@@ -23,5 +23,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/entities/workbook/api/fetch-workbook-quizzes"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "from-server"]
 }

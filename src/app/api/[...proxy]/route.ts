@@ -23,7 +23,6 @@ const handler = async (
   const targetPath = path.proxy.join("/");
   const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}${search}`;
 
-  console.log("targetUrl: ", targetUrl);
 
   const method = req.method.toLowerCase() as
     | "get"
@@ -33,21 +32,45 @@ const handler = async (
     | "delete"
     | "options";
 
+  console.log('[API Proxy] Request:', {
+    method,
+    targetPath,
+    targetUrl,
+    hasAccessToken: !!accessToken,
+    hasRefreshToken: !!refreshToken,
+  });
+
   const data = ["get", "head", "delete"].includes(method)
     ? undefined
     : await req.json();
 
   const tryRequest = async (cookie: string) => {
+    // 쿠키에서 accessToken 추출
+    const accessTokenMatch = cookie.match(/accessToken=([^;]+)/);
+    const extractedToken = accessTokenMatch ? accessTokenMatch[1] : '';
+    
+    console.log('[API Proxy] Token extraction:', {
+      hasCookie: !!cookie,
+      extractedToken: extractedToken ? `${extractedToken.substring(0, 20)}...` : 'none',
+    });
+    
     const headers: Record<string, string> = {
       ...Object.fromEntries(req.headers.entries()),
-      cookie,
       host: "",
     };
-    console.log(cookie);
+
+    // Authorization Bearer 헤더 추가
+    if (extractedToken) {
+      headers['Authorization'] = `Bearer ${extractedToken}`;
+      console.log('[API Proxy] Added Authorization header');
+    } else {
+      console.log('[API Proxy] No token to add to Authorization header');
+    }
 
     // 압축 관련 헤더 제거 (gzip 응답 깨짐 방지)
     delete headers["accept-encoding"];
     delete headers["content-encoding"];
+    delete headers["cookie"]; // 쿠키는 제거하고 Authorization 헤더 사용
 
     if (!data || data instanceof FormData) {
       delete headers["content-type"];
@@ -61,8 +84,8 @@ const handler = async (
       headers,
       data,
       validateStatus: () => true,
-      withCredentials: true,
-      decompress: true, // axios가 자동으로 압축 해제하도록 설정
+      withCredentials: false, // Authorization 헤더 사용하므로 false
+      decompress: true,
     });
   };
 
@@ -111,7 +134,12 @@ const handler = async (
 
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
-    console.log(apiResponse);
+    
+    console.log('[API Proxy] Response:', {
+      status: apiResponse.status,
+      statusText: apiResponse.statusText,
+      hasData: !!apiResponse.data,
+    });
 
     let response;
 
@@ -156,11 +184,12 @@ const handler = async (
         );
 
         return response;
+      } else {
+        console.error('[API Proxy] Missing tokens in OAuth response');
       }
     }
 
     if (apiResponse.status === 204) {
-      console.log("code: 204");
       response = new NextResponse(null, { status: 204 });
     } else {
       response = NextResponse.json(apiResponse.data, {
@@ -183,7 +212,6 @@ const handler = async (
 
     return response;
   } catch (e) {
-    console.log(e);
     return NextResponse.json(
       { message: (e as AxiosError).message },
       { status: 500 }

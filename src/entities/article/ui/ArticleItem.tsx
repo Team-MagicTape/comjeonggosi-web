@@ -23,7 +23,7 @@ const ArticleItem = ({ data, isLoading }: Props) => {
   return (
     <CustomLink 
       href={`/articles/${data.id}`} 
-      className="block p-3 transition-colors rounded-md cursor-pointer bg-gray-50 hover:bg-gray-100 group"
+      className="block p-3 transition-colors rounded-md cursor-pointer bg-white hover:bg-gray-100 group"
     >
       <h3 className="mb-1 font-medium text-gray-900 line-clamp-1">
         {data.title}

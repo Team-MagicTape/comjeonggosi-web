@@ -187,7 +187,7 @@ const CategoryManagement = ({ initialCategories }: Props) => {
         {categories.length === 0 ? (
           <AdminEmptyState
             icon={FolderOpen}
-            title="카테고리가 없습니다"
+            title="카테고리가 없습니다."
             description="새로운 카테고리를 추가해보세요"
           />
         ) : (

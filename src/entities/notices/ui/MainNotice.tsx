@@ -31,7 +31,7 @@ const MainNotice = () => {
         <h2 className="text-lg font-semibold">공지사항</h2>
         <CustomLink
           href="/notices"
-          className="text-sm text-gray-600 font-medium hover:underline cursor-pointer"
+          className="text-sm text-primary font-medium hover:underline cursor-pointer"
         >
           전체보기 →
         </CustomLink>
@@ -46,7 +46,7 @@ const MainNotice = () => {
           ))
         ) : notices.length === 0 ? (
           <div className="p-4 text-center">
-            <p className="text-sm text-gray-400">등록된 공지사항이 없습니다</p>
+            <p className="text-sm text-gray-400">등록된 공지사항이 없습니다.</p>
           </div>
         ) : (
           <CustomLink

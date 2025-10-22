@@ -46,7 +46,7 @@ const ArticleDetail = async ({ params }: PathParams) => {
     <div className="py-4 lg:py-6">
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
         <aside className="hidden lg:block lg:w-64 xl:w-80">
-          <ArticleSidebar data={articles} title="관련글" />
+          <ArticleSidebar data={articles} title="관련글" id={Number(id)} />
         </aside>
         <main className="flex-1 bg-white border border-gray-100 rounded-lg p-4 lg:p-6 xl:p-8">
           <h1 className="text-2xl lg:text-3xl font-bold mb-4">
@@ -57,6 +57,9 @@ const ArticleDetail = async ({ params }: PathParams) => {
             <Markdown content={article.content} />
           </div>
         </main>
+      </div>
+      <div className="block mt-4 xl:hidden">
+        <ArticleSidebar data={articles} title="관련글" id={Number(id)} />
       </div>
     </div>
   );

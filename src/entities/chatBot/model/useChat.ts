@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Message } from "../types/Message";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 export const useChat = (quizContent?: string) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,7 +8,7 @@ export const useChat = (quizContent?: string) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const eventSourceRef = useRef<EventSource | null>(null);
+  const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,10 +43,9 @@ export const useChat = (quizContent?: string) => {
         ? encodeURIComponent(`현재 퀴즈: ${quizContent}`)
         : "";
 
-      eventSourceRef.current = new EventSource(
-        `http://192.168.0.38/chat?user_message=${encodedMessage}${
-          encodedContext ? `&context=${encodedContext}` : ""
-        }`
+      eventSourceRef.current = new EventSourcePolyfill(
+        `https://6da50ceeb105.ngrok-free.app/chat?user_message=${encodedMessage}${encodedContext ? `&context=${encodedContext}` : ""}`,
+        { headers: { "ngrok-skip-browser-warning": "69420" } }
       );
 
       let aiMessage = "";

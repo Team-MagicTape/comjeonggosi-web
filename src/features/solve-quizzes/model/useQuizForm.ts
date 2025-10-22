@@ -11,7 +11,8 @@ import { User } from "@/entities/user/types/user";
 export const useQuizForm = (
   categories: Category[],
   initialQuiz: Quiz | null,
-  user: User | null
+  user: User | null,
+  categoryId: string
 ) => {
   const categoryList: Tab[] = categories.map((item) => ({
     name: item.name,
@@ -24,7 +25,9 @@ export const useQuizForm = (
     { name: "약점보강퀴즈", value: "WEAKNESS" },
   ];
 
-  const [category, setCategory] = useState<Tab>(categoryList[0]);
+  const initialCategory = categoryList.find(item => item.value === categoryId) || categoryList[0];
+
+  const [category, setCategory] = useState<Tab>(initialCategory);
   const [mode, setMode] = useState<Tab>(modeList[0]);
   const [difficulty, setDifficulty] = useState(3);
   const [currentIdx, setCurrentIdx] = useState(0);

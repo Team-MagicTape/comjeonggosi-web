@@ -16,10 +16,10 @@ interface Props {
   categories: Category[];
   initialQuiz: Quiz | null;
   user: User | null;
-  initialCategory?: string;
+  categoryId: string;
 }
 
-const QuizFormClean = ({ categories, initialQuiz, user, initialCategory }: Props) => {
+const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => {
   const [showSettings, setShowSettings] = useState(false);
   
   const {
@@ -45,7 +45,7 @@ const QuizFormClean = ({ categories, initialQuiz, user, initialCategory }: Props
     difficulty,
     setDifficulty,
     isCurrentQuizAnswered,
-  } = useQuizForm(categories, initialQuiz, user);
+  } = useQuizForm(categories, initialQuiz, user, categoryId);
 
   const currentQuiz = quizzes[currentIdx];
 

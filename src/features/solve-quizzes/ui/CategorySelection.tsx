@@ -1,14 +1,14 @@
 "use client";
 
 import { Category } from "@/entities/category/types/category";
-import { useRouter } from "next/navigation";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 interface CategorySelectionProps {
   categories: Category[];
 }
 
 export const CategorySelection = ({ categories }: CategorySelectionProps) => {
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const handleCategoryClick = (categoryId: string) => {
     router.push(`/quizzes/${categoryId}`);

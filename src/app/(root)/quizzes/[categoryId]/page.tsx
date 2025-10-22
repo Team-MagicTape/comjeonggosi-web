@@ -23,6 +23,7 @@ export default async function QuizCategoryPage({ params }: PageProps) {
         categories={categories} 
         initialQuiz={quiz} 
         user={user} 
+        categoryId={categoryId}
       />
     </Suspense>
   );

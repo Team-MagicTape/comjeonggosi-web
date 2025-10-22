@@ -1,21 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { QuizModal } from "@/features/solve-quizzes/ui/QuizModal";
 import QuizFormClean from "@/features/solve-quizzes/ui/QuizFormClean";
 import { Category } from "@/entities/category/types/category";
 import { Quiz } from "@/entities/quiz/types/quiz";
 import { User } from "@/entities/user/types/user";
 import { useEffect, useState } from "react";
+import { useCustomRouter } from "@/shared/model/useCustomRouter";
 
 interface QuizModalPageProps {
   categories: Category[];
   initialQuiz: Quiz | null;
   user: User | null;
+  categoryId: string;
 }
 
-export default function QuizModalPage({ categories, initialQuiz, user }: QuizModalPageProps) {
-  const router = useRouter();
+export default function QuizModalPage({ categories, initialQuiz, user, categoryId }: QuizModalPageProps) {
+  const router = useCustomRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function QuizModalPage({ categories, initialQuiz, user }: QuizMod
         categories={categories} 
         initialQuiz={initialQuiz} 
         user={user}
+        categoryId={categoryId}
       />
     </QuizModal>
   );

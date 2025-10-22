@@ -29,7 +29,6 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
     selectedAnswer,
     showAnswer,
     handleAnswerSelect,
-    isCorrect,
     handleNext,
     handlePrev,
     settings,
@@ -44,7 +43,6 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
     mode,
     difficulty,
     setDifficulty,
-    isCurrentQuizAnswered,
   } = useQuizForm(categories, initialQuiz, user, categoryId);
 
   const currentQuiz = quizzes[currentIdx];

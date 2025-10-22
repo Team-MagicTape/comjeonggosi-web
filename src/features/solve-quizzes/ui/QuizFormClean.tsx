@@ -10,6 +10,7 @@ import { Quiz } from "@/entities/quiz/types/quiz";
 import { User } from "@/entities/user/types/user";
 import { ChevronLeft, ChevronRight, Settings2 } from "lucide-react";
 import { useState } from "react";
+import ChatBot from "@/entities/chatBot/ui/ChatBot";
 
 interface Props {
   categories: Category[];
@@ -376,6 +377,7 @@ const QuizFormClean = ({ categories, initialQuiz, user, initialCategory }: Props
           </div>
         </div>
       )}
+      <ChatBot />
     </div>
   );
 };

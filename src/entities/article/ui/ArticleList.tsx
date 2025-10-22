@@ -44,7 +44,7 @@ const ArticleList = ({ articles, categories, seletedCategoryId }: Props) => {
   }
 
   return (
-    <>
+    <div className="w-full space-y-6">
       <Tabs
         tabs={tabs}
         selected={category}
@@ -68,7 +68,7 @@ const ArticleList = ({ articles, categories, seletedCategoryId }: Props) => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

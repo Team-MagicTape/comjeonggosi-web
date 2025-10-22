@@ -11,17 +11,17 @@ const WorkbookElement = ({ workbook }: Props) => {
   return (
     <CustomLink
       href={`/workbooks/${workbook.id}`}
-      className="w-full h-full bg-white rounded-lg border border-gray-100 p-4 lg:p-5 hover:border-gray-200 transition-colors group cursor-pointer"
+      className="w-full h-full p-4 transition-colors bg-white border border-gray-100 rounded-lg cursor-pointer lg:p-5 hover:border-gray-200 group"
     >
       <div className="flex flex-col h-full">
         {/* 상단: 문제집 정보 */}
         <div className="flex-1">
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2">
+              <h3 className="mb-2 text-lg font-semibold text-gray-900 line-clamp-2">
                 {workbook.name}
               </h3>
-              <p className="text-gray-600 text-sm line-clamp-2">
+              <p className="text-sm text-gray-600 line-clamp-2">
                 {workbook.description}
               </p>
             </div>
@@ -32,7 +32,7 @@ const WorkbookElement = ({ workbook }: Props) => {
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">
-              {workbook.quizIds.length}개 문제
+              {/* {(workbook.quizIds || []).length}개 문제 */}
             </span>
           </div>
           <span className="text-sm text-gray-400">

@@ -37,13 +37,19 @@ const OAuthCallbackPage = () => {
       }
 
       try {
-        await sendAuthToken(provider, token);
-
+        const user = await sendAuthToken(provider, token);
+        if (!user) {
+          throw new Error("토큰 교환 실패");
+        }
         const redirectPath = localStorage.getItem("redirect") || "/";
         localStorage.removeItem("redirect");
-        
+
         // 캐시를 무시하고 완전히 새로고침 (timestamp 추가로 캐시 방지)
-        const finalUrl = redirectPath + (redirectPath.includes('?') ? '&' : '?') + '_t=' + Date.now();
+        const finalUrl =
+          redirectPath +
+          (redirectPath.includes("?") ? "&" : "?") +
+          "_t=" +
+          Date.now();
         window.location.href = finalUrl;
       } catch (error) {
         console.error("[OAuthCallback] Auth error:", error);
@@ -55,10 +61,10 @@ const OAuthCallbackPage = () => {
   }, [params, searchParams, router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex items-center justify-center min-h-screen">
       <div className="text-center">
         <div className="mb-4 text-lg">로그인 처리중...</div>
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        <div className="w-8 h-8 mx-auto border-b-2 border-gray-900 rounded-full animate-spin"></div>
       </div>
     </div>
   );

@@ -23,7 +23,6 @@ const handler = async (
   const targetPath = path.proxy.join("/");
   const targetUrl = `${process.env.NEXT_PUBLIC_API_URL}/${targetPath}${search}`;
 
-
   const method = req.method.toLowerCase() as
     | "get"
     | "post"
@@ -32,7 +31,7 @@ const handler = async (
     | "delete"
     | "options";
 
-  console.log('[API Proxy] Request:', {
+  console.log("[API Proxy] Request:", {
     method,
     targetPath,
     targetUrl,
@@ -47,13 +46,15 @@ const handler = async (
   const tryRequest = async (cookie: string) => {
     // 쿠키에서 accessToken 추출
     const accessTokenMatch = cookie.match(/accessToken=([^;]+)/);
-    const extractedToken = accessTokenMatch ? accessTokenMatch[1] : '';
-    
-    console.log('[API Proxy] Token extraction:', {
+    const extractedToken = accessTokenMatch ? accessTokenMatch[1] : "";
+
+    console.log("[API Proxy] Token extraction:", {
       hasCookie: !!cookie,
-      extractedToken: extractedToken ? `${extractedToken.substring(0, 20)}...` : 'none',
+      extractedToken: extractedToken
+        ? `${extractedToken.substring(0, 20)}...`
+        : "none",
     });
-    
+
     const headers: Record<string, string> = {
       ...Object.fromEntries(req.headers.entries()),
       host: "",
@@ -61,10 +62,10 @@ const handler = async (
 
     // Authorization Bearer 헤더 추가
     if (extractedToken) {
-      headers['Authorization'] = `Bearer ${extractedToken}`;
-      console.log('[API Proxy] Added Authorization header');
+      headers["Authorization"] = `Bearer ${extractedToken}`;
+      console.log("[API Proxy] Added Authorization header");
     } else {
-      console.log('[API Proxy] No token to add to Authorization header');
+      console.log("[API Proxy] No token to add to Authorization header");
     }
 
     // 압축 관련 헤더 제거 (gzip 응답 깨짐 방지)
@@ -134,8 +135,8 @@ const handler = async (
 
   try {
     const apiResponse = await tryRequest(cookieHeaderToUse);
-    
-    console.log('[API Proxy] Response:', {
+
+    console.log("[API Proxy] Response:", {
       status: apiResponse.status,
       statusText: apiResponse.statusText,
       hasData: !!apiResponse.data,
@@ -161,12 +162,41 @@ const handler = async (
     // OAuth 인증 엔드포인트 처리 (Google, GitHub, Naver, Kakao)
     const oauthPaths = OAUTH_PROVIDERS.map((v) => "auth/" + v);
     const isAuthLogin = targetPath === "auth/login";
-    
-    if (oauthPaths.some((path) => targetPath === path) || isAuthLogin) {
+    const isAuthEndpoint =
+      oauthPaths.some((path) => targetPath === path) || isAuthLogin;
+
+    console.log("[API Proxy] Auth check:", {
+      targetPath,
+      oauthPaths,
+      isAuthEndpoint,
+      status: apiResponse.status,
+      hasData: !!apiResponse.data,
+      dataType: typeof apiResponse.data,
+      dataKeys: apiResponse.data ? Object.keys(apiResponse.data) : [],
+      hasAccessToken: !!apiResponse.data?.accessToken,
+      hasRefreshToken: !!apiResponse.data?.refreshToken,
+    });
+
+    // 인증 엔드포인트이고 성공 응답인 경우에만 쿠키 설정
+    if (
+      isAuthEndpoint &&
+      apiResponse.status >= 200 &&
+      apiResponse.status < 300 &&
+      apiResponse.data
+    ) {
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
         apiResponse.data;
 
       if (newAccessToken && newRefreshToken) {
+        console.log("[API Proxy] ✅ Setting auth cookies:", {
+          accessToken: newAccessToken.substring(0, 20) + "...",
+          refreshToken: newRefreshToken.substring(0, 20) + "...",
+          cookieOptions: {
+            accessToken: ACCESSTOKEN_COOKIE_OPTION,
+            refreshToken: REFRESHTOKEN_COOKIE_OPTION,
+          },
+        });
+
         response = NextResponse.json(apiResponse.data, {
           status: apiResponse.status,
         });
@@ -183,9 +213,16 @@ const handler = async (
           REFRESHTOKEN_COOKIE_OPTION
         );
 
+        console.log("[API Proxy] ✅ Auth cookies set successfully");
+        console.log("[API Proxy] Response cookies:", response.cookies.getAll());
         return response;
       } else {
-        console.error('[API Proxy] Missing tokens in OAuth response');
+        console.error("[API Proxy] ❌ Missing tokens in OAuth response:", {
+          hasAccessToken: !!newAccessToken,
+          hasRefreshToken: !!newRefreshToken,
+          responseData: apiResponse.data,
+          responseKeys: Object.keys(apiResponse.data || {}),
+        });
       }
     }
 

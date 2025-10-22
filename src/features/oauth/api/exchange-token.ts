@@ -1,4 +1,5 @@
 import { User } from "@/entities/user/types/user";
+import { apiClient } from "@/shared/libs/custom-axios";
 import { saveUser } from "@/shared/utils/user-storage";
 
 interface AuthResponse {
@@ -7,31 +8,29 @@ interface AuthResponse {
   user: User;
 }
 
-export const sendAuthToken = async (
-  provider: string,
-  token: string
-): Promise<User> => {
-  const isGithub = provider === "github";
-  const body = isGithub ? { code: token } : { idToken: token };
+export const sendAuthToken = async (provider: string, token: string) => {
+  try {
+    const isGithub = provider === "github";
+    const body = JSON.stringify(
+      isGithub ? { code: token } : { idToken: token }
+    );
 
-  const response = await fetch(`/api/auth/${provider}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    credentials: 'include', // 쿠키 포함
-  });
+    const { data } = await apiClient.post<AuthResponse>(
+      `/api/auth/${provider}`,
+      body
+    );
+    console.log("ok");
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: "Authentication failed" }));
-    throw new Error(error.error || "Authentication failed");
+    if (!data) {
+      throw new Error("Authentication failed");
+    }
+
+    // User를 localStorage에 저장
+    saveUser(data.user);
+
+    return data.user;
+  } catch (e) {
+    console.error(e);
+    return null;
   }
-
-  const data: AuthResponse = await response.json();
-  
-  // User를 localStorage에 저장
-  saveUser(data.user);
-  
-  return data.user;
 };

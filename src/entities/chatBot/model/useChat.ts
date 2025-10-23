@@ -44,8 +44,7 @@ export const useChat = (quizContent?: string) => {
         : "";
 
       eventSourceRef.current = new EventSourcePolyfill(
-        `https://6da50ceeb105.ngrok-free.app/chat?user_message=${encodedMessage}${encodedContext ? `&context=${encodedContext}` : ""}`,
-        { headers: { "ngrok-skip-browser-warning": "69420" } }
+        `https://devai.comgo.dev/chat?user_message=${encodedMessage}${encodedContext ? `&context=${encodedContext}` : ""}`
       );
 
       let aiMessage = "";

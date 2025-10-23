@@ -2,18 +2,12 @@
 
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
-import {
-  ArrowLeft,
-  FileText,
-  Plus,
-  BookOpen,
-} from "lucide-react";
+import { ArrowLeft, FileText, Plus, BookOpen } from "lucide-react";
 import { useLoadQuizzes } from "../model/useLoadQuizzes";
 
 interface Props {
   workbook: Workbook;
 }
-
 
 const WorkbookDetail = ({ workbook }: Props) => {
   const {
@@ -23,6 +17,8 @@ const WorkbookDetail = ({ workbook }: Props) => {
     isLoadingMore,
     loadedCount,
     loadMoreQuizzes,
+    hasMore,
+    remainingCount,
   } = useLoadQuizzes(workbook);
   if (!workbook) {
     return (
@@ -36,12 +32,16 @@ const WorkbookDetail = ({ workbook }: Props) => {
             문제집 목록으로
           </CustomLink>
         </div>
-        
+
         <div className="bg-white border border-gray-100 rounded-lg p-6 lg:p-8">
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-lg font-semibold text-gray-700">문제집을 찾을 수 없습니다</p>
-            <p className="text-sm text-gray-500 mt-2">요청하신 문제집이 존재하지 않거나 삭제되었습니다</p>
+            <p className="text-lg font-semibold text-gray-700">
+              문제집을 찾을 수 없습니다
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              요청하신 문제집이 존재하지 않거나 삭제되었습니다
+            </p>
           </div>
         </div>
       </div>
@@ -66,20 +66,18 @@ const WorkbookDetail = ({ workbook }: Props) => {
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
               {workbook.name}
             </h1>
-            <p className="text-gray-600 mb-4">
-              {workbook.description}
-            </p>
+            <p className="text-gray-600 mb-4">{workbook.description}</p>
             <div className="flex items-center gap-4 text-sm text-gray-500">
               <span className="flex items-center gap-1">
                 <BookOpen className="w-4 h-4" />
-                {workbook._count?.workbookQuizzes || 0}개 문제
+                {workbook.quizCount || 0}개 문제
               </span>
             </div>
           </div>
         </div>
-        
+
         <div className="pt-4 border-t border-gray-100">
-          {(workbook._count?.workbookQuizzes || 0) > 0 ? (
+          {(workbook.quizCount || 0) > 0 ? (
             <CustomLink
               href={`/workbooks/${workbook.id}/quizzes`}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium"
@@ -99,29 +97,29 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
       <div className="bg-white border border-gray-100 rounded-lg p-6 lg:p-8">
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">
-            문제 목록
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900">문제 목록</h2>
         </div>
 
         {isLoadingQuizzes ? (
           <div className="space-y-3">
-            {Array.from({ length: Math.min(3, workbook._count?.workbookQuizzes || 0) }).map((_, index) => (
-              <div
-                key={index}
-                className="p-4 bg-gray-50 rounded-lg animate-pulse"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0"></div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+            {Array.from({ length: Math.min(3, workbook.quizCount || 0) }).map(
+              (_, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-lg animate-pulse"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-gray-200 rounded-full flex-shrink-0"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
-        ) : (workbook._count?.workbookQuizzes || 0) === 0 ? (
+        ) : (workbook.quizCount || 0) === 0 ? (
           <div className="text-center py-12">
             <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500">아직 등록된 문제가 없습니다</p>
@@ -145,13 +143,15 @@ const WorkbookDetail = ({ workbook }: Props) => {
                         {quiz.content}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 text-xs">
-                        <span className={`px-2 py-0.5 rounded-md ${
-                          quiz.type === "MULTIPLE_CHOICE"
-                            ? "bg-blue-100 text-blue-700"
-                            : quiz.type === "TRUE_FALSE"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-purple-100 text-purple-700"
-                        }`}>
+                        <span
+                          className={`px-2 py-0.5 rounded-md ${
+                            quiz.type === "MULTIPLE_CHOICE"
+                              ? "bg-blue-100 text-blue-700"
+                              : quiz.type === "TRUE_FALSE"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-purple-100 text-purple-700"
+                          }`}
+                        >
                           {quiz.type === "MULTIPLE_CHOICE"
                             ? "객관식"
                             : quiz.type === "TRUE_FALSE"
@@ -171,7 +171,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
               ))}
             </div>
 
-            {loadedCount < (workbook._count?.workbookQuizzes || 0) && (
+            {hasMore && (
               <div className="flex justify-center mt-6">
                 <button
                   onClick={loadMoreQuizzes}
@@ -190,10 +190,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
                   ) : (
                     <>
                       <Plus className="w-4 h-4" />
-                      더보기 ({Math.min(
-                        ITEMS_PER_PAGE,
-                        (workbook._count?.workbookQuizzes || 0) - loadedCount
-                      )}개)
+                      더보기 ({Math.min(ITEMS_PER_PAGE, remainingCount)}개)
                     </>
                   )}
                 </button>
@@ -202,7 +199,7 @@ const WorkbookDetail = ({ workbook }: Props) => {
 
             {quizzes.length > 0 && (
               <div className="text-center text-xs text-gray-500 mt-4">
-                {quizzes.length} / {workbook._count?.workbookQuizzes || 0} 문제 표시됨
+                {quizzes.length} / {workbook.quizCount || 0} 문제 표시됨
               </div>
             )}
           </>

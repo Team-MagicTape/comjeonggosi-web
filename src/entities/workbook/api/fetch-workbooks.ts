@@ -27,6 +27,8 @@ export const fetchWorkbooks = async () => {
         limit: 100,
       },
     });
+    console.log(data);
+    
     
     return data?.data?.workbooks?.nodes || [];
   } catch (e) {

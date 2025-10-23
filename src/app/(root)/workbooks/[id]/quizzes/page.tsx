@@ -1,31 +1,23 @@
 import { fetchWorkbook } from "@/entities/workbook/api/fetch-workbook";
 import WorkbookQuizForm from "@/features/solve-quizzes/ui/WorkbookQuizForm";
 import { PathParams } from "@/shared/types/path-params";
-import { customFetch } from "@/shared/libs/custom-fetch";
-import { Quiz } from "@/entities/quiz/types/quiz";
 
 const WorkbookQuizzes = async ({ params }: PathParams) => {
   const { id } = await params;
-  const workbook = await fetchWorkbook(String(id));
-  
-  // Load all quizzes for the workbook
-  const totalQuizzes = workbook?._count?.workbookQuizzes || 0;
-  let allQuizzes: Quiz[] = [];
-  
-  if (totalQuizzes > 0) {
-    try {
-      const { data } = await customFetch.get<{ quizzes: Array<{ quiz: Quiz }> }>(
-        `/workbooks/${id}/quizzes?page=1&limit=${totalQuizzes}`
-      );
-      allQuizzes = data.quizzes.map((wq) => wq.quiz);
-    } catch (error) {
-      console.error("Failed to load quizzes:", error);
-    }
-  }
+  const workbookId = String(id);
+
+  // GraphQL로 워크북 정보와 퀴즈를 한 번에 조회
+  const workbook = await fetchWorkbook(workbookId);
+
+  console.log("[WorkbookQuizzes] 로드 완료:", {
+    workbookId,
+    workbookName: workbook?.name,
+    quizCount: workbook?.quizzes?.length || 0,
+  });
 
   return (
     <>
-      <WorkbookQuizForm data={allQuizzes} />
+      <WorkbookQuizForm data={workbook?.quizzes || []} />
     </>
   );
 };

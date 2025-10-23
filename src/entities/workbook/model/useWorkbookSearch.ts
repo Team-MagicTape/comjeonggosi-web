@@ -10,6 +10,7 @@ export const useWorkbookSearch = (workbooks: Workbook[]) => {
     }
 
     const query = searchQuery.toLowerCase();
+    
     return workbooks.filter((workbook) => {
       return (
         workbook.name.toLowerCase().includes(query) ||

@@ -1,73 +1,44 @@
 import { Quiz } from "@/entities/quiz/types/quiz";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Workbook } from "../types/workbook";
-import { apiClient } from "@/shared/libs/custom-axios";
 
 const ITEMS_PER_PAGE = 15;
 
+/**
+ * 워크북의 퀴즈를 페이지네이션하여 표시하는 훅
+ * 워크북에 이미 포함된 퀴즈 데이터를 사용합니다.
+ */
 export const useLoadQuizzes = (workbook: Workbook) => {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [loadedCount, setLoadedCount] = useState(0);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isLoadingQuizzes, setIsLoadingQuizzes] = useState(
-    workbook ? (workbook._count?.workbookQuizzes || 0) > 0 : false
-  );
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalQuizzes = workbook._count?.workbookQuizzes || 0;
+  const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 
-  const loadInitialQuizzes = async () => {
-    if (totalQuizzes === 0) {
-      setIsLoadingQuizzes(false);
-      return;
-    }
+  // 워크북에서 퀴즈 가져오기 (이미 GraphQL로 조회됨)
+  const allQuizzes = useMemo(() => {
+    return workbook?.quizzes || [];
+  }, [workbook?.quizzes]);
 
-    setIsLoadingQuizzes(true);
-    try {
-      const { data } = await apiClient.get<{ quizzes: Array<{ quiz: Quiz }> }>(
-        `/api/workbooks/${workbook.id}/quizzes?page=1&limit=${ITEMS_PER_PAGE}`
-      );
-      const quizList = data.quizzes.map((wq) => wq.quiz);
-      setQuizzes(quizList);
-      setLoadedCount(quizList.length);
-      setCurrentPage(1);
-    } catch (error) {
-      console.error("초기 퀴즈 로드 실패:", error);
-    } finally {
-      setIsLoadingQuizzes(false);
-    }
+  const totalQuizzes = workbook?.quizCount || 0;
+
+  // 현재 표시할 퀴즈들
+  const displayedQuizzes = useMemo(() => {
+    return allQuizzes.slice(0, displayCount);
+  }, [allQuizzes, displayCount]);
+
+  // 더 보기
+  const loadMoreQuizzes = () => {
+    setDisplayCount((prev) => Math.min(prev + ITEMS_PER_PAGE, totalQuizzes));
   };
 
-  // 더 많은 퀴즈 로드
-  const loadMoreQuizzes = async () => {
-    if (loadedCount >= totalQuizzes) return;
-
-    setIsLoadingMore(true);
-    try {
-      const nextPage = currentPage + 1;
-      const { data } = await apiClient.get<{ quizzes: Array<{ quiz: Quiz }> }>(
-        `/api/workbooks/${workbook.id}/quizzes?page=${nextPage}&limit=${ITEMS_PER_PAGE}`
-      );
-      const quizList = data.quizzes.map((wq) => wq.quiz);
-      setQuizzes((prev) => [...prev, ...quizList]);
-      setLoadedCount((prev) => prev + quizList.length);
-      setCurrentPage(nextPage);
-    } catch (error) {
-      console.error("추가 퀴즈 로드 실패:", error);
-    } finally {
-      setIsLoadingMore(false);
-    }
-  };
-
-  useEffect(() => {
-    loadInitialQuizzes();
-  }, [workbook.id]);
+  const hasMore = displayCount < totalQuizzes;
+  const remainingCount = totalQuizzes - displayCount;
 
   return {
     ITEMS_PER_PAGE,
-    quizzes,
-    isLoadingQuizzes,
-    isLoadingMore,
-    loadedCount,
+    quizzes: displayedQuizzes,
+    isLoadingQuizzes: false, // 이미 로드됨
+    isLoadingMore: false,
+    loadedCount: displayedQuizzes.length,
     loadMoreQuizzes,
+    hasMore,
+    remainingCount,
   };
 };

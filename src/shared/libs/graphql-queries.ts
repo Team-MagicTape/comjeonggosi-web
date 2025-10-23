@@ -139,20 +139,33 @@ export const GET_WORKBOOK = `
       averageAccuracy
       createdAt
       updatedAt
+      deletedAt
       owner {
         id
         nickname
+        email
         profileImageUrl
+        role
       }
       quizzes {
         id
         type
-        question
-        difficulty
         category
         subcategory
+        question
+        choices {
+          text
+          isCorrect
+        }
+        answer
+        explanation
+        difficulty
         tags
+        yearAppeared
         correctRate
+        totalSubmissions
+        createdAt
+        updatedAt
       }
     }
   }
@@ -319,6 +332,41 @@ export const GET_MY_QUESTIONS = `
       status
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const GET_WORKBOOK_QUIZZES = `
+  query GetWorkbookQuizzes($workbookId: ID!, $page: Int = 1, $limit: Int = 100) {
+    workbookQuizzes(workbookId: $workbookId, page: $page, limit: $limit) {
+      nodes {
+        id
+        type
+        category
+        subcategory
+        question
+        choices {
+          text
+          isCorrect
+        }
+        answer
+        explanation
+        difficulty
+        tags
+        yearAppeared
+        correctRate
+        totalSubmissions
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        page
+        limit
+        total
+        totalPages
+        hasNext
+        hasPrev
+      }
     }
   }
 `;

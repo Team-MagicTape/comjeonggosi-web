@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Workbook } from "../types/workbook";
 import CustomLink from "@/shared/ui/CustomLink";
@@ -32,12 +32,10 @@ const WorkbookElement = ({ workbook }: Props) => {
         <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">
-              {/* {(workbook.quizIds || []).length}개 문제 */}
+              {workbook.quizCount || 0}개 문제
             </span>
           </div>
-          <span className="text-sm text-gray-400">
-            →
-          </span>
+          <span className="text-sm text-gray-400">→</span>
         </div>
       </div>
     </CustomLink>

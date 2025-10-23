@@ -12,7 +12,7 @@ import MyContentCards from "@/widgets/section/ui/MyContentCard";
 import MyReviews from "@/widgets/section/ui/MyReviews";
 import { fetchReviewRecommendations } from "@/entities/review/api/fetch-review-recommendations";
 import { fetchReviewStats } from "@/entities/review/api/fetch-review-stats";
-
+import { fetchReviewDue } from "@/entities/review/api/fetch-review-due";
 import MyReport from "@/widgets/section/ui/MyReport";
 import { Metadata } from "next";
 import LogoutButton from "@/features/logout/ui/LogoutButton";
@@ -53,12 +53,15 @@ const My = async () => {
     mails,
     reviewRecommendations,
     reviewStats,
+    reviewDue
   ] = await Promise.all([
     fetchCategories(),
     fetchInitialSubmissions(),
     fetchInitialMails(),
     fetchReviewRecommendations(),
     fetchReviewStats(),
+    fetchReviewDue()
+
   ]);
 
   return (
@@ -87,7 +90,7 @@ const My = async () => {
           },
           {
             child: (
-              <MyReviews reviews={reviewRecommendations} stats={reviewStats} />
+              <MyReviews reviews={reviewRecommendations} stats={reviewStats} dueData={reviewDue ?? []}/>
             ),
             title: "복습 관리",
           },

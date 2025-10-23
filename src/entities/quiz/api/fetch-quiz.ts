@@ -1,5 +1,8 @@
 import { apiClient } from "@/shared/libs/custom-axios";
-import { GET_CATEGORY_QUIZZES, GET_RANDOM_QUIZ } from "@/shared/libs/graphql-queries";
+import {
+  GET_CATEGORY_QUIZZES,
+  GET_RANDOM_QUIZ,
+} from "@/shared/libs/graphql-queries";
 import { ServerQuiz, Quiz } from "../types/quiz";
 import { transformServerQuizToQuiz } from "@/shared/utils/transform-quiz";
 
@@ -35,35 +38,21 @@ export const fetchQuiz = async (
     };
 
     const mappedDifficulty = difficultyMap[difficulty];
-    let serverQuiz: ServerQuiz | undefined;
 
-    if (mode === "RANDOM") {
-      const { data } = await apiClient.post<RandomQuizzesResponse>(
-        "/api/graphql",
-        {
-          query: GET_RANDOM_QUIZ,
-          variables: {
-            count: 1,
-          },
-        }
-      );
-      serverQuiz = data?.data?.randomQuizzes?.[0];
-    } else {
-      const { data } = await apiClient.post<CategoryQuizzesResponse>(
-        "/api/graphql",
-        {
-          query: GET_CATEGORY_QUIZZES,
-          variables: {
-            categoryId,
-            page: 1,
-            limit: 1,
-            difficulty: mappedDifficulty || undefined,
-            random: mode === "RANDOM",
-          },
-        }
-      );
-      serverQuiz = data?.data?.categoryQuizzes?.nodes?.[0];
-    }
+    const { data } = await apiClient.post<CategoryQuizzesResponse>(
+      "/api/graphql",
+      {
+        query: GET_CATEGORY_QUIZZES,
+        variables: {
+          categoryId,
+          page: 1,
+          limit: 1,
+          difficulty: mappedDifficulty || undefined,
+          random: mode === "RANDOM",
+        },
+      }
+    );
+    const serverQuiz = data?.data?.categoryQuizzes?.nodes?.[0];
 
     if (!serverQuiz) return null;
 

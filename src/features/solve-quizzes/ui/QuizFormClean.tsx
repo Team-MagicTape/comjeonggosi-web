@@ -19,9 +19,14 @@ interface Props {
   categoryId: string;
 }
 
-const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => {
+const QuizFormClean = ({
+  categories,
+  initialQuiz,
+  user,
+  categoryId,
+}: Props) => {
   const [showSettings, setShowSettings] = useState(false);
-  
+
   const {
     category,
     setCategory,
@@ -56,13 +61,16 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
             {/* 왼쪽: 진행률 */}
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-gray-600">
-                {currentIdx + 1} <span className="text-gray-400">/</span> {quizzes.length}
+                {currentIdx + 1} <span className="text-gray-400">/</span>{" "}
+                {quizzes.length}
               </span>
             </div>
 
             {/* 중앙: 카테고리 */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-900">{category.name}</span>
+              <span className="text-sm font-medium text-gray-900">
+                {category.name}
+              </span>
               <button
                 onClick={() => setShowSettings(!showSettings)}
                 className="p-1.5 hover:bg-gray-100 rounded transition-colors"
@@ -90,7 +98,9 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
                 <select
                   value={category.value}
                   onChange={(e) => {
-                    const selected = categoryList.find(cat => cat.value === e.target.value);
+                    const selected = categoryList.find(
+                      (cat) => cat.value === e.target.value
+                    );
                     if (selected) setCategory(selected);
                   }}
                   className="px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#ff8f63]"
@@ -115,7 +125,9 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
                 <select
                   value={mode.value}
                   onChange={(e) => {
-                    const selected = modeList.find(m => m.value === e.target.value);
+                    const selected = modeList.find(
+                      (m) => m.value === e.target.value
+                    );
                     if (selected) setMode(selected);
                   }}
                   className="px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white hover:border-gray-300 focus:outline-none focus:ring-1 focus:ring-[#ff8f63]"
@@ -172,10 +184,13 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
                     <div className="grid grid-cols-2 gap-3">
                       {["O", "X"].map((option, idx) => {
                         // O/X를 true/false로 변환해서 비교
-                        const normalizedOption = option === "O" ? "true" : "false";
-                        const normalizedAnswer = currentQuiz.answer?.toLowerCase();
-                        const isCorrectAnswer = normalizedAnswer === normalizedOption;
-                        
+                        const normalizedOption =
+                          option === "O" ? "true" : "false";
+                        const normalizedAnswer =
+                          currentQuiz.answer?.toLowerCase();
+                        const isCorrectAnswer =
+                          normalizedAnswer === normalizedOption;
+
                         return (
                           <OptionButton
                             key={idx}
@@ -217,13 +232,23 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
                       value={shortAnswer}
                       onChange={(e) => setShortAnswer(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter" && !showAnswer && shortAnswer.trim()) {
+                        if (
+                          e.key === "Enter" &&
+                          !showAnswer &&
+                          shortAnswer.trim()
+                        ) {
                           handleShortAnswerSubmit();
                         }
                       }}
                       placeholder="답을 입력하세요"
                       disabled={showAnswer}
-                      className="w-full px-5 py-3.5 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff8f63] focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+                      className={`w-full px-5 py-3.5 text-base border rounded-lg focus:outline-none disabled:bg-gray-50 disabled:text-gray-500 ${
+                        showAnswer && selectedAnswer !== currentQuiz.answer
+                          ? "border-red-500 border-2"
+                          : showAnswer && selectedAnswer === currentQuiz.answer
+                          ? "border-green-500 border-2"
+                          : "border-gray-300 focus:ring-2 focus:ring-[#ff8f63] focus:border-transparent"
+                      }`}
                     />
                   </div>
                 ) : (
@@ -269,23 +294,23 @@ const QuizFormClean = ({ categories, initialQuiz, user, categoryId }: Props) => 
               </div>
 
               {/* 제출 버튼 */}
-              {!showAnswer && (
-                (selectedAnswer && currentQuiz.type !== "SHORT_ANSWER") ||
-                (currentQuiz.type === "SHORT_ANSWER" && shortAnswer.trim())
-              ) && (
-                <button
-                  onClick={() => {
-                    if (currentQuiz.type === "SHORT_ANSWER") {
-                      handleShortAnswerSubmit();
-                    } else if (selectedAnswer) {
-                      handleAnswerSelect(selectedAnswer);
-                    }
-                  }}
-                  className="w-full py-3.5 bg-[#ff8f63] hover:bg-[#ff7a4d] text-white font-semibold rounded-lg transition-colors shadow-sm"
-                >
-                  제출하기
-                </button>
-              )}
+              {!showAnswer &&
+                ((selectedAnswer && currentQuiz.type !== "SHORT_ANSWER") ||
+                  (currentQuiz.type === "SHORT_ANSWER" &&
+                    shortAnswer.trim())) && (
+                  <button
+                    onClick={() => {
+                      if (currentQuiz.type === "SHORT_ANSWER") {
+                        handleShortAnswerSubmit();
+                      } else if (selectedAnswer) {
+                        handleAnswerSelect(selectedAnswer);
+                      }
+                    }}
+                    className="w-full py-3.5 bg-[#ff8f63] hover:bg-[#ff7a4d] text-white font-semibold rounded-lg transition-colors shadow-sm"
+                  >
+                    제출하기
+                  </button>
+                )}
 
               {/* 해설 */}
               {showAnswer && (

@@ -1,15 +1,17 @@
 import { customFetch } from "@/shared/libs/custom-fetch";
 import { ReviewStat } from "../types/review-stat";
 
-/**
- * 복습 통계 조회
- */
-export const fetchReviewStats = async (): Promise<ReviewStat | null> => {
+export const fetchReviewStats = async (): Promise<ReviewStat> => {
   try {
     const { data } = await customFetch.get<ReviewStat>("/reviews/stats");
-    return data || null;
+    return data;
   } catch (error) {
-    console.error('[fetchReviewStats] Error:', error);
-    return null;
+    console.error("fetchReviewStats Error:", error);
+    return {
+      totalReviews: 0,
+      completedToday: 0,
+      streakDays: 0,
+      averageAccuracy: 0,
+    };
   }
 };

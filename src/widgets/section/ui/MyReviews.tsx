@@ -11,7 +11,7 @@ import { useState } from "react";
 
 interface Props {
   reviews: Review[] | null;
-  stats: ReviewStat | null;
+  stats: ReviewStat;
 }
 
 const INITIAL_DISPLAY_COUNT = 5;
@@ -26,7 +26,7 @@ const MyReviews = ({ reviews, stats }: Props) => {
     <div className="w-full p-4 bg-white border border-gray-200 rounded-2xl">
       <h2 className="mb-4 text-xl font-semibold">복습 관리</h2>
 
-      {stats && <ReviewStats stats={stats} />}
+      <ReviewStats stats={stats} />
 
       <div className="mt-4 space-y-3">
         {reviewList.length === 0 ? (

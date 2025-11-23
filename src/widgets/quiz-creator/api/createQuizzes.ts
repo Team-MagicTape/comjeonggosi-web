@@ -5,7 +5,7 @@ import { QuizResponseType } from "../type/quiz-response";
 export const createQuizzes = async (quiz: QuizRequestType) => {
   try {
     const { data } = await apiClient.post<QuizResponseType>(
-      `/admin/quizzes`,
+      `/api/admin/quizzes`,
       quiz
     );
     return data;
